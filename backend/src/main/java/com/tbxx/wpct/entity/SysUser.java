@@ -1,5 +1,7 @@
 package com.tbxx.wpct.entity;
 
+import org.apache.catalina.User;
+
 /**
  * @author ZXX
  * @ClassName SysUser
@@ -8,4 +10,5 @@ package com.tbxx.wpct.entity;
  */
 
 public class SysUser {
+    User d;
 }
