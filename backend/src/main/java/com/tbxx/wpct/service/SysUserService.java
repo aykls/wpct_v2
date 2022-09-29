@@ -1,5 +1,8 @@
 package com.tbxx.wpct.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.tbxx.wpct.entity.SysUser;
+
 /**
  * @author ZXX
  * @InterfaceName SysUserService
@@ -7,5 +10,5 @@ package com.tbxx.wpct.service;
  * @DATE 2022/9/29 18:24
  */
 
-public interface SysUserService {
+public interface SysUserService extends IService<SysUser> {
 }
