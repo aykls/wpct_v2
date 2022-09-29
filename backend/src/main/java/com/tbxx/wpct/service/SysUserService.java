@@ -1,6 +1,7 @@
 package com.tbxx.wpct.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.SysUser;
 
 /**
@@ -11,4 +12,6 @@ import com.tbxx.wpct.entity.SysUser;
  */
 
 public interface SysUserService extends IService<SysUser> {
+
+    Result insertUser(SysUser sysUser);
 }

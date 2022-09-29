@@ -3,7 +3,7 @@ package com.tbxx.wpct.util.constant;
 /**
  * @author ZXX
  * @ClassName SysConstant
- * @Description TODO
+ * @Description 常量
  * @DATE 2022/9/29 18:42
  */
 
