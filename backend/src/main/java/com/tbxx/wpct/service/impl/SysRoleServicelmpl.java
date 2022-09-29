@@ -1,6 +1,7 @@
 package com.tbxx.wpct.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.SysRole;
 import com.tbxx.wpct.mapper.SysRoleMapper;
 import com.tbxx.wpct.service.SysRoleService;
@@ -14,6 +15,5 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
-
 
 }

@@ -14,4 +14,6 @@ import com.tbxx.wpct.entity.SysUser;
 public interface SysUserService extends IService<SysUser> {
 
     Result insertUser(SysUser sysUser);
+
+    Result removeUser(Integer ID);
 }
