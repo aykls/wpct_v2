@@ -24,15 +24,15 @@ public class SysRoleController {
      */
     @PostMapping("/add")
     public Result insersysUser(@RequestBody SysRole role){
-        return roleService.insertRole(role);
+        return roleService.addRoleAndPerm(role);
     }
 
     /**
      * 删除角色
      */
     @GetMapping("/remove")
-    public Result removeUser(@RequestParam SysRole ID){
-        return roleService.removeRole(ID);
+    public Result removeUser(@RequestParam Integer ID){
+        return roleService.deleteRoleAndPerm(ID);
     }
 //
 //    @PostMapping("/update")

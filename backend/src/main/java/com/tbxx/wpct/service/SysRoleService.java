@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 public interface SysRoleService extends IService<SysRole> {
 
     @Transactional
-    Result insertRole(SysRole role);
+    Result addRoleAndPerm(SysRole role);
 
-    Result removeRole(SysRole id);
+    @Transactional
+    Result deleteRoleAndPerm(Integer id);
 }

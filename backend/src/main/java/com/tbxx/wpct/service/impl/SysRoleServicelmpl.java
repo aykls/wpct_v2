@@ -1,5 +1,6 @@
 package com.tbxx.wpct.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.SysRole;
@@ -24,7 +25,7 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     SysRoleMapper sysRoleMapper;
 
     @Override
-    public Result insertRole(SysRole role) {
+    public Result addRoleAndPerm(SysRole role) {
 
         SysRole role_name = query().eq("role_name", role.getRoleName()).one();
         if(role_name==null)
@@ -36,8 +37,17 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public Result removeRole(SysRole id) {
-        removeById(id);
+    public Result deleteRoleAndPerm(Integer id) {
+        /**
+         * 删除role表 和role_permission表 有关该角色的信息
+         */
+        sysRoleMapper.deleteRoleAndPerm(id);
+        /**
+         * 删除后，修改 该角色对应的用户设为  普通用户角色(默认)
+         */
+        UpdateWrapper<SysRole> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("role_id", 0).eq("role_id", id);
+        update(updateWrapper);
         return Result.ok("删除成功");
     }
 }

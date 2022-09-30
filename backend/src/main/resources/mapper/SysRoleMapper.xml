@@ -11,5 +11,12 @@
         </foreach>
 
     </insert>
+    <delete id="deleteRoleAndPerm" >
+        DELETE r.*,rp.*
+        FROM  sys_role r
+        LEFT JOIN sys_role_permission rp ON r.id = rp.role_id
+        WHERE r.id= #{ID}
+    </delete>
+
 
 </mapper>
