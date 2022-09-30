@@ -14,6 +14,7 @@ import com.tbxx.wpct.dto.UserDTO;
 import com.tbxx.wpct.entity.SysUser;
 import com.tbxx.wpct.mapper.SysUserMapper;
 import com.tbxx.wpct.service.SysUserService;
+import com.tbxx.wpct.util.UserHolder;
 import com.tbxx.wpct.util.constant.SysConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -72,7 +73,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }catch (Exception e){
             return Result.fail("密码错误，请重新输入");
         }
-
 
         //随机生成token作为登录凭证
         String token = UUID.randomUUID().toString(true);

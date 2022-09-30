@@ -34,8 +34,9 @@ public class CustomRealm extends AuthorizingRealm {
         log.debug("======doAuthorizationInfo授权=======");
 
         UserDTO user = UserHolder.getUser();
+        Integer roleId = user.getRoleId();
 
-        Set<String> permissions = sysUserMapper.findPermsListByRoleId(user);
+        Set<String> permissions = sysUserMapper.findPermsListByRoleId(roleId.toString());
 
         log.debug("获得权限===>{}",permissions.iterator().toString());
 

@@ -7,6 +7,9 @@ import com.tbxx.wpct.entity.SysUser;
 
 import java.util.Set;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author ZXX
  * @InterfaceName SysUserMapper
@@ -17,6 +20,6 @@ import java.util.Set;
 
 public interface SysUserMapper extends BaseMapper<SysUser> {
 
-    Set<String> findPermsListByRoleId(UserDTO userDTO);
+    Set<String> findPermsListByRoleId(String roleId);
 
 }

@@ -36,7 +36,6 @@ public class SysUserController {
     /**
      * 删除用户
      */
-    @RequiresPermissions("bill:list")
     @GetMapping("/remove")
     public Result removeUser(@RequestParam Integer ID){
         return userService.removeUser(ID);
