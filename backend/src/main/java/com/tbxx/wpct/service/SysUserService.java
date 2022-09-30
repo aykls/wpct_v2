@@ -1,8 +1,11 @@
 package com.tbxx.wpct.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tbxx.wpct.dto.LoginFormDTO;
 import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.SysUser;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @author ZXX
@@ -18,4 +21,6 @@ public interface SysUserService extends IService<SysUser> {
     Result removeUser(Integer ID);
 
     Result updateUser(SysUser sysUser);
+
+    Result authLogin(LoginFormDTO loginForm, HttpSession session);
 }

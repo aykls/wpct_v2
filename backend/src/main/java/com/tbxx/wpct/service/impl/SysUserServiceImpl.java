@@ -1,18 +1,33 @@
 package com.tbxx.wpct.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.tbxx.wpct.dto.LoginFormDTO;
 import com.tbxx.wpct.dto.Result;
+import com.tbxx.wpct.dto.UserDTO;
 import com.tbxx.wpct.entity.SysUser;
 import com.tbxx.wpct.mapper.SysUserMapper;
 import com.tbxx.wpct.service.SysUserService;
 import com.tbxx.wpct.util.constant.SysConstant;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import static com.tbxx.wpct.util.constant.RedisConstants.LOGIN_USER_KEY;
+import static com.tbxx.wpct.util.constant.RedisConstants.LOGIN_USER_TTL;
 import static com.tbxx.wpct.util.constant.SysConstant.PASSWORD_REGEX;
 
 /**
@@ -25,6 +40,37 @@ import static com.tbxx.wpct.util.constant.SysConstant.PASSWORD_REGEX;
 @Slf4j
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Override
+    public Result authLogin(LoginFormDTO loginForm, HttpSession session) {
+        String userName = loginForm.getUserName();
+        SysUser user_name = query().eq("user_name", userName).one();
+        if (StrUtil.isBlank(userName)){
+            return Result.fail("用户不存在");
+        }
+        String password = loginForm.getPassword();
+        QueryChainWrapper<SysUser> success = query().eq("user_name", userName).eq("password", password);
+        if(success == null){
+            return Result.fail("密码错误，请重新输入");
+        }
+
+        //随机生成token作为登录凭证
+        String token = UUID.randomUUID().toString(true);
+        UserDTO userDTO = BeanUtil.copyProperties(user_name,UserDTO.class);
+        Map<String, Object> userMap = BeanUtil.beanToMap(userDTO, new HashMap<>(),
+                CopyOptions.create().setIgnoreNullValue(true).
+                        setFieldValueEditor((fieldName, fieldValue) -> fieldValue.toString()));
+        //4.4将用户信息存为登录令牌  设置TTL（参考session 30分钟有效期 --->拦截器）
+        stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + token, userMap);
+        //4.5设置token有效期 到期后清除
+        stringRedisTemplate.expire(LOGIN_USER_KEY, LOGIN_USER_TTL, TimeUnit.MINUTES);
+        //5.返回 token
+
+        return Result.ok(token);
+    }
 
     /**
      * 新增用户
