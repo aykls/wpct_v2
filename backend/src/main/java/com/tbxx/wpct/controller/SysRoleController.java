@@ -20,20 +20,20 @@ public class SysRoleController {
     private SysRoleServicelmpl roleService;
 
     /**
-     * 新增用户
+     * 新增角色
      */
     @PostMapping("/add")
     public Result insersysUser(@RequestBody SysRole role){
         return roleService.insertRole(role);
     }
 
-//    /**
-//     * 删除用户
-//     */
-//    @GetMapping("/remove")
-//    public Result removeUser(@RequestParam SysRole ID){
-//        return roleService.removeRole(ID);
-//    }
+    /**
+     * 删除角色
+     */
+    @GetMapping("/remove")
+    public Result removeUser(@RequestParam SysRole ID){
+        return roleService.removeRole(ID);
+    }
 //
 //    @PostMapping("/update")
 //    public Result updateUser(@RequestBody SysRole user){
