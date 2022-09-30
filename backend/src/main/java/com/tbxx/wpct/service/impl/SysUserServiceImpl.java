@@ -15,6 +15,10 @@ import com.tbxx.wpct.mapper.SysUserMapper;
 import com.tbxx.wpct.service.SysUserService;
 import com.tbxx.wpct.util.constant.SysConstant;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.subject.Subject;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +56,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         String userName = loginForm.getUserName();
         String password = loginForm.getPassword();
 
+        Subject subject = SecurityUtils.getSubject();
+
+        UsernamePasswordToken usernamePasswordToken=new UsernamePasswordToken(userName,password);
+        subject.login(usernamePasswordToken);
+
         SysUser user_name = query().eq("user_name", userName).one();
         if (user_name == null) {
             return Result.fail("用户不存在");
@@ -74,13 +83,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return Result.ok(token);
     }
 
+    @Override
+    public SysUser QueryUser(String username) {
+        return query().eq("user_name",username).one();
+    }
+
     /**
      * 新增用户
      * @param sysUser 用户信息
      */
     @Override
     @Transactional
-    public Result insertUser(SysUser sysUser) {
+    public Result insersysUser(SysUser sysUser) {
         String password = sysUser.getPassword();
         String userName = sysUser.getUserName();
         SysUser user_name = query().eq("user_name", userName).one();
@@ -141,5 +155,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         updateWrapper.set("password", password);
         update(updateWrapper);
         return Result.ok("修改成功");
+    }
+
+    @Override
+    public AuthorizationInfo getAuthorizationInfo(SysUser shiroUser) {
+        return null;
     }
 }

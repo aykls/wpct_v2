@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @ClassName SysRole * @Description TODO
@@ -26,6 +27,8 @@ public class SysRole implements Serializable{
     private String roleName;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
+
+    private List<SysPerm> permsList;
 
 
 }

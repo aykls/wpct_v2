@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tbxx.wpct.dto.LoginFormDTO;
 import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.SysUser;
+import org.apache.shiro.authz.AuthorizationInfo;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,11 +17,15 @@ import javax.servlet.http.HttpSession;
 
 public interface SysUserService extends IService<SysUser> {
 
-    Result insertUser(SysUser sysUser);
+    Result insersysUser(SysUser sysUser);
 
     Result removeUser(Integer ID);
 
     Result updateUser(SysUser sysUser);
 
     Result authLogin(LoginFormDTO loginForm, HttpSession session);
+
+    SysUser QueryUser(String username);
+
+    AuthorizationInfo getAuthorizationInfo(SysUser shiroUser);
 }
