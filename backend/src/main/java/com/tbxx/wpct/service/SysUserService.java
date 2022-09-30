@@ -16,4 +16,6 @@ public interface SysUserService extends IService<SysUser> {
     Result insertUser(SysUser sysUser);
 
     Result removeUser(Integer ID);
+
+    Result updateUser(SysUser sysUser);
 }

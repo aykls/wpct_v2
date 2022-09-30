@@ -38,4 +38,9 @@ public class SysUserController {
         return userService.removeUser(ID);
     }
 
+    @PostMapping("/update")
+    public Result updateUser(@RequestBody SysUser user){
+        return userService.updateUser(user);
+    }
+
 }
