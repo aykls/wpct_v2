@@ -44,6 +44,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+    /**
+     * 登录
+     */
     @Override
     public Result authLogin(LoginFormDTO loginForm, HttpSession session) {
         String userName = loginForm.getUserName();
@@ -67,13 +70,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                         setFieldValueEditor((fieldName, fieldValue) -> fieldValue.toString()));
         stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + token, userMap);
         //设置过期时间（30分钟）
-        stringRedisTemplate.expire(LOGIN_USER_KEY, LOGIN_USER_TTL, TimeUnit.MINUTES);
+        stringRedisTemplate.expire(LOGIN_USER_KEY+token, LOGIN_USER_TTL, TimeUnit.MINUTES);
         return Result.ok(token);
     }
 
     /**
      * 新增用户
-     *
      * @param sysUser 用户信息
      */
     @Override
@@ -98,7 +100,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     /**
      * 删除用户
-     *
      * @param ID 用户ID
      */
     @Override
