@@ -6,6 +6,7 @@ import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.SysUser;
 import org.apache.shiro.authz.AuthorizationInfo;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -28,4 +29,6 @@ public interface SysUserService extends IService<SysUser> {
     SysUser QueryUser(String username);
 
     AuthorizationInfo getAuthorizationInfo(SysUser shiroUser);
+
+    Result logout(HttpServletRequest request);
 }
