@@ -28,8 +28,8 @@ public class SysUserController {
      * 新增用户
      */
     @PostMapping("/add")
-    public Result insersysUser(@RequestBody SysUser user){
-        return userService.insersysUser(user);
+    public Result insertUser(@RequestBody SysUser user){
+        return userService.insertUser(user);
     }
 
     /**

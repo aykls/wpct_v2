@@ -56,4 +56,9 @@ public class SysUser implements Serializable {
      */
     private LocalDateTime updateTime;
 
+    /**
+     * 盐
+     */
+    private String salt;
+
 }

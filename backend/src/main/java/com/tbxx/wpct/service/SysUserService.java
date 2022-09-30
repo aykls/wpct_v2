@@ -17,7 +17,7 @@ import javax.servlet.http.HttpSession;
 
 public interface SysUserService extends IService<SysUser> {
 
-    Result insersysUser(SysUser sysUser);
+    Result insertUser(SysUser sysUser);
 
     Result removeUser(Integer ID);
 

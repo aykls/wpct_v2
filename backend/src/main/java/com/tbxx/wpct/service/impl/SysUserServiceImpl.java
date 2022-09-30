@@ -3,6 +3,7 @@ package com.tbxx.wpct.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -56,19 +58,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         String userName = loginForm.getUserName();
         String password = loginForm.getPassword();
 
-        Subject subject = SecurityUtils.getSubject();
-
-        UsernamePasswordToken usernamePasswordToken=new UsernamePasswordToken(userName,password);
-        subject.login(usernamePasswordToken);
-
         SysUser user_name = query().eq("user_name", userName).one();
         if (user_name == null) {
             return Result.fail("用户不存在");
         }
-        SysUser user = query().eq("user_name", userName).eq("password", password).one();
-        if (user == null) {
+
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userName, password);
+        try{
+            subject.login(usernamePasswordToken);
+        }catch (Exception e){
             return Result.fail("密码错误，请重新输入");
         }
+
 
         //随机生成token作为登录凭证
         String token = UUID.randomUUID().toString(true);
@@ -79,26 +81,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                         setFieldValueEditor((fieldName, fieldValue) -> fieldValue.toString()));
         stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + token, userMap);
         //设置过期时间（30分钟）
-        stringRedisTemplate.expire(LOGIN_USER_KEY+token, LOGIN_USER_TTL, TimeUnit.MINUTES);
+        stringRedisTemplate.expire(LOGIN_USER_KEY + token, LOGIN_USER_TTL, TimeUnit.MINUTES);
         return Result.ok(token);
     }
 
     @Override
     public SysUser QueryUser(String username) {
-        return query().eq("user_name",username).one();
+        return query().eq("user_name", username).one();
     }
 
     /**
      * 新增用户
+     *
      * @param sysUser 用户信息
      */
     @Override
     @Transactional
-    public Result insersysUser(SysUser sysUser) {
+    public Result insertUser(SysUser sysUser) {
         String password = sysUser.getPassword();
         String userName = sysUser.getUserName();
+
         SysUser user_name = query().eq("user_name", userName).one();
-        if (StrUtil.isNotBlank(user_name.toString())) {
+        if (user_name != null) {
             return Result.fail("用户名已存在");
         }
         if (password == null) {
@@ -108,12 +112,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (!flag) {
             return Result.fail("密码格式错误(请用6~20位的数字加字母或下划线)");
         }
+        String salt = String.valueOf(RandomUtil.randomInt(9999));
+        Md5Hash md5Hash = new Md5Hash(password, salt, 1024);
+        sysUser.setPassword(md5Hash.toHex());
+        sysUser.setSalt(salt);
         save(sysUser);
         return Result.ok("添加成功");
     }
 
     /**
      * 删除用户
+     *
      * @param ID 用户ID
      */
     @Override
