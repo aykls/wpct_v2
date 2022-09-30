@@ -1,8 +1,11 @@
 package com.tbxx.wpct.shiro;
 
+import com.tbxx.wpct.dto.UserDTO;
 import com.tbxx.wpct.entity.SysUser;
+import com.tbxx.wpct.mapper.SysUserMapper;
 import com.tbxx.wpct.service.SysUserService;
 import com.tbxx.wpct.service.impl.SysUserServiceImpl;
+import com.tbxx.wpct.util.UserHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -15,6 +18,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.SimpleByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.util.Set;
 
 @Slf4j
@@ -22,19 +26,23 @@ public class CustomRealm extends AuthorizingRealm {
     @Autowired
     private SysUserServiceImpl sysUserService;
 
+    @Resource
+    private SysUserMapper sysUserMapper;
+
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-//        log.debug("======doAuthorizationInfo授权=======");
-//
-//        String principal = (String) principals.getPrimaryPrincipal();
-//        //2、通过用户名查询所有的权限表达式
-//        Set<String> permissions = sysUserService.getPermissionsByUsername(principal);
-//        log.debug("获得权限===>{}",permissions.iterator().toString());
-//
-//        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-//        authorizationInfo.setStringPermissions(permissions);
-//        return authorizationInfo;
-        return  null;
+        log.debug("======doAuthorizationInfo授权=======");
+
+        UserDTO user = UserHolder.getUser();
+
+        Set<String> permissions = sysUserMapper.findPermsListByRoleId(user);
+
+        log.debug("获得权限===>{}",permissions.iterator().toString());
+
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        authorizationInfo.setStringPermissions(permissions);
+        return authorizationInfo;
+
     }
 
     @Override

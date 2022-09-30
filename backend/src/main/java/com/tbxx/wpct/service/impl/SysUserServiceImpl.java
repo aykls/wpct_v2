@@ -50,6 +50,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+
+
     /**
      * 登录
      */

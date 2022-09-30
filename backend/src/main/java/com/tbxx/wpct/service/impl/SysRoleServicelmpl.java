@@ -26,6 +26,10 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public Result insertRole(SysRole role) {
 
+        SysRole role_name = query().eq("role_name", role.getRoleName()).one();
+        if(role_name==null)
+            return Result.fail("已存在该角色");
+
         save(role);
         sysRoleMapper.addRoleAndPerm(role);
         return Result.ok("新增成功");
