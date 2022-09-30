@@ -47,33 +47,33 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Result authLogin(LoginFormDTO loginForm, HttpSession session) {
         String userName = loginForm.getUserName();
+        String password = loginForm.getPassword();
+
         SysUser user_name = query().eq("user_name", userName).one();
-        if (StrUtil.isBlank(userName)){
+        if (user_name == null) {
             return Result.fail("用户不存在");
         }
-        String password = loginForm.getPassword();
-        QueryChainWrapper<SysUser> success = query().eq("user_name", userName).eq("password", password);
-        if(success == null){
+        SysUser user = query().eq("user_name", userName).eq("password", password).one();
+        if (user == null) {
             return Result.fail("密码错误，请重新输入");
         }
 
         //随机生成token作为登录凭证
         String token = UUID.randomUUID().toString(true);
-        UserDTO userDTO = BeanUtil.copyProperties(user_name,UserDTO.class);
+        //存入redis
+        UserDTO userDTO = BeanUtil.copyProperties(user_name, UserDTO.class);
         Map<String, Object> userMap = BeanUtil.beanToMap(userDTO, new HashMap<>(),
                 CopyOptions.create().setIgnoreNullValue(true).
                         setFieldValueEditor((fieldName, fieldValue) -> fieldValue.toString()));
-        //4.4将用户信息存为登录令牌  设置TTL（参考session 30分钟有效期 --->拦截器）
         stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + token, userMap);
-        //4.5设置token有效期 到期后清除
+        //设置过期时间（30分钟）
         stringRedisTemplate.expire(LOGIN_USER_KEY, LOGIN_USER_TTL, TimeUnit.MINUTES);
-        //5.返回 token
-
         return Result.ok(token);
     }
 
     /**
      * 新增用户
+     *
      * @param sysUser 用户信息
      */
     @Override
@@ -82,15 +82,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         String password = sysUser.getPassword();
         String userName = sysUser.getUserName();
         SysUser user_name = query().eq("user_name", userName).one();
-        if (StrUtil.isNotBlank(user_name.toString())){
+        if (StrUtil.isNotBlank(user_name.toString())) {
             return Result.fail("用户名已存在");
         }
-        if(password == null){
+        if (password == null) {
             return Result.fail("密码不能为空");
         }
         boolean flag = password.matches(PASSWORD_REGEX);
-        if (!flag){
-           return Result.fail("密码格式错误(请用6~20位的数字加字母或下划线)");
+        if (!flag) {
+            return Result.fail("密码格式错误(请用6~20位的数字加字母或下划线)");
         }
         save(sysUser);
         return Result.ok("添加成功");
@@ -98,15 +98,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     /**
      * 删除用户
+     *
      * @param ID 用户ID
      */
     @Override
     public Result removeUser(Integer ID) {
-        if(ID == null){
+        if (ID == null) {
             return Result.fail("用户不存在");
         }
         boolean success = removeById(ID);
-        if(!success){
+        if (!success) {
             return Result.fail("删除失败,请稍后重试");
         }
         return Result.ok("删除成功");
@@ -115,30 +116,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Result updateUser(SysUser sysUser) {
 //        Integer id = sysUser.getID();
-        Integer id =1;
+        Integer id = 1;
         String password = sysUser.getPassword();
-        String nickname=sysUser.getNickName();
+        String nickname = sysUser.getNickName();
         Integer roleId = sysUser.getRoleId();
-        boolean flag= true;
+        boolean flag = true;
         UpdateWrapper<SysUser> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.set("nickname",nickname).set("role_id",roleId).eq("id",id);
+        updateWrapper.set("nickname", nickname).set("role_id", roleId).eq("id", id);
         /**
          * 不修改密码
          */
-        if ("".equals(password))
-        {
+        if ("".equals(password)) {
             update(updateWrapper);
             return Result.ok("修改成功");
         }
         /**
          * 修改密码
          */
-        if (!password.matches(PASSWORD_REGEX))
-        {
+        if (!password.matches(PASSWORD_REGEX)) {
             return Result.fail("密码格式至少六位");
         }
 
-        updateWrapper.set("password",password);
+        updateWrapper.set("password", password);
         update(updateWrapper);
         return Result.ok("修改成功");
     }

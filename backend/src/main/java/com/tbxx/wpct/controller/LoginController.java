@@ -24,7 +24,7 @@ public class LoginController {
     @Resource
     SysUserServiceImpl userService;
 
-    @PostMapping("auth")
+    @PostMapping("/auth")
     public Result authLogin(@RequestBody LoginFormDTO loginForm, HttpSession session){
         return userService.authLogin(loginForm, session);
     }
