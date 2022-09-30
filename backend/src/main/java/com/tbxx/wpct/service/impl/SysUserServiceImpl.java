@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.util.HashMap;
@@ -85,6 +86,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         //设置过期时间（30分钟）
         stringRedisTemplate.expire(LOGIN_USER_KEY + token, LOGIN_USER_TTL, TimeUnit.MINUTES);
         return Result.ok(token);
+    }
+
+    @Override
+    public Result logout(HttpServletRequest request) {
+        String token = request.getHeader("authorization");
+        Boolean success = stringRedisTemplate.delete(LOGIN_USER_KEY + token);
+        if(Boolean.FALSE.equals(success)){
+            return Result.fail("退出失败，请重试");
+        }
+        return Result.ok("您的账号已安全退出");
     }
 
     @Override
@@ -160,7 +171,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
          * 修改密码
          */
         if (!password.matches(PASSWORD_REGEX)) {
-            return Result.fail("密码格式至少六位");
+            return Result.fail("密码格式错误(请用6~20位的数字加字母或下划线)");
         }
 
         updateWrapper.set("password", password);
