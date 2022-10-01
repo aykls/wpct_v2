@@ -1,5 +1,4 @@
-package com.tbxx.wpct.dto;
-
+package com.tbxx.wpct.util;
 
 import lombok.Data;
 
@@ -7,13 +6,13 @@ import java.time.LocalDateTime;
 
 /**
  * @author ZXX
- * @ClassName UserDTO
- * @Description TODO
- * @DATE 2022/9/30 11:44
+ * @ClassName UserList
+ * @Description  查询用户列表
+ * @DATE 2022/10/1 16:04
  */
 
 @Data
-public class UserDTO {
+public class UserList {
     /**
      * 用户id
      */
@@ -34,6 +33,10 @@ public class UserDTO {
      */
     private Integer roleId;
 
+    /**
+     * 用户对应的角色名
+     */
+    private String roleName;
 
     /**
      * 创建时间
@@ -44,7 +47,4 @@ public class UserDTO {
      * 更新时间
      */
     private LocalDateTime updateTime;
-
-
-
 }

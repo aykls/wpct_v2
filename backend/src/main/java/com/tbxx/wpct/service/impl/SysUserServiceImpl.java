@@ -16,6 +16,7 @@ import com.tbxx.wpct.entity.SysUser;
 import com.tbxx.wpct.mapper.SysUserMapper;
 import com.tbxx.wpct.service.SysUserService;
 import com.tbxx.wpct.util.UserHolder;
+import com.tbxx.wpct.util.UserList;
 import com.tbxx.wpct.util.constant.SysConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -202,12 +203,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public Result UserDTOList() {
-
-//        List<SysUser> list = query().list();
-//        List<UserDTO> userDTOS = BeanUtil.copyToList(list, UserDTO.class);
-       Set<UserDTO> userDTOS =sysUserMapper.findUserDTOList();
-        return Result.ok(userDTOS);
+    public Result UserList() {
+        Set<UserList> UserList =sysUserMapper.findUserList();
+        return Result.ok(UserList);
     }
 
 

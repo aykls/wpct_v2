@@ -31,7 +31,7 @@ public class SysRoleController {
      * 删除角色
      */
     @GetMapping("/remove")
-    public Result removeUser(@RequestParam Integer ID){
+    public Result removeRole(@RequestParam Integer ID){
         return roleService.deleteRoleAndPerm(ID);
     }
 

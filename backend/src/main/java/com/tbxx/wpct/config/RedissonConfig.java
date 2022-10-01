@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author ZXX
  * @ClassName RedissonConfig
- * @Description TODO
+ * @Description TODO Redisson分布式锁
  * @DATE 2022/9/30 12:07
  */
 
