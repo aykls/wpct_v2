@@ -9,14 +9,17 @@
         <foreach collection="permsList" item="item" index="index" separator=",">
             (#{roleId}, #{item})
         </foreach>
-
     </insert>
-    <delete id="deleteRoleAndPerm" >
+
+    <delete id="deleteRoleAndPerm"  parameterType="java.lang.Integer">
         DELETE r.*,rp.*
         FROM  sys_role r
         LEFT JOIN sys_role_permission rp ON r.id = rp.role_id
         WHERE r.id= #{ID}
     </delete>
+
+    <
+
 
 
 </mapper>

@@ -13,4 +13,13 @@ public interface SysRoleService extends IService<SysRole> {
 
     @Transactional
     Result deleteRoleAndPerm(Integer id);
+
+    @Transactional
+    Result updateRoleNameAndPerms(SysRole sysRole);
+
+    /**
+     * 角色列表
+     * @return
+     */
+    Result listRole();
 }

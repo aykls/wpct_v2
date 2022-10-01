@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName SysUserServicelmpl * @Description TODO
@@ -23,6 +24,9 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Resource
     SysRoleMapper sysRoleMapper;
+
+    @Autowired
+    SysUserServiceImpl sysUserService;
 
     @Override
     public Result addRoleAndPerm(SysRole role) {
@@ -45,9 +49,36 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         /**
          * 删除后，修改 该角色对应的用户设为  普通用户角色(默认)
          */
-        UpdateWrapper<SysRole> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.set("role_id", 0).eq("role_id", id);
-        update(updateWrapper);
+        sysUserService.updateUserRole(id);
+
         return Result.ok("删除成功");
+    }
+
+
+    /**
+     *  角色列表
+     */
+    @Override
+    public Result listRole() {
+        sysRoleMapper.listRole();
+        return Result.ok();
+    }
+
+    /**
+     * 修改角色名&权限
+     */
+    @Override
+    public Result updateRoleNameAndPerms(SysRole sysRole) {
+        String roleName = sysRole.getRoleName();
+        if(roleName == null){
+            return Result.fail("请填写角色名称");
+        }
+        update().eq("role_name",roleName);
+        //权限列表
+        List<String> permsList = sysRole.getPermsList();
+
+        //从角色列表中获取更新前的权限 迭代对比 删除|
+
+        return Result.ok("修改成功");
     }
 }

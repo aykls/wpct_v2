@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tbxx.wpct.dto.LoginFormDTO;
 import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.dto.UserDTO;
+import com.tbxx.wpct.entity.SysRole;
 import com.tbxx.wpct.entity.SysUser;
 import com.tbxx.wpct.mapper.SysUserMapper;
 import com.tbxx.wpct.service.SysUserService;
@@ -88,6 +89,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return Result.ok(token);
     }
 
+    /**
+     *登出
+     */
     @Override
     public Result logout(HttpServletRequest request) {
         String token = request.getHeader("authorization");
@@ -98,6 +102,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return Result.ok("您的账号已安全退出");
     }
 
+    /**
+     *查询用户Shiro
+     */
     @Override
     public SysUser QueryUser(String username) {
         return query().eq("user_name", username).one();
@@ -179,8 +186,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         return Result.ok("修改成功");
     }
 
+    /**
+     *删除用户的角色 并设置一个默认值0
+     */
     @Override
-    public AuthorizationInfo getAuthorizationInfo(SysUser shiroUser) {
-        return null;
+    public void updateUserRole(Integer roleId) {
+        UpdateWrapper<SysUser> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("role_id", 0).eq("role_id", roleId);
+        update(updateWrapper);
     }
 }

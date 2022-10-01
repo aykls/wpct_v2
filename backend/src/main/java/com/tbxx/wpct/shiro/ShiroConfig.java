@@ -47,6 +47,8 @@ public class ShiroConfig {
         map.put("/user/toRegister","anon");   //anon 设置为公共资源
         map.put("/user/getCaptcha","anon");   //anon 设置为公共资源
         map.put("/user/*","anon");
+        map.put("/role/*","anon");
+
 
 
 

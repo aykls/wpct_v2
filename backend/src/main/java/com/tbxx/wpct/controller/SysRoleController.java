@@ -34,11 +34,23 @@ public class SysRoleController {
     public Result removeUser(@RequestParam Integer ID){
         return roleService.deleteRoleAndPerm(ID);
     }
-//
-//    @PostMapping("/update")
-//    public Result updateUser(@RequestBody SysRole user){
-//        return roleService.updateRole(user);
-//    }
 
+
+    /**
+     * 角色列表
+     */
+    @GetMapping("/listRole")
+    public Result listRole(){
+        return roleService.listRole();
+    }
+
+
+    /**
+     * 修改角色名&权限
+     */
+    @PostMapping("/update")
+    public Result updateRoleNameAndPerms(@RequestBody SysRole sysRole){
+        return roleService.updateRoleNameAndPerms(sysRole);
+    }
 
 }
