@@ -1,6 +1,7 @@
 package com.tbxx.wpct.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -8,6 +9,8 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author ZXX
@@ -60,5 +63,9 @@ public class SysUser implements Serializable {
      * 盐
      */
     private String salt;
+
+    @TableField(exist = false)
+    private List<Map<Object ,Object>> users;
+
 
 }

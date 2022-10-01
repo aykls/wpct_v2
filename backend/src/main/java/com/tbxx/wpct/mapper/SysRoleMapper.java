@@ -3,6 +3,10 @@ package com.tbxx.wpct.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.SysRole;
+import com.tbxx.wpct.util.OneToMore;
+
+import java.util.List;
+import java.util.Map;
 
 public interface SysRoleMapper extends BaseMapper<SysRole> {
 
@@ -18,5 +22,5 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     /**
      * 角色列表
      */
-    void listRole();
+    List<OneToMore> listRole();
 }

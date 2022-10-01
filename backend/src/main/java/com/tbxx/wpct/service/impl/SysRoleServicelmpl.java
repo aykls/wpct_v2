@@ -7,11 +7,13 @@ import com.tbxx.wpct.entity.SysRole;
 import com.tbxx.wpct.entity.SysUser;
 import com.tbxx.wpct.mapper.SysRoleMapper;
 import com.tbxx.wpct.service.SysRoleService;
+import com.tbxx.wpct.util.OneToMore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName SysUserServicelmpl * @Description TODO
@@ -60,8 +62,8 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public Result listRole() {
-        sysRoleMapper.listRole();
-        return Result.ok();
+        List<OneToMore> maps = sysRoleMapper.listRole();
+        return Result.ok(maps);
     }
 
     /**

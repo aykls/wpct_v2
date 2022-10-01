@@ -19,7 +19,6 @@ public interface SysRoleService extends IService<SysRole> {
 
     /**
      * 角色列表
-     * @return
      */
     Result listRole();
 }
