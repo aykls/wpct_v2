@@ -49,8 +49,8 @@ public class SysUserController {
     }
 
     @GetMapping("/list")
-    public Result UserList(){
-        return userService.UserList();
+    public Result UserList(@RequestParam int pageNum){
+        return userService.UserList(pageNum);
     }
 
 }
