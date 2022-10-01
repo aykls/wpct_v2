@@ -8,6 +8,9 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.tbxx.wpct.dto.LoginFormDTO;
 import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.dto.UserDTO;
@@ -203,9 +206,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public Result UserList() {
-        Set<UserList> UserList =sysUserMapper.findUserList();
-        return Result.ok(UserList);
+    public Result UserList(int pageNum) {
+
+
+        Page<Object> page= PageHelper.startPage(pageNum,5);
+
+        List<UserList> UserList =sysUserMapper.findUserList();
+
+        PageInfo<UserList> pageInfo=new PageInfo<>(UserList,5);
+        return Result.ok(pageInfo);
+
     }
 
 
