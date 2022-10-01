@@ -33,8 +33,9 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public Result addRoleAndPerm(SysRole role) {
 
         SysRole role_name = query().eq("role_name", role.getRoleName()).one();
-        if(role_name==null)
+        if (role_name != null) {
             return Result.fail("已存在该角色");
+        }
 
         save(role);
         sysRoleMapper.addRoleAndPerm(role);
@@ -61,8 +62,8 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
      */
     @Override
     public Result listRole() {
-        List<OneToMore> maps = sysRoleMapper.listRole();
-        return Result.ok(maps);
+        List<OneToMore> lists = sysRoleMapper.listRole();
+        return Result.ok(lists);
     }
 
     /**
@@ -75,7 +76,7 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if(roleName == null){
             return Result.fail("请填写角色名称");
         }
-        update().eq("role_name",roleName);
+        update().eq("role_name", roleName);
         //权限列表
 
         //新旧权限列表差集

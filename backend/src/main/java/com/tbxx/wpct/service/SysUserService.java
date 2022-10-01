@@ -32,5 +32,5 @@ public interface SysUserService extends IService<SysUser> {
 
     void updateUserRole(Integer roleId);
 
-    Result UserDTOList();
+    Result UserList();
 }

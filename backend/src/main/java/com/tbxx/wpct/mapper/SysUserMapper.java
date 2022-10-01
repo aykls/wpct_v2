@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tbxx.wpct.dto.UserDTO;
 import com.tbxx.wpct.entity.SysUser;
+import com.tbxx.wpct.util.UserList;
 
 import java.util.Set;
 
@@ -22,6 +23,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     Set<String> findPermsListByRoleId(String roleId);
 
-    Set<UserDTO> findUserDTOList();
+    Set<UserList> findUserList();
 
 }

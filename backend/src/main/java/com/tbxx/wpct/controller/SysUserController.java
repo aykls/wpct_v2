@@ -50,7 +50,7 @@ public class SysUserController {
 
     @GetMapping("/list")
     public Result UserList(){
-        return userService.UserDTOList();
+        return userService.UserList();
     }
 
 }

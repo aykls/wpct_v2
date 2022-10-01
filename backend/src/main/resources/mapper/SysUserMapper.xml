@@ -10,7 +10,7 @@
         WHERE rp.`role_id` = #{roleId}
     </select>
 
-    <resultMap id="userMap" type="com.tbxx.wpct.dto.UserDTO">
+    <resultMap id="userMap" type="com.tbxx.wpct.util.UserList">
         <id column="userId" property="ID"/>
         <result column="username" property="userName"/>
         <result column="nickname" property="nickName"/>
@@ -19,7 +19,7 @@
         <result column="roleId" property="roleId"/>
         <result column="roleName" property="roleName"/>
     </resultMap>
-    <select id="findUserDTOList" resultMap="userMap">
+    <select id="findUserList" resultMap="userMap">
         SELECT 		u.*,
                       r.id        roleId,
                       r.role_name roleName

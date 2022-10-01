@@ -65,6 +65,9 @@ public class SysUser implements Serializable {
     private String salt;
 
     @TableField(exist = false)
+    private String roleName = null;
+
+    @TableField(exist = false)
     private List<Map<Object ,Object>> users;
 
 
