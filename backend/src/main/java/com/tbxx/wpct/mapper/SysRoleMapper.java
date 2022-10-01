@@ -27,15 +27,18 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     List<OneToMore> listRole();
 
     /**
+     * 角色对应权限ID集合
+     */
+    HashSet<Integer> RolePerm(int roleId);
+    /**
      * 批量增加 角色有用权限
      */
-    Set<String> batchAddRolePerm(int orderId,HashSet<Integer> perms);
+    void  batchAddRolePerm(int orderId,HashSet<Integer> perms);
 
     /**
      * 批量删除 角色无用权限
      */
-    Set<String> batchdeleteRolePerm(int orderId, HashSet<Integer> perms);
-
+    void batchdeleteRolePerm(int orderId, HashSet<Integer> perms);
 
 
 }

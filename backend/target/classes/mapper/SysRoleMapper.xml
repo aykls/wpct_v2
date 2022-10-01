@@ -53,5 +53,30 @@
     </select>
 
 
+    <select id="RolePerm" resultType="java.lang.Integer">
+        select  permission_id
+        from  sys_role_permission
+        where role_id=#{roleId}
+    </select>
+
+    <insert id="batchAddRolePerm">
+        insert into sys_role_permission
+        (role_id, permission_id) values
+        <foreach collection="perms" item="perm" separator=",">
+            (#{orderId},#{perm})
+        </foreach>
+    </insert>
+
+    <delete id="batchdeleteRolePerm">
+        delete
+        from sys_role_permission
+        where role_id=#{orderId} and permission_id in
+        (
+        <foreach collection="perms" item="perm" separator=",">
+            #{perm}
+        </foreach>
+        )
+    </delete>
+
 
 </mapper>

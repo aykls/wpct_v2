@@ -76,7 +76,7 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if(roleName == null){
             return Result.fail("请填写角色名称");
         }
-        update().eq("role_name", roleName);
+        update().set("role_name", roleName).eq("id",roleId).update();
         //权限列表
 
         //新旧权限列表差集
@@ -84,9 +84,9 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         //新权限列表
         HashSet<Integer> NewPermsList=new HashSet<>(sysRole.getPermsIDList());
-        SysRole oldRole = query().eq("role_id", roleId).one();
+       
         //旧权限列表
-        HashSet<Integer> OlderPermsList = new HashSet<>(oldRole.getPermsIDList());
+        HashSet<Integer> OlderPermsList = sysRoleMapper.RolePerm(roleId);
 
         //从角色列表中获取更新前的权限 迭代对比 删除|
         saveNewPermission(GapPermsList,NewPermsList,OlderPermsList,roleId);
@@ -102,7 +102,8 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private void saveNewPermission(HashSet<Integer> gapPerms, HashSet<Integer> newPerms, HashSet<Integer> oldPerms,int orderId) {
             gapPerms.addAll(newPerms);
             gapPerms.removeAll(oldPerms);
-            sysRoleMapper.batchAddRolePerm(orderId,gapPerms);
+            if (!gapPerms.isEmpty())
+                 sysRoleMapper.batchAddRolePerm(orderId,gapPerms);
     }
 
     /**
@@ -111,6 +112,7 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private void removeOldPermission(HashSet<Integer> gapPerms, HashSet<Integer> newPerms, HashSet<Integer> oldPerms,int orderId) {
         gapPerms.addAll(oldPerms);
         gapPerms.removeAll(newPerms);
-        sysRoleMapper.batchdeleteRolePerm(orderId,gapPerms);
+        if (!gapPerms.isEmpty())
+            sysRoleMapper.batchdeleteRolePerm(orderId,gapPerms);
     }
 }
