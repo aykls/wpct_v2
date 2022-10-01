@@ -7,6 +7,7 @@ import com.tbxx.wpct.util.OneToMore;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface SysRoleMapper extends BaseMapper<SysRole> {
 
@@ -23,4 +24,17 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
      * 角色列表
      */
     List<OneToMore> listRole();
+
+    /**
+     * 批量增加 角色有用权限
+     */
+    Set<String> batchAddRolePerm(int orderId,Set<Integer> perms);
+
+    /**
+     * 批量删除 角色无用权限
+     */
+    Set<String> batchdeleteRolePerm(int orderId,Set<Integer> perms);
+
+
+
 }

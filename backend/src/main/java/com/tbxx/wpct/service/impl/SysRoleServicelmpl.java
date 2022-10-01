@@ -12,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName SysUserServicelmpl * @Description TODO
@@ -72,15 +71,46 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public Result updateRoleNameAndPerms(SysRole sysRole) {
         String roleName = sysRole.getRoleName();
+        int roleId = sysRole.getRoleId();
         if(roleName == null){
             return Result.fail("请填写角色名称");
         }
         update().eq("role_name",roleName);
         //权限列表
-        List<String> permsList = sysRole.getPermsList();
+
+        //新旧权限列表差集
+        Set<Integer> GapPermsList=new HashSet<Integer>();
+
+        //新权限列表
+        Set<Integer> NewPermsList = (Set<Integer>) sysRole.getPermsIDList();
+
+        SysRole oldRole = query().eq("role_id", roleId).one();
+        //旧权限列表
+        Set<Integer> OlderPermsList = (Set<Integer>) oldRole.getPermsIDList();
 
         //从角色列表中获取更新前的权限 迭代对比 删除|
+        saveNewPermission(GapPermsList,NewPermsList,OlderPermsList,roleId);
+        GapPermsList.clear();
+        removeOldPermission(GapPermsList,NewPermsList,OlderPermsList,roleId);
 
         return Result.ok("修改成功");
+    }
+
+    /**
+     * 为角色添加新权限
+     */
+    private void saveNewPermission(Set<Integer> gapPerms, Set<Integer> newPerms, Set<Integer> oldPerms,int orderId) {
+            gapPerms.addAll(newPerms);
+            gapPerms.removeAll(oldPerms);
+            sysRoleMapper.batchAddRolePerm(orderId,gapPerms);
+    }
+
+    /**
+     * 删除角色 旧的 不再拥有的权限
+     */
+    private void removeOldPermission(Set<Integer> gapPerms, Set<Integer> newPerms, Set<Integer> oldPerms,int orderId) {
+        gapPerms.addAll(oldPerms);
+        gapPerms.removeAll(newPerms);
+        sysRoleMapper.batchdeleteRolePerm(orderId,gapPerms);
     }
 }

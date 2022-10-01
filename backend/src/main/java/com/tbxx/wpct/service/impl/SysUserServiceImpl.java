@@ -204,10 +204,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Result UserDTOList() {
 
-//        List<SysUser> list = query().list();
-//        List<UserDTO> userDTOS = BeanUtil.copyToList(list, UserDTO.class);
        Set<UserDTO> userDTOS =sysUserMapper.findUserDTOList();
         return Result.ok(userDTOS);
+
     }
 
 

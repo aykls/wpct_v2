@@ -30,8 +30,15 @@ public class SysRole implements Serializable{
     private LocalDateTime updateTime;
 
 
+    /**
+     * 权限名集合
+     */
     @TableField(exist = false)
     private List<String> permsList;
-
+    /**
+     * 权限名ID集合
+     */
+    @TableField(exist = false)
+    private List<Integer> permsIDList;
 
 }
