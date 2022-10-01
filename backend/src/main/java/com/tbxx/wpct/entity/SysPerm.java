@@ -24,7 +24,7 @@ public class SysPerm {
     /**
      * 菜单模块类型
      */
-    private String menuNode;
+    private String menuCode;
     /**
      * 该类型中功能名字
      */

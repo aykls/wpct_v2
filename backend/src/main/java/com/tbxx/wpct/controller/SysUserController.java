@@ -3,6 +3,7 @@ package com.tbxx.wpct.controller;
 import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.SysUser;
 import com.tbxx.wpct.service.impl.SysUserServiceImpl;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,11 @@ public class SysUserController {
     @PostMapping("/update")
     public Result updateUser(@RequestBody SysUser user){
         return userService.updateUser(user);
+    }
+
+    @GetMapping("/list")
+    public Result UserList(){
+        return userService.UserDTOList();
     }
 
 }

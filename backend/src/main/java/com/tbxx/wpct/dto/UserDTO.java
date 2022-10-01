@@ -3,6 +3,8 @@ package com.tbxx.wpct.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @author ZXX
  * @ClassName UserDTO
@@ -31,6 +33,22 @@ public class UserDTO {
      * 用户对应的角色id
      */
     private Integer roleId;
+
+    /**
+     * 用户对应的角色名
+     */
+    private String roleName;
+
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间
+     */
+    private LocalDateTime updateTime;
 
 
 

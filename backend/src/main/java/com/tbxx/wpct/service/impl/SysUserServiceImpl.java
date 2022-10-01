@@ -27,12 +27,16 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.tbxx.wpct.util.constant.RedisConstants.LOGIN_USER_KEY;
@@ -53,7 +57,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
-
+    @Resource
+    private SysUserMapper sysUserMapper;
 
     /**
      * 登录
@@ -195,4 +200,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         updateWrapper.set("role_id", 0).eq("role_id", roleId);
         update(updateWrapper);
     }
+
+    @Override
+    public Result UserDTOList() {
+
+//        List<SysUser> list = query().list();
+//        List<UserDTO> userDTOS = BeanUtil.copyToList(list, UserDTO.class);
+       Set<UserDTO> userDTOS =sysUserMapper.findUserDTOList();
+        return Result.ok(userDTOS);
+    }
+
+
 }

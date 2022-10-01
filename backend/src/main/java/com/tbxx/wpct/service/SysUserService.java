@@ -28,8 +28,9 @@ public interface SysUserService extends IService<SysUser> {
 
     SysUser QueryUser(String username);
 
-
     Result logout(HttpServletRequest request);
 
     void updateUserRole(Integer roleId);
+
+    Result UserDTOList();
 }

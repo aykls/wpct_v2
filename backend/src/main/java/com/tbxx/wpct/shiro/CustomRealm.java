@@ -6,6 +6,7 @@ import com.tbxx.wpct.mapper.SysUserMapper;
 import com.tbxx.wpct.service.SysUserService;
 import com.tbxx.wpct.service.impl.SysUserServiceImpl;
 import com.tbxx.wpct.util.UserHolder;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;

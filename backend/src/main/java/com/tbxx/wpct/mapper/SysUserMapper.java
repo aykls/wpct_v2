@@ -22,4 +22,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     Set<String> findPermsListByRoleId(String roleId);
 
+    Set<UserDTO> findUserDTOList();
+
 }
