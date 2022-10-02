@@ -32,7 +32,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -79,9 +78,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(userName, password);
-        try{
+        try {
             subject.login(usernamePasswordToken);
-        }catch (Exception e){
+        } catch (Exception e) {
             return Result.fail("密码错误，请重新输入");
         }
 
@@ -99,20 +98,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     *登出
+     * 登出
      */
     @Override
     public Result logout(HttpServletRequest request) {
         String token = request.getHeader("authorization");
         Boolean success = stringRedisTemplate.delete(LOGIN_USER_KEY + token);
-        if(Boolean.FALSE.equals(success)){
+        if (Boolean.FALSE.equals(success)) {
             return Result.fail("退出失败，请重试");
         }
         return Result.ok("您的账号已安全退出");
     }
 
     /**
-     *查询用户Shiro
+     * 查询用户Shiro
      */
     @Override
     public SysUser QueryUser(String username) {
@@ -196,7 +195,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     /**
-     *删除用户的角色 并设置一个默认值0
+     * 删除用户的角色 并设置一个默认值0
      */
     @Override
     public void updateUserRole(Integer roleId) {
@@ -208,12 +207,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Result UserList(int pageNum) {
 
+        Page<Object> page = PageHelper.startPage(pageNum, 5);
+        List<UserList> UserList = sysUserMapper.findUserList();
 
-        Page<Object> page= PageHelper.startPage(pageNum,5);
-
-        List<UserList> UserList =sysUserMapper.findUserList();
-
-        PageInfo<UserList> pageInfo=new PageInfo<>(UserList,5);
+        PageInfo<UserList> pageInfo = new PageInfo<>(UserList, 5);
         return Result.ok(pageInfo);
 
     }

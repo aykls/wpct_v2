@@ -58,7 +58,7 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
 
     /**
-     *  角色列表
+     * 角色列表
      */
     @Override
     public Result listRole() {
@@ -73,25 +73,25 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public Result updateRoleNameAndPerms(SysRole sysRole) {
         String roleName = sysRole.getRoleName();
         int roleId = sysRole.getRoleId();
-        if(roleName == null){
+        if (roleName == null) {
             return Result.fail("请填写角色名称");
         }
-        update().set("role_name", roleName).eq("id",roleId).update();
+        update().set("role_name", roleName).eq("id", roleId).update();
         //权限列表
 
         //新旧权限列表差集
-        HashSet<Integer> GapPermsList=new HashSet<Integer>();
+        HashSet<Integer> GapPermsList = new HashSet<Integer>();
 
         //新权限列表
-        HashSet<Integer> NewPermsList=new HashSet<>(sysRole.getPermsIDList());
-       
+        HashSet<Integer> NewPermsList = new HashSet<>(sysRole.getPermsIDList());
+
         //旧权限列表
         HashSet<Integer> OlderPermsList = sysRoleMapper.RolePerm(roleId);
 
         //从角色列表中获取更新前的权限 迭代对比 删除|
-        saveNewPermission(GapPermsList,NewPermsList,OlderPermsList,roleId);
+        saveNewPermission(GapPermsList, NewPermsList, OlderPermsList, roleId);
         GapPermsList.clear();
-        removeOldPermission(GapPermsList,NewPermsList,OlderPermsList,roleId);
+        removeOldPermission(GapPermsList, NewPermsList, OlderPermsList, roleId);
 
         return Result.ok("修改成功");
     }
@@ -99,20 +99,20 @@ public class SysRoleServicelmpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     /**
      * 为角色添加新权限
      */
-    private void saveNewPermission(HashSet<Integer> gapPerms, HashSet<Integer> newPerms, HashSet<Integer> oldPerms,int orderId) {
-            gapPerms.addAll(newPerms);
-            gapPerms.removeAll(oldPerms);
-            if (!gapPerms.isEmpty())
-                 sysRoleMapper.batchAddRolePerm(orderId,gapPerms);
+    private void saveNewPermission(HashSet<Integer> gapPerms, HashSet<Integer> newPerms, HashSet<Integer> oldPerms, int roleId) {
+        gapPerms.addAll(newPerms);
+        gapPerms.removeAll(oldPerms);
+        if (!gapPerms.isEmpty())
+            sysRoleMapper.batchAddRolePerm(roleId, gapPerms);
     }
 
     /**
      * 删除角色 旧的 不再拥有的权限
      */
-    private void removeOldPermission(HashSet<Integer> gapPerms, HashSet<Integer> newPerms, HashSet<Integer> oldPerms,int orderId) {
+    private void removeOldPermission(HashSet<Integer> gapPerms, HashSet<Integer> newPerms, HashSet<Integer> oldPerms, int roleId) {
         gapPerms.addAll(oldPerms);
         gapPerms.removeAll(newPerms);
         if (!gapPerms.isEmpty())
-            sysRoleMapper.batchdeleteRolePerm(orderId,gapPerms);
+            sysRoleMapper.batchdeleteRolePerm(roleId, gapPerms);
     }
 }

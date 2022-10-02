@@ -16,10 +16,6 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
 
     public void deleteRoleAndPerm(Integer ID);
 
-    /**
-     * 更新权限
-     */
-    void updateRolePerms();
 
     /**
      * 角色列表
@@ -33,12 +29,12 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     /**
      * 批量增加 角色有用权限
      */
-    void  batchAddRolePerm(int orderId,HashSet<Integer> perms);
+    void  batchAddRolePerm(int roleId,HashSet<Integer> perms);
 
     /**
      * 批量删除 角色无用权限
      */
-    void batchdeleteRolePerm(int orderId, HashSet<Integer> perms);
+    void batchdeleteRolePerm(int roleId, HashSet<Integer> perms);
 
 
 }
