@@ -1,6 +1,9 @@
 package com.tbxx.wpct.config;
 
 
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,9 +13,9 @@ import org.springframework.context.annotation.Configuration;
  * @Description TODO Redisson分布式锁
  * @DATE 2022/9/30 12:07
  */
-
-@Configuration
-public class RedissonConfig {
+//
+//@Configuration
+//public class RedissonConfig {
 //    @Bean
 //    public RedissonClient redissonClient(){
 //        Config config = new Config();
@@ -22,4 +25,4 @@ public class RedissonConfig {
 //        // 创建RedissonClient对象
 //        return Redisson.create(config);
 //    }
-}
+//}
