@@ -3,6 +3,8 @@ package com.tbxx.wpct.controller;
 import com.tbxx.wpct.dto.LoginFormDTO;
 import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.service.impl.SysUserServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpSession;
  * @DATE 2022/9/30 11:45
  */
 
+@Api(tags = "登录操作接口")
 @RestController
 @RequestMapping("/log")
 public class LoginOrOutController {
@@ -25,6 +28,7 @@ public class LoginOrOutController {
     /**
      * 登录
      */
+    @ApiOperation("登录")
     @PostMapping("/login")
     public Result authLogin(@RequestBody LoginFormDTO loginForm, HttpSession session){
         return userService.authLogin(loginForm, session);
@@ -33,6 +37,7 @@ public class LoginOrOutController {
     /**
      * 登出
      */
+    @ApiOperation("登出")
     @GetMapping("/logout")
     public Result Logout(HttpServletRequest request){
         return userService.logout(request);
