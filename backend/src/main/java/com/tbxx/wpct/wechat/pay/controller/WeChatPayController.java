@@ -85,19 +85,6 @@ public class WeChatPayController {
 
     }
 
-//    @CrossOrigin
-//    @GetMapping("/auth")
-//    public void wxLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        String path = domain + "/callback";
-//        String url = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
-//                "appid=" + app1 +
-//                "&redirect_uri=" + path +
-//                "&response_type=code" +
-//                "&scope=snsapi_userinfo" +
-//                "&state=1" +
-//                "#wechat_redirect";
-//        response.sendRedirect(url);
-//    }
 
     @ApiOperation("获得微信用户信息")
     @CrossOrigin
