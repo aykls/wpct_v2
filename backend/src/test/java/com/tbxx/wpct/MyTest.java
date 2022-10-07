@@ -24,13 +24,13 @@ public class MyTest {
 
 
     @Test
-    public void test(){
+    public void test() {
         String appSecret = wxPayConfig.getAppSecret();
         String appid = wxPayConfig.getAppid();
         String apiV3Key = wxPayConfig.getApiV3Key();
         String mchSerialNo = wxPayConfig.getMchSerialNo();
         String privateKeyPath = wxPayConfig.getPrivateKeyPath();
-        System.out.println(privateKeyPath+apiV3Key);
+        System.out.println(privateKeyPath + apiV3Key);
 
     }
 }
