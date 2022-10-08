@@ -18,7 +18,7 @@ import static com.tbxx.wpct.util.constant.RedisConstants.LOGIN_USER_TTL;
 /**
  * @author ZXX
  * @ClassName RefreshTokenInterceptor
- * @Description TODO
+ * @Description
  * @DATE 2022/9/30 13:29
  */
 

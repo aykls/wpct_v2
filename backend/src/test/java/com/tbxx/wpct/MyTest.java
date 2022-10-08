@@ -1,6 +1,6 @@
 package com.tbxx.wpct;
 
-import com.tbxx.wpct.wechat.pay.config.WxPayConfig;
+import com.tbxx.wpct.config.WxPayConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 /**
  * @author ZXX
  * @ClassName MyTest
- * @Description TODO
+ * @Description
  * @DATE 2022/10/6 16:32
  */
 

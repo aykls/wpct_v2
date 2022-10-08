@@ -1,4 +1,4 @@
-package com.tbxx.wpct.wechat.pay.enums;
+package com.tbxx.wpct.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

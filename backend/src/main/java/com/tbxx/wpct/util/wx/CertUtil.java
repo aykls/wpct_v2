@@ -1,7 +1,7 @@
-package com.tbxx.wpct.wechat.pay.util;
+package com.tbxx.wpct.util.wx;
 
 
-import com.tbxx.wpct.wechat.pay.config.Constant;
+import com.tbxx.wpct.config.Constant;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContexts;
 

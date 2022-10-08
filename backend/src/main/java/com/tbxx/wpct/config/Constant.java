@@ -1,4 +1,4 @@
-package com.tbxx.wpct.wechat.pay.config;
+package com.tbxx.wpct.config;
 
 public class Constant {
 	/**

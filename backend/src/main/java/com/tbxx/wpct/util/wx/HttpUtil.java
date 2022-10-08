@@ -1,4 +1,4 @@
-package com.tbxx.wpct.wechat.pay.util;
+package com.tbxx.wpct.util.wx;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;

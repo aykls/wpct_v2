@@ -6,7 +6,7 @@ import com.tbxx.wpct.entity.WechatUser;
 /**
  * @author ZXX
  * @InterfaceName WechatUserMapper
- * @Description TODO
+ * @Description
  * @DATE 2022/10/1 17:15
  */
 

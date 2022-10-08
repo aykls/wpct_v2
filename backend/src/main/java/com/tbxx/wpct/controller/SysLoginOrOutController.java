@@ -13,16 +13,16 @@ import javax.servlet.http.HttpSession;
 
 /**
  * @author ZXX
- * @ClassName LoginOrOutController
- * @Description TODO
+ * @ClassName SysLoginOrOutController
+ * @Description
  * @DATE 2022/9/30 11:45
  */
 
 @CrossOrigin //开放前端的跨域访问
-@Api(tags = "登录操作接口")
+@Api(tags = "后台管理系统登录操作接口")
 @RestController
 @RequestMapping("/log")
-public class LoginOrOutController {
+public class SysLoginOrOutController {
     @Resource
     SysUserServiceImpl userService;
 

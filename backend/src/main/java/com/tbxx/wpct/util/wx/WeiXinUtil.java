@@ -1,4 +1,4 @@
-package com.tbxx.wpct.wechat.pay.util;
+package com.tbxx.wpct.util.wx;
 
 import com.alibaba.fastjson.JSONObject;
 

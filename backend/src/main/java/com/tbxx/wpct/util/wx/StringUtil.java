@@ -1,4 +1,4 @@
-package com.tbxx.wpct.wechat.pay.util;
+package com.tbxx.wpct.util.wx;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

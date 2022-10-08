@@ -1,4 +1,4 @@
-package com.tbxx.wpct.wechat.pay.config;
+package com.tbxx.wpct.config;
 
 import com.wechat.pay.contrib.apache.httpclient.WechatPayHttpClientBuilder;
 import com.wechat.pay.contrib.apache.httpclient.auth.PrivateKeySigner;
@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 /**
  * @author ZXX
  * @ClassName WxPayConfig
- * @Description TODO
+ * @Description
  * @DATE 2022/10/6 13:41
  */
 
