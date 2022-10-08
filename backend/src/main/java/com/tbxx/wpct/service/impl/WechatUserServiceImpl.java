@@ -57,15 +57,13 @@ public class WechatUserServiceImpl extends ServiceImpl<WechatUserMapper, WechatU
         //写入用户关联的房屋信息（一个用户可以对应多个房屋 多对多）
         List<BuildInfo> buildInfoList = wechatUser.getBuildInfoList();
 
-
-
         buildInfoMapper.insertBuildInfos(buildInfoList);
 
 
 
         wechatUserMapper.insertBuildAndwechatUser(openid,wechatUser.getBuildInfoList());
 
-        return null ;
+        return Result.ok("注册成功") ;
     }
 
 
