@@ -2,7 +2,9 @@ package com.tbxx.wpct.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tbxx.wpct.dto.Result;
+import com.tbxx.wpct.entity.BuildInfo;
 import com.tbxx.wpct.entity.WechatUser;
+import com.tbxx.wpct.service.impl.BuildInfoServiceImpl;
 import com.tbxx.wpct.service.impl.WechatPayServiceImpl;
 import com.tbxx.wpct.service.impl.WechatUserServiceImpl;
 import io.swagger.annotations.Api;
@@ -29,6 +31,9 @@ public class WechatUserController {
     @Autowired
     WechatUserServiceImpl wechatUserService;
 
+    @Autowired
+    BuildInfoServiceImpl buildInfoService;
+
 
     @ApiOperation("微信用户注册")
     @PostMapping ("/register")
@@ -37,6 +42,8 @@ public class WechatUserController {
           wechatUserService.register(wechatUser,openid);
           return Result.ok();
     }
+
+
 
 
 }

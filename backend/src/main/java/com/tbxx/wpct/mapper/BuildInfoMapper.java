@@ -14,4 +14,6 @@ import java.util.List;
 
 public interface BuildInfoMapper extends BaseMapper<BuildInfo> {
     void insertBuildInfos(List<BuildInfo> buildInfoList);
+
+
 }

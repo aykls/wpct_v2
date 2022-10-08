@@ -37,10 +37,6 @@ public class WechatUserServiceImpl extends ServiceImpl<WechatUserMapper, WechatU
 
      /**
      * 注册
-     * QueryWrapper<WechatUser> queryWrapper=new QueryWrapper<>();
-     *           queryWrapper.eq("openid",openid);
-     *           wechatUserService.update(wechatUser, queryWrapper);
-     *           return  Result.ok("注册成功");
      */
     @Override
     public Result register(WechatUser wechatUser, String openid) {
@@ -54,9 +50,8 @@ public class WechatUserServiceImpl extends ServiceImpl<WechatUserMapper, WechatU
         }
         log.warn("手机身份证格式验证");
 
-        //写入用户关联的房屋信息（一个用户可以对应多个房屋 多对多）
+        //用户注册
         List<BuildInfo> buildInfoList = wechatUser.getBuildInfoList();
-
         buildInfoMapper.insertBuildInfos(buildInfoList);
 
 
