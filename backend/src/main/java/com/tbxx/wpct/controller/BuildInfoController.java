@@ -28,8 +28,11 @@ public class BuildInfoController {
     BuildInfoServiceImpl buildInfoService;
 
 
-//    @ApiOperation("用户新增绑定房屋信息")
-//    @PostMapping("")
+    @ApiOperation("用户新增绑定房屋信息")
+    @PostMapping("/add")
+    public Result addBindBuild(@RequestBody BuildInfo buildInfo) {
+        return buildInfoService.addBindBuild(buildInfo);
+    }
 
 
 
@@ -53,6 +56,7 @@ public class BuildInfoController {
 //                    buildInfoService.
 //
 //                    }
+
 
 
 }
