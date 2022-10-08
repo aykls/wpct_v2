@@ -5,10 +5,10 @@
 <mapper namespace="com.tbxx.wpct.mapper.BuildInfoMapper">
 
     <insert id="insertBuildInfos" >
-        insert into tb_build_info (house_type, village_name, build_no, room_no)
+        insert into tb_build_info (house_type, village_name, build_no, room_no,openid,relation)
         values
         <foreach collection="buildInfoList" item="item" index="index" separator=",">
-            (#{item.houseType}, #{item.villageName}, #{item.buildNo},#{item.roomNo})
+            (#{item.houseType}, #{item.villageName}, #{item.buildNo},#{item.roomNo},#{item.openid},#{item.relation})
         </foreach>
     </insert>
 

@@ -1,6 +1,7 @@
 package com.tbxx.wpct.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.BuildInfo;
 
 /**
@@ -11,4 +12,13 @@ import com.tbxx.wpct.entity.BuildInfo;
  */
 
 public interface BuildInfoService extends IService<BuildInfo> {
+
+
+    Result removeBuild(int buildid);
+
+    Result updateBuild(BuildInfo buildid);
+
+    Result buildList(String openid);
+
+    Result addBindBuild(BuildInfo buildInfo);
 }

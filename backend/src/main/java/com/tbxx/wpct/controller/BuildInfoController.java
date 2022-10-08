@@ -35,27 +35,24 @@ public class BuildInfoController {
     }
 
 
+    @ApiOperation("用户房屋列表")
+    @GetMapping("/list")
+    public Result BuildList(@RequestParam String openid) {
+        return buildInfoService.buildList(openid);
+    }
 
 
+    @ApiOperation("用户修改绑定房屋信息")
+    @PostMapping("/update")
+    public Result updateBindBuild(@RequestBody BuildInfo buildInfo) {
+        return buildInfoService.updateBuild(buildInfo);
+    }
 
-
-
-
-
-//
-//    @ApiOperation("用户修改绑定房屋信息")
-//    @PostMapping("/update/bind/build")
-//    public Result removeBindBuild(@RequestBody int id){
-//
-//
-//    }
-//
-//    @ApiOperation("用户删除房屋信息")
-//    @PostMappideng("/remove/bind/build")
-//    public Result addBindBuild(@RequestBody BuildInfo buildInfo){
-//                    buildInfoService.
-//
-//                    }
+    @ApiOperation("用户删除房屋信息")
+    @GetMapping("/remove")
+    public Result removeBindBuild(@RequestParam int id) {
+        return buildInfoService.removeBuild(id);
+    }
 
 
 

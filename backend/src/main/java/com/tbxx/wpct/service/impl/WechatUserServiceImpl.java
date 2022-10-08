@@ -39,7 +39,7 @@ public class WechatUserServiceImpl extends ServiceImpl<WechatUserMapper, WechatU
      * 注册
      */
     @Override
-    public Result register(WechatUser wechatUser, String openid) {
+    public Result register(WechatUser wechatUser) {
         String phoneNumber = wechatUser.getNumber();
         String pid = wechatUser.getPid();
         if(!phoneNumber.matches(PHONE_REGEX)){
@@ -54,13 +54,8 @@ public class WechatUserServiceImpl extends ServiceImpl<WechatUserMapper, WechatU
         List<BuildInfo> buildInfoList = wechatUser.getBuildInfoList();
         buildInfoMapper.insertBuildInfos(buildInfoList);
 
-
-
-        wechatUserMapper.insertBuildAndwechatUser(openid,wechatUser.getBuildInfoList());
-
         return Result.ok("注册成功") ;
     }
-
 
 
 }

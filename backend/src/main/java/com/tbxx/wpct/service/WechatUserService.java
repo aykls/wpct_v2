@@ -16,7 +16,7 @@ import java.util.List;
 
 public interface WechatUserService extends IService<WechatUser> {
 
-    Result register(WechatUser wechatUser, String openid);
-    
-   
+    Result register(WechatUser wechatUser);
+
+
 }

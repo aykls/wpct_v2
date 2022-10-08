@@ -29,8 +29,11 @@ public class BuildInfo {
     /** 房号 */
     private String roomNo;
     /**
+     * openId
+     */
+    private  String openid;
+    /**
      * 与房屋的关系
      */
-    @TableField(exist = false)
     private  String relation;
 }

@@ -1,7 +1,11 @@
 package com.tbxx.wpct.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tbxx.wpct.entity.BuildInfo;
 import com.tbxx.wpct.entity.WechatUser;
+import springfox.documentation.builders.BuilderDefaults;
+
+import java.util.List;
 
 /**
  * @author ZXX
@@ -11,4 +15,5 @@ import com.tbxx.wpct.entity.WechatUser;
  */
 
 public interface WechatUserMapper extends BaseMapper<WechatUser> {
+
 }
