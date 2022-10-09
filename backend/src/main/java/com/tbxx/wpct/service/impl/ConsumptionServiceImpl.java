@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author ZXX
- * @ClassName ConsumptionImpl
+ * @ClassName ConsumptionServiceImpl
  * @Description TODO
  * @DATE 2022/10/8 21:13
  */
 
 @Slf4j
 @Service
-public class ConsumptionImpl extends ServiceImpl<ConsumptionMapper, Consumption> implements ConsumptionService {
+public class ConsumptionServiceImpl extends ServiceImpl<ConsumptionMapper, Consumption> implements ConsumptionService {
 
 }

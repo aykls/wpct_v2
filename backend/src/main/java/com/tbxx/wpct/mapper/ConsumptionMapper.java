@@ -11,4 +11,5 @@ import com.tbxx.wpct.entity.Consumption;
  */
 
 public interface ConsumptionMapper extends BaseMapper<Consumption> {
+
 }
