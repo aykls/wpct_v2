@@ -182,7 +182,9 @@ public class WeChatPayController {
         //System.out.println("我捉:" + jsonObject.getString("openid"));
         //System.out.println(userRes);
 
-        userUrl = domain + "/?openid=" + jsonObject.getString("openid") + "#/wxauth";
+        userUrl = "https://60z8193p42.goho.co//zqb/new.html" + "?openid=" + jsonObject.getString("openid");
+        //userUrl = "https://60z8193p42.goho.co//zqb/new.html" + "?openid=oXXFD6jXgtzCz4GWDJG7jzC11Z0Q";
+
         //TODO 如果没有授权登录 跳转注册页面  未完成
         response.sendRedirect(userUrl);
 
@@ -235,7 +237,7 @@ public class WeChatPayController {
     @PostMapping("/jsapi/pay")
     public Result wechatPay() throws IOException, NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         log.warn("JSAPI下单");
-        String resultJson = wechatPayService.jsapiPay();
+        String resultJson = wechatPayService.jsapiPay(openid,orderId);
         return Result.ok(resultJson);
     }
 
