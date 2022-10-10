@@ -1,7 +1,11 @@
 package com.tbxx.wpct.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.gson.Gson;
+import com.tbxx.wpct.entity.OrderInfo;
+import com.tbxx.wpct.mapper.OrderInfoMapper;
 import com.tbxx.wpct.service.WechatPayService;
 import com.tbxx.wpct.util.HttpUtils;
 import com.tbxx.wpct.util.OrderNoUtils;
@@ -50,6 +54,10 @@ public class WechatPayServiceImpl implements WechatPayService {
     private CloseableHttpClient httpClient;
 
 
+    @Resource
+    OrderInfoMapper orderInfoMapper;
+
+    //测试号 appid 和 app
     String app1 = "wxb7756386a217f9f1";
     String app2 = "705ab7713492d438d4181c211e82f0ec";
 
@@ -60,11 +68,12 @@ public class WechatPayServiceImpl implements WechatPayService {
      * 请求URL：https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi
      */
     @Override
-    public String jsapiPay() throws IOException, NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+    public String jsapiPay(String openid, String orderId) throws Exception {
+        log.warn("生成订单");
 
-        log.warn("生成订单======test");
+        OrderInfo orderInfo = orderInfoMapper.selectById(orderId);
 
-        log.warn("调用统一下单api=====test");
+        log.warn("调用统一下单api");
         HttpPost httpPost = new HttpPost(wxPayConfig.getDomain().concat("/v3/pay/transactions/jsapi"));
 
         //请求body参数
@@ -73,12 +82,12 @@ public class WechatPayServiceImpl implements WechatPayService {
 
         paramsMap.put("appid", wxPayConfig.getAppid());
         paramsMap.put("mchid", wxPayConfig.getMchId());
-        paramsMap.put("description", "wpct支付"); //test
-        paramsMap.put("out_trade_no", OrderNoUtils.getOrderNo());   //test
+        paramsMap.put("description", orderInfo.getTitle());
+        paramsMap.put("out_trade_no", orderInfo.getOrderNo());   //test
         paramsMap.put("notify_url", "https://4s3471264h.zicp.fun/weixin/jsapi/notify");  //test
 
         Map amountMap = new HashMap();
-        amountMap.put("total", 1);  //test
+        amountMap.put("total", orderInfo.getTotalFee());
         amountMap.put("currency", "CNY");
 
         Map payerMap = new HashMap();
@@ -119,15 +128,22 @@ public class WechatPayServiceImpl implements WechatPayService {
             Map<String, String> resultMap = gson.fromJson(bodyAsString,
                     HashMap.class);
             String prepayId = resultMap.get("prepay_id");
+            //存入 预支付交易会话标识 防止调用下单接口
+            orderInfo.setPrepayId(prepayId);
+            QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("id",orderId);
+            orderInfoMapper.update(orderInfo,queryWrapper);
 
-            String paySign = wxPayConfig.getSign(wxPayConfig.getAppid(), timeStamp, nonceStr, prepayId,
-                    wxPayConfig.getPrivateKeyPath());// 签名
+
+//            String paySign = wxPayConfig.getSign(wxPayConfig.getAppid(), timeStamp, nonceStr, prepayId,
+//                    wxPayConfig.getPrivateKeyPath());// 签名
+            String Sign =  wxPayConfig.getSign(wxPayConfig.getAppid(), Long.parseLong(timeStamp),nonceStr,"prepay_id="+ prepayId);
 
             resultMap.put("timeStamp", timeStamp);
             resultMap.put("nonceStr", nonceStr);
             resultMap.put("appId", wxPayConfig.getAppid());
             resultMap.put("signType", "RSA");
-            resultMap.put("paySign", paySign);
+            resultMap.put("paySign", Sign);
 
             String resultJson = gson.toJson(resultMap);
 
@@ -188,7 +204,7 @@ public class WechatPayServiceImpl implements WechatPayService {
 
 
             log.warn("收到支付结果通知，处理订单........");
-            //处理订单
+            //TODO 处理订单
             //////////////////////////////////////////////////
 
             //成功应答

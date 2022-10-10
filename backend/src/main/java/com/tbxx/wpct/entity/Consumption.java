@@ -1,5 +1,8 @@
 package com.tbxx.wpct.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -15,67 +18,109 @@ import java.io.Serializable;
 
 @Data
 @TableName(value = "tb_consumption")
-public class Consumption implements Serializable{
+public class Consumption implements Serializable {
+    /**
+     * 房屋id
+     **/
+    @TableId(value = "id", type = IdType.AUTO)
+    private int buildId;
 
-    private int buildId ;
+    /**
+     * 面积核准单价
+     */
+    private int areaFee;
 
-    /** 面积核准单价 */
+    /**
+     * 面积
+     */
+    private double area;
 
-    private double areaFee ;
+    /**
+     * 核准面积
+     */
+    private double limitArea;
 
-    /** 面积 */
-    private double area ;
+    /**
+     * 超出面积
+     */
+    private double overArea;
 
-    /** 核准面积 */
-    private double limitArea ;
+    /**
+     * 超出面积单价
+     */
+    private int overareaFee;
 
-    /** 超出面积 */
-    private double overArea ;
+    /**
+     * 物业单价
+     */
+    private int property;
 
-    /** 超出面积单价 */
-    private double overareaFee ;
+    /**
+     * 物业费
+     */
+    private int propertyFee;
 
-    /** 物业单价 */
-    private double property ;
+    /**
+     * 押金
+     */
+    private int deposit;
 
-    /** 物业费 */
-    private double propertyFee ;
+    /**
+     * 公共电梯费
+     */
+    private int liftFee;
 
-    /** 押金 */
-    private double deposit ;
+    /**
+     * 水费
+     */
+    private int waterFee;
 
-    /** 公共电梯费 */
-    private double liftFee ;
+    /**
+     * 电费
+     */
+    private int electricity;
 
-    /** 水费 */
-    private double waterFee ;
+    /**
+     * 气费
+     */
+    private int gasFee;
 
-    /** 电费 */
-    private double electricity ;
+    /**
+     * 停车费
+     */
+    private int carFee;
 
-    /** 气费 */
-    private double gasFee ;
+    /**
+     * 收回不符合条件疫情减免金额
+     */
+    private int aFee;
 
-    /** 停车费 */
-    private double carFee ;
+    /**
+     * 应收不符合条件租金
+     */
+    private int bFee;
 
-    /** 收回不符合条件疫情减免金额 */
-    private double aFee ;
+    /**
+     * 应收应退租金
+     */
+    private int cFee;
 
-    /** 应收不符合条件租金 */
-    private double bFee ;
+    /**
+     * 应收应退物业费
+     */
+    private int dFee;
 
-    /** 应收应退租金 */
-    private double cFee ;
+    /**
+     * 优惠
+     */
+    private int discount;
 
-    /** 应收应退物业费 */
-    private double dFee ;
 
-    /** 优惠 */
-    private double discount ;
-
-    /** 月金额 */
-    private double monthCost ;
+    /**
+     * 月金额
+     */
+    @TableField(exist = false)
+    private int monthCost;
 
 
 }

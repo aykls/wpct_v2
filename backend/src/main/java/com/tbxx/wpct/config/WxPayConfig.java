@@ -63,7 +63,6 @@ public class WxPayConfig {
     private String notifyDomain;
 
 
-
     /**
      * 获取商户私钥
      *
@@ -97,7 +96,7 @@ public class WxPayConfig {
         // 获取证书管理器实例
         CertificatesManager certificatesManager = CertificatesManager.getInstance();
         // 向证书管理器增加需要自动更新平台证书的商户信息 // ... 若有多个商户号，可继续调用putMerchant添加商户信息
-        certificatesManager.putMerchant(mchId, wechatPay2Credentials,apiV3Key.getBytes(StandardCharsets.UTF_8));
+        certificatesManager.putMerchant(mchId, wechatPay2Credentials, apiV3Key.getBytes(StandardCharsets.UTF_8));
 
         // 从证书管理器中获取verifier
         Verifier verifier = certificatesManager.getVerifier(mchId);
@@ -106,10 +105,11 @@ public class WxPayConfig {
 
     /**
      * 获取HttpClient对象
+     *
      * @param verifier 签名验证器
      */
     @Bean(name = "WxPayClient")
-    public CloseableHttpClient getWxPayClient(Verifier verifier){
+    public CloseableHttpClient getWxPayClient(Verifier verifier) {
 
         log.info("获取HttpClient");
 
@@ -129,7 +129,7 @@ public class WxPayConfig {
 
 
     @Bean(name = "wxPayNoSignClient")
-    public CloseableHttpClient getWxPayNoSignClient(Verifier verifier){
+    public CloseableHttpClient getWxPayNoSignClient(Verifier verifier) {
         log.info("初始化wxPayNoSignClient");
         //获取商户私钥
         PrivateKey privateKey = getPrivateKey(privateKeyPath);
@@ -144,17 +144,37 @@ public class WxPayConfig {
     }
 
 
+    //    public  String getSign(String appid ,String timeStamp,String nonceStr ,String prepayId  , String  privateKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+//
+//            String signatureStr = Stream.of(appid, timeStamp, nonceStr, prepayId)
+//                    .collect(Collectors.joining("\n", "", "\n"));
+//            Signature sign = Signature.getInstance("SHA256withRSA");
+//            PrivateKey merchantPrivateKey = this.getPrivateKey(privateKey);
+//            sign.initSign(merchantPrivateKey);
+//            sign.update(signatureStr.getBytes(StandardCharsets.UTF_8));
+//            return Base64.getEncoder().encodeToString(sign.sign());
+//
+//    }
+    private String buildMessage(String appId, long timestamp, String nonceStr, String pack) {
+        return appId + "\n"
+                + timestamp + "\n"
+                + nonceStr + "\n"
+                + pack + "\n";
+    }
+    private String sign(byte[] message) throws Exception{
+        PrivateKey merchantPrivateKey = PemUtil
+                .loadPrivateKey(new ByteArrayInputStream( Constant.privateKey.getBytes("utf-8")));
 
-    public  String getSign(String appid ,String timeStamp,String nonceStr ,String prepayId  , String  privateKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-
-            String signatureStr = Stream.of(appid, timeStamp, nonceStr, prepayId)
-                    .collect(Collectors.joining("\n", "", "\n"));
-            Signature sign = Signature.getInstance("SHA256withRSA");
-            PrivateKey merchantPrivateKey = this.getPrivateKey(privateKey);
-            sign.initSign(merchantPrivateKey);
-            sign.update(signatureStr.getBytes(StandardCharsets.UTF_8));
-            return Base64.getEncoder().encodeToString(sign.sign());
-
+        Signature sign = Signature.getInstance("SHA256withRSA");
+        //这里需要一个PrivateKey类型的参数，就是商户的私钥。
+        sign.initSign(merchantPrivateKey);
+        sign.update(message);
+        return Base64.getEncoder().encodeToString(sign.sign());
+    }
+    public String getSign(String appId, long timestamp, String nonceStr, String pack) throws Exception {
+        String message = buildMessage(appId, timestamp, nonceStr, pack);
+        String paySign = sign(message.getBytes("utf-8"));
+        return paySign;
     }
 
 

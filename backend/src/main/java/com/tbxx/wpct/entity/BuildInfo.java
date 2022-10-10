@@ -17,23 +17,33 @@ import lombok.Data;
 @TableName("tb_build_info")
 public class BuildInfo {
 
-    /** id自增**/
+    /**
+     * id自增
+     **/
     @TableId(value = "id", type = IdType.AUTO)
-    private int id ;
-    /** 房屋类型 */
-    private String houseType ;
-    /** 小区名 */
-    private String villageName ;
-    /** 楼号 */
-    private String buildNo ;
-    /** 房号 */
+    private int id;
+    /**
+     * 房屋类型
+     */
+    private String houseType;
+    /**
+     * 小区名
+     */
+    private String villageName;
+    /**
+     * 楼号
+     */
+    private String buildNo;
+    /**
+     * 房号
+     */
     private String roomNo;
     /**
      * openId
      */
-    private  String openid;
+    private String openid;
     /**
      * 与房屋的关系
      */
-    private  String relation;
+    private String relation;
 }

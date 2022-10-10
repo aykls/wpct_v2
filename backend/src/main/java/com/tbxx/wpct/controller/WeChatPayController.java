@@ -17,6 +17,7 @@ import com.wechat.pay.contrib.apache.httpclient.exception.NotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,7 +58,8 @@ public class WeChatPayController {
     WechatUserServiceImpl wechatUserService;
 
 
-    private String domain = "https://4s3471264h.zicp.fun";   //"http://fjwpct.com";//"http://dadanb.top";
+    private String domain = "https://4s3471264h.zicp.fun";  //"http://fjwpct.com";  //"http://dadanb.top";  //"https://4s3471264h.zicp.fun";
+
     String app1 = "wxb7756386a217f9f1";
     String app2 = "705ab7713492d438d4181c211e82f0ec";
 
@@ -82,7 +84,7 @@ public class WeChatPayController {
             }
 
             String url = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
-                    "appid=" + app1 +
+                    "appid=" + wxPayConfig.getAppid() +
                     "&redirect_uri=" + path +
                     "&response_type=code" +
                     "&scope=snsapi_userinfo" +
@@ -114,8 +116,8 @@ public class WeChatPayController {
          */
         //2.通过code换取网页token
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token?" +
-                "appid=" + app1 +
-                "&secret=" + app2 +
+                "appid=" + wxPayConfig.getAppid() +
+                "&secret=" + wxPayConfig.getAppSecret() +
                 "&code=" + code +
                 "&grant_type=authorization_code";
         String s = HttpUtil.get(url);
@@ -147,7 +149,8 @@ public class WeChatPayController {
                 "&openid=" + openid +
                 "&lang=zh_CN";
 
-        String userRes = WeiXinUtil.httpRequest(userUrl, "GET", null);
+        // String userRes = WeiXinUtil.httpRequest(userUrl, "GET", null);
+        String userRes = HttpUtil.get(userUrl);
         log.warn("用户的信息==>{}", userRes);
 
 
@@ -158,16 +161,13 @@ public class WeChatPayController {
             WechatUser wechatUser = new WechatUser();
             wechatUser.setOpenid(jsonObject.getString("openid"));
             wechatUser.setNickname(jsonObject.getString("nickname"));
-            wechatUser.setSex(jsonObject.getInteger("sex"));
-            wechatUser.setCity(jsonObject.getString("city"));
-            wechatUser.setCountry(jsonObject.getString("country"));
             wechatUserService.save(wechatUser);
         }
 
-        if (user == null || user.getPid() == null) {
-            //TODO 跳转注册页面
-        }
-        // TODO 绑定身份证-> 跳转首页
+//        if (user == null || user.getPid() == null) {
+//            //TODO 跳转注册页面
+//        }
+//        // TODO 绑定身份证-> 跳转首页
 
 
         /*
@@ -198,7 +198,7 @@ public class WeChatPayController {
         Gson gson = new Gson();
 
         // https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET
-        String url1 = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + app1 + "&secret=" + app2;
+        String url1 = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + wxPayConfig.getAppid() + "&secret=" + wxPayConfig.getAppSecret();
         String resu1 = WeiXinUtil.httpRequest(url1, "GET", null);
         log.warn("结果1是==>{}", resu1);
 
@@ -216,13 +216,14 @@ public class WeChatPayController {
         String nonceStr = RandomUtil.randomString(32);// 随机字符串
         String timeStamp = String.valueOf(System.currentTimeMillis() / 1000);// 时间戳
         String url = "https://4s3471264h.zicp.fun";   //test
+        //String url = "http://fjwpct.com";
 
         String jsapi_ticket = "jsapi_ticket=" + ticket + "&noncestr=" + nonceStr + "&timestamp=" + timeStamp + "&url=" + url;
 
         String resSign = DigestUtil.sha1Hex(jsapi_ticket);
         HashMap<String, Object> respJsonMap = new HashMap();
 
-        respJsonMap.put("appId", app1);
+        respJsonMap.put("appId", wxPayConfig.getAppid());
         respJsonMap.put("timestamp", timeStamp);
         respJsonMap.put("nonceStr", nonceStr);
         respJsonMap.put("signature", resSign);
@@ -235,7 +236,7 @@ public class WeChatPayController {
 
     @ApiOperation("JSAPI下单")
     @PostMapping("/jsapi/pay")
-    public Result wechatPay() throws IOException, NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+    public Result wechatPay(@RequestParam String openid, @RequestParam(name = "id") String orderId) throws Exception {
         log.warn("JSAPI下单");
         String resultJson = wechatPayService.jsapiPay(openid,orderId);
         return Result.ok(resultJson);

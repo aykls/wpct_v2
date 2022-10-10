@@ -36,24 +36,8 @@ public class WechatUser implements Serializable {
      */
     private String nickname;
 
-    /**
-     * 性别
-     */
-    private Integer sex;
-
-    /**
-     * city
-     */
-    private String city;
-
-    /**
-     * country
-     */
-    private String country;
 
     //
-
-
     /**
      * 姓名
      */

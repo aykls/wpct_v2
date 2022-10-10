@@ -19,7 +19,7 @@ import java.security.SignatureException;
  */
 
 public interface WechatPayService {
-    String  jsapiPay() throws IOException, NoSuchAlgorithmException, SignatureException, InvalidKeyException;
+    String  jsapiPay(String openid,String orderId) throws Exception;
 
     String payNotify(HttpServletRequest request, HttpServletResponse response) throws GeneralSecurityException, NotFoundException, IOException, HttpCodeException;
 }
