@@ -10,6 +10,8 @@ import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author ZXX
@@ -22,4 +24,26 @@ public interface WechatPayService {
     String  jsapiPay(String openid,String orderId) throws Exception;
 
     String payNotify(HttpServletRequest request, HttpServletResponse response) throws GeneralSecurityException, NotFoundException, IOException, HttpCodeException;
+
+
+    void processOrder(String plainText);
+
+    void cancelOrder(String orderNo) throws Exception;
+
+    String queryOrder(String orderNo) throws IOException;
+
+    void checkOrderStatus(String orderNo) throws Exception;
+
+    void refund(String orderNo, String reason) throws Exception;
+
+    String queryRefund(String refundNo) throws Exception;
+
+    void checkRefundStatus(String refundNo) throws Exception;
+
+    void processRefund(HashMap<String, Object> resultMap) throws  Exception;
+
+    String queryBill(String billDate, String type) throws Exception;
+
+    String downloadBill(String billDate, String type) throws Exception;
 }
+

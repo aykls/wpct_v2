@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.tbxx.wpct.mapper.ConsumptionMapper">
+
+    <!--date_format(tbname,'%Y-%m')=date_format(now(),'%Y-%m')-->
+    <update id="updatePooledToZero">
+        UPDATE tb_consumption c
+            LEFT JOIN tb_payinfo p on c.build_id = payinfo_id
+        SET c.lift_fee=0,
+            c.gwater_fee=0,
+            c.electricity_fee=0
+        WHERE c.build_id = p.payinfo_id
+          AND DATE_FORMAT(p.pay_begin_time, '%Y-%m') = date_format(now(), '%Y-%m')
+    </update>
+
+    <update id="addPooledFee">
+        UPDATE tb_consumption c
+            LEFT JOIN tb_payinfo p on c.build_id = payinfo_id
+        SET c.${control}=#{Fee}
+        WHERE c.build_id = p.payinfo_id
+          AND DATE_FORMAT(p.pay_begin_time, '%Y-%m') = date_format(now(), '%Y-%m')
+          AND village_name = #{villageName}
+    </update>
+
+    <update id="updatePooledFee">
+        UPDATE tb_pooled_fee p
+        SET p.${control} = #{Fee}
+        WHERE DATE_FORMAT(p.create_time, '%Y-%m') = date_format(now(), '%Y-%m')
+          AND village_name = #{villageName}
+    </update>
+
+
+    <update id="updateToNew">
+        UPDATE tb_consumption c
+            LEFT JOIN tb_payinfo p on c.build_id = payinfo_id
+        SET c.${control}=#{Fee}
+        WHERE c.build_id = p.payinfo_id
+          AND DATE_FORMAT(p.pay_begin_time, '%Y-%m') = date_format(now(), '%Y-%m')
+    </update>
+</mapper>

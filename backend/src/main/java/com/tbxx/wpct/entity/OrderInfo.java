@@ -28,9 +28,7 @@ public class OrderInfo implements Serializable {
 
     private String orderNo;//商户订单编号
 
-    private int totalFee;//订单金额(分)
-
-    private String prepayId;//订单连接
+    private Integer totalFee;//订单金额(分)
 
     private String orderStatus;//订单状态
 
@@ -52,6 +50,7 @@ public class OrderInfo implements Serializable {
     private String roomNo;
 
 
+
     @TableField(exist = false)
     private List<String> openid;
 
@@ -59,4 +58,14 @@ public class OrderInfo implements Serializable {
     private String relation;
 
 
+    @Override
+    public int compareTo(OrderInfo orderInfo) {
+        LocalDateTime createTime1 = orderInfo.getCreateTime();
+        long l1 = createTime1.atZone(ZONE_ID).toEpochSecond();
+        LocalDateTime createTime2 = this.getCreateTime();
+        long l2 = createTime2.atZone(ZONE_ID).toEpochSecond();
+
+
+        return (int) (l1-l2);
+    }
 }

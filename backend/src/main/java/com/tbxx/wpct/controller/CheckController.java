@@ -21,7 +21,7 @@ import javax.annotation.Resource;
  */
 
 @CrossOrigin //开放前端的跨域访问
-@Api(tags = "费用")
+@Api(tags = "账单管理")
 @Slf4j
 @RestController
 @RequestMapping("/check")
@@ -29,25 +29,27 @@ public class CheckController {
 
     @Autowired
     CheckServiceImpl checkService;
+
     /**
-     * 缴费添加
+     * 缴费添加(同步)
      */
     @ApiOperation("新增缴费")
     @PostMapping("/add")
-    public Result addCheck(@RequestBody PayInfo payinfo){
+    public Result addCheck(@RequestBody PayInfo payinfo) {
         return checkService.addCheck(payinfo);
     }
 
 
-    /**
-     * 删除缴费
-     */
-//    @ApiOperation("删除缴费")
-//    @PostMapping("/remove")
-//    public Result removeCheck(@RequestBody ){
-//
-//
-//        return
-//    }
 
+
+    /**
+     * 前端微信用户缴费列表
+     */
+    @ApiOperation("前台微信用户列表")
+    @PostMapping("/flist")
+    public Result CheckList(@RequestParam String openid) {
+
+        return checkService.checklist(openid);
+
+    }
 }

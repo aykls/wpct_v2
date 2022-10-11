@@ -28,7 +28,7 @@ public class Consumption implements Serializable {
     /**
      * 面积核准单价
      */
-    private int areaFee;
+    private Integer areaFee;
 
     /**
      * 面积
@@ -48,79 +48,88 @@ public class Consumption implements Serializable {
     /**
      * 超出面积单价
      */
-    private int overareaFee;
+    private Integer overareaFee;
 
     /**
      * 物业单价
      */
-    private int property;
+    private Integer property;
 
     /**
      * 物业费
      */
-    private int propertyFee;
+    private Integer propertyFee;
 
     /**
      * 押金
      */
-    private int deposit;
+    private Integer deposit;
 
-    /**
-     * 公共电梯费
-     */
-    private int liftFee;
 
     /**
      * 水费
      */
-    private int waterFee;
+    private Integer waterFee;
 
     /**
      * 电费
      */
-    private int electricity;
+    private Integer electricity;
 
     /**
      * 气费
      */
-    private int gasFee;
+    private Integer gasFee;
 
     /**
      * 停车费
      */
-    private int carFee;
+    private Integer carFee;
 
     /**
      * 收回不符合条件疫情减免金额
      */
-    private int aFee;
+    private Integer aFee;
 
     /**
      * 应收不符合条件租金
      */
-    private int bFee;
+    private Integer bFee;
 
     /**
      * 应收应退租金
      */
-    private int cFee;
+    private Integer cFee;
 
     /**
      * 应收应退物业费
      */
-    private int dFee;
+    private Integer dFee;
 
     /**
      * 优惠
      */
-    private int discount;
+    private Integer discount;
+
+    /**
+     * 公电梯费
+     */
+    private Integer liftFee;
+    /**
+     * 公水费
+     */
+    private Integer gwaterFee;
+    /**
+     * 公电费
+     */
+    private Integer electricityFee;
 
 
     /**
      * 月金额
      */
     @TableField(exist = false)
-    private int monthCost;
+    private Integer monthCost;
 
 
 }

@@ -16,7 +16,7 @@ public enum WxNotifyType {
 	/**
 	 * 退款结果通知
 	 */
-	REFUND_NOTIFY("/wenxin/jsapi/refunds/notify");
+	REFUND_NOTIFY("/wenxin/refunds/notify");
 
 	/**
 	 * 类型

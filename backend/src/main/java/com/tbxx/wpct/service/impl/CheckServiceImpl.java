@@ -1,6 +1,14 @@
 package com.tbxx.wpct.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.tbxx.wpct.dto.Result;
+import com.tbxx.wpct.dto.UserDTO;
+import com.tbxx.wpct.entity.BuildInfo;
 import com.tbxx.wpct.entity.Consumption;
 import com.tbxx.wpct.entity.OrderInfo;
 import com.tbxx.wpct.entity.PayInfo;
@@ -10,6 +18,8 @@ import com.tbxx.wpct.mapper.OrderInfoMapper;
 import com.tbxx.wpct.mapper.PayInfoMapper;
 import com.tbxx.wpct.service.CheckService;
 import com.tbxx.wpct.util.OrderNoUtils;
+import com.tbxx.wpct.util.UserHolder;
+import com.tbxx.wpct.util.UserList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,23 +47,24 @@ public class CheckServiceImpl implements CheckService {
     PayInfoMapper payfoMapper;
 
 
+    /**
+     * 新增缴费
+     *
+     * @param payinfo 缴费信息
+     * @return ok
+     */
     @Override
     public Result addCheck(PayInfo payinfo) {
         Consumption consumption = payinfo.getConsumption();
         OrderInfo orderInfo = new OrderInfo();
-        String orderNo = OrderNoUtils.getOrderNo();  //生成
+        String orderNo = OrderNoUtils.getOrderNo();  //生成商家订单号
 
-        Runnable runnable1 = () -> {
-            consumptionMapper.insert(consumption);
-        };
-        Runnable runnable2 = () -> {
-            payfoMapper.insert(payinfo);
-        };
+        String checkid = CheckUtil.getCheckNo();  //生成consumption和payinfo 连接
+        consumption.setBuildId(checkid);
+        payinfo.setPayinfoId(checkid);
 
-        //多线程执行SQL
-        runnable1.run();
-        runnable2.run();
-
+        consumptionMapper.insert(consumption);
+        payfoMapper.insert(payinfo);
 
         orderInfo.setTitle("武平城投缴费业务");   //商品描述
         orderInfo.setOrderNo(orderNo);  //商家订单号
@@ -69,5 +80,97 @@ public class CheckServiceImpl implements CheckService {
 
         return Result.ok("添加成功");
 
+    }
+
+    /**
+     * 后端缴费列表
+     */
+    @Override
+    public Result checksList(int pageNum,String month) {
+        PageHelper.startPage(pageNum, 5);
+        List<PayInfo> payInfos = baseMapper.checksList(month);
+        PageInfo<PayInfo> pageInfo = new PageInfo<>(payInfos, 5);
+        return Result.ok(pageInfo);
+    }
+
+
+
+    /**
+     * 前端微信用户缴费列表
+     */
+    @Override
+    public Result checklist(String openid) {
+        //openid 对应多个房屋信息
+        List<BuildInfo> buildInfoList = buildInfoService.query().eq("openid", openid).list();
+
+        //存放多个房子 多个时间段 多个订单集合
+        List<OrderInfo> totalList = new ArrayList<>();
+
+        //调用房屋集合 三个信息点 来查询 对应所有时间段订单
+        for (BuildInfo buildInfo : buildInfoList) {
+            QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("village_name", buildInfo.getVillageName()).eq("build_no", buildInfo.getBuildNo())
+                    .eq("room_no", buildInfo.getRoomNo());
+
+            //一个房屋订单集合 加入总订单集合
+            totalList.addAll(orderInfoMapper.selectList(queryWrapper));
+        }
+        Collections.sort(totalList);
+
+        totalList.forEach(
+                item -> System.out.println(item.toString())
+        );
+        return Result.ok(totalList);
+    }
+
+
+    /**
+     * 修改缴费（同步）
+     */
+    @Override
+    public Result checkUpdate(PayInfo payinfo) {
+        //TODO 操作留底
+//        UserDTO updateUser = UserHolder.getUser();
+//        log.warn("当前进行修改的用户是===>{}",updateUser.getUserName());
+//        payinfo.setUpdateUser(updateUser.getUserName());
+
+        String payinfoId = payinfo.getPayinfoId();
+        Consumption consumption = payinfo.getConsumption();
+        String buildId = consumption.getBuildId();
+
+        UpdateWrapper<PayInfo> updateWrapper1 = new UpdateWrapper<>();
+        updateWrapper1.eq("payinfo_id", payinfoId);
+
+        UpdateWrapper<Consumption> updateWrapper2 = new UpdateWrapper<>();
+        updateWrapper2.eq("build_id",buildId);
+
+        payfoMapper.update(payinfo,updateWrapper1);
+        consumptionMapper.update(consumption,updateWrapper2);
+
+
+        return Result.ok("更新成功!");
+    }
+
+
+    /**
+     * (前后端) 删除缴费列表
+     */
+    @Override
+    public Result deleteCheck(String checkid,String orderId) {
+        //查询订单
+        QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", orderId);
+        orderInfoMapper.delete(queryWrapper);
+
+        QueryWrapper<Consumption> cqueryWrapper = new QueryWrapper<>();
+        cqueryWrapper.eq("build_id",checkid);
+
+        QueryWrapper<PayInfo> pqueryWrapper = new QueryWrapper<>();
+        pqueryWrapper.eq("payinfo_id",checkid);
+
+        consumptionMapper.delete(cqueryWrapper);
+        payfoMapper.delete(pqueryWrapper);
+
+        return Result.ok("删除成功");
     }
 }

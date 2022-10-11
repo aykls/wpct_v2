@@ -12,8 +12,20 @@ import org.springframework.transaction.annotation.Transactional;
  * @DATE 2022/10/9 18:39
  */
 
-public interface CheckService  {
+public interface CheckService extends IService<PayInfo> {
 
     @Transactional
     Result addCheck(PayInfo payinfo);
+
+
+    @Transactional
+    Result checklist(String openid);
+
+    @Transactional
+    Result checksList(int pageNum,String month);
+
+    @Transactional
+    Result deleteCheck(String checkid,String orderId);
+
+    Result checkUpdate(PayInfo payinfo);
 }

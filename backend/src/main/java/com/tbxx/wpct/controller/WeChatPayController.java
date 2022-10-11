@@ -10,10 +10,16 @@ import com.tbxx.wpct.entity.WechatUser;
 import com.tbxx.wpct.service.impl.WechatPayServiceImpl;
 import com.tbxx.wpct.service.impl.WechatUserServiceImpl;
 import com.tbxx.wpct.config.WxPayConfig;
+import com.tbxx.wpct.util.HttpUtils;
 import com.tbxx.wpct.util.wx.HttpUtil;
 import com.tbxx.wpct.util.wx.WeiXinUtil;
 import com.wechat.pay.contrib.apache.httpclient.exception.HttpCodeException;
 import com.wechat.pay.contrib.apache.httpclient.exception.NotFoundException;
+import com.wechat.pay.contrib.apache.httpclient.exception.ParseException;
+import com.wechat.pay.contrib.apache.httpclient.exception.ValidationException;
+import com.wechat.pay.contrib.apache.httpclient.notification.Notification;
+import com.wechat.pay.contrib.apache.httpclient.notification.NotificationHandler;
+import com.wechat.pay.contrib.apache.httpclient.notification.NotificationRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +33,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author ZXX
@@ -41,7 +47,7 @@ import java.util.Map;
  * @DATE 2022/10/6 13:48
  */
 
-@Api(tags = "微信支付测试")
+@Api(tags = "微信支付JSAPI  ")
 @Slf4j
 @RestController
 @RequestMapping("/weixin")
@@ -170,21 +176,8 @@ public class WeChatPayController {
 //        // TODO 绑定身份证-> 跳转首页
 
 
-        /*
-        String userInfo = HttpUtil.get(userUrl);
-
-        String userRes = new String(userInfo.getBytes("GBK"), "UTF-8");
-       // String userRes=new String(userInfo.getBytes("GBK"),"UTF-8");
-
-        //JSONObject user = JSON.parseObject(userInfo);
-*/
-        //checkService.addCheck(jsonObject);//增加微信用户
-        //System.out.println("我捉:" + jsonObject.getString("openid"));
-        //System.out.println(userRes);
-
         userUrl = "https://60z8193p42.goho.co//zqb/new.html" + "?openid=" + jsonObject.getString("openid");
-        //userUrl = "https://60z8193p42.goho.co//zqb/new.html" + "?openid=oXXFD6jXgtzCz4GWDJG7jzC11Z0Q";
-
+        
         //TODO 如果没有授权登录 跳转注册页面  未完成
         response.sendRedirect(userUrl);
 
@@ -249,6 +242,139 @@ public class WeChatPayController {
         log.warn("支付结果通知");
         String notify = wechatPayService.payNotify(request, response);
         return Result.ok(notify);
+    }
+
+
+    /**
+     * 用户取消订单
+     *          //TODO 实际可能用不到
+     */
+    @ApiOperation("用户取消订单")
+    @PostMapping("/cancel/{orderNo}")
+    public Result cancel(@PathVariable String orderNo) throws Exception {
+        log.info("取消订单");
+        wechatPayService.cancelOrder(orderNo);
+        return Result.ok("订单已取消");
+    }
+
+    /**
+     * 查询订单
+     */
+    @ApiOperation("查询订单：测试订单状态用")
+    @GetMapping("query/{orderNo}")
+    public Result queryOrder(@PathVariable String orderNo) throws IOException {
+        log.info("查询订单");
+        String bodyAsString = wechatPayService.queryOrder(orderNo);
+        return Result.ok("查询成功",bodyAsString);
+    }
+
+
+    @ApiOperation("申请退款")
+    @PostMapping("/refunds/{orderNo}/{reason}")
+    public Result refunds(@PathVariable String orderNo, @PathVariable String reason)
+            throws Exception {
+        log.info("申请退款");
+        wechatPayService.refund(orderNo, reason);
+        return Result.ok();
+    }
+
+    /**
+     * 查询退款
+     *
+     * @param refundNo
+     * @return
+     * @throws Exception
+     */
+    @ApiOperation("查询退款：测试用")
+    @GetMapping("/query-refund/{refundNo}")
+    public Result queryRefund(@PathVariable String refundNo) throws Exception {
+        log.info("查询退款");
+        String result = wechatPayService.queryRefund(refundNo);
+        return Result.ok(result);
+    }
+
+
+    /**
+     * 退款结果通知
+     * 退款状态改变后，微信会把相关退款结果发送给商户。
+     */
+    @ApiOperation("退款结果通知")
+    @PostMapping("/refunds/notify")
+    public String refundsNotify(HttpServletRequest request, HttpServletResponse response) throws ValidationException, ParseException {
+
+        log.info("退款通知执行");
+        Gson gson = new Gson();
+        Map<String, String> map = new HashMap<>(); //应答对象
+
+        try {
+            //处理通知参数
+            String body = HttpUtils.readData(request);
+            String wechatPaySerial = request.getHeader("Wechatpay-Serial");
+            String nonce = request.getHeader("Wechatpay-Nonce");
+            String timestamp = request.getHeader("Wechatpay-Timestamp");
+            String signature = request.getHeader("Wechatpay-Signature");
+            HashMap<String, Object> bodyMap = gson.fromJson(body, HashMap.class);
+
+
+            String requestId = (String) bodyMap.get("id");
+            log.info("退款通知的id ===> {}", requestId);
+            log.info("退款通知的完整数据 ===> {}", body);   //对称解密ciphertext
+
+            //构建request，传入必要参数(wxPaySDK0.4.8带有request方式验签的方法 github)
+            NotificationRequest Nrequest = new NotificationRequest.Builder()
+                    .withSerialNumber(wechatPaySerial)
+                    .withNonce(nonce)
+                    .withTimestamp(timestamp)
+                    .withSignature(signature)
+                    .withBody(body)
+                    .build();
+
+            NotificationHandler handler = new NotificationHandler(wxPayConfig.getVerifier(), wxPayConfig.getApiV3Key().getBytes(StandardCharsets.UTF_8));
+
+            //验签和解析请求体(只有这里会报错)
+            Notification notification = handler.parse(Nrequest);
+            log.info("验签成功");
+
+            //从notification获取请求报文(对称解密)
+            String plainText = notification.getDecryptData();
+            log.info("请求报文===>{}", plainText);
+            //将密文转成map 方便拿取
+            HashMap resultMap = gson.fromJson(plainText, HashMap.class);
+            log.info("请求报文map===>{}", resultMap);
+
+            //处理退款单
+            wechatPayService.processRefund(resultMap);
+
+            //成功应答
+            response.setStatus(200);
+            map.put("code", "SUCCESS");
+            map.put("message", "成功");
+            return gson.toJson(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //失败应答
+            response.setStatus(500);
+            map.put("code", "ERROR");
+            map.put("message", "失败");
+            return gson.toJson(map);
+        }
+
+    }
+
+    @ApiOperation("获取账单url：测试用")
+    @GetMapping("/querybill/{billDate}/{type}")   //type：tradebill|fundflowbill
+    public Result queryTradeBill(@PathVariable String billDate, @PathVariable String type) throws Exception {
+        log.info("获取账单url");
+        String downloadUrl = wechatPayService.queryBill(billDate, type);
+        return  Result.ok("获取账单url成功",downloadUrl);
+    }
+
+    @ApiOperation("下载账单")
+    @GetMapping("/downloadbill/{billDate}/{type}")
+    public Result downloadBill(@PathVariable String billDate, @PathVariable String type) throws Exception {
+        log.info("下载账单");
+        String result = wechatPayService.downloadBill(billDate, type);
+        return Result.ok(result);
     }
 
 }
