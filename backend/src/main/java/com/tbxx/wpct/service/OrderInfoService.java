@@ -12,4 +12,11 @@ import com.tbxx.wpct.enums.OrderStatus;
  */
 
 public interface OrderInfoService extends IService<OrderInfo> {
+
+
+    String getOrderStatus(String orderNo);
+
+    void updateStatusByOrderNo(String orderNo, OrderStatus orderStatus);
+
+    OrderInfo getOrderByOrderNo(String orderNo);
 }

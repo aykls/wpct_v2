@@ -8,7 +8,12 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
+
+import static com.fasterxml.jackson.datatype.jsr310.deser.JSR310StringParsableDeserializer.ZONE_ID;
 
 /**
  * @author ZXX
@@ -19,7 +24,7 @@ import java.util.List;
 
 @Data
 @TableName("tb_order_info")
-public class OrderInfo implements Serializable {
+public class OrderInfo implements Serializable,Comparable<OrderInfo> {
 
     @TableId(value = "id", type = IdType.AUTO)
     private int id; //主键
@@ -35,6 +40,8 @@ public class OrderInfo implements Serializable {
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
+
+    private String checkid;    //consump 和 payinfo 表(连删)
 
     /**
      * 小区名
@@ -57,6 +64,10 @@ public class OrderInfo implements Serializable {
     @TableField(exist = false)
     private String relation;
 
+
+
+    @TableField(exist = false)
+    private static final ZoneId ZONE_ID = ZoneOffset.systemDefault();
 
     @Override
     public int compareTo(OrderInfo orderInfo) {

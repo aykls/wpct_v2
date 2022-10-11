@@ -24,7 +24,7 @@ public class Result {
     private Object data;
     private Long total;
 
-    public static Result ok(){
+    public static Result ok() {
         return new Result(true, null, null, null);
     }
 

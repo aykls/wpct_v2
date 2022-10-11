@@ -24,8 +24,7 @@ public class PayInfo implements Serializable {
     /**
      * 缴费id
      */
-    @TableId(value = "id", type = IdType.AUTO)
-    private String id;
+    private String payinfoId;
 
     /**
      * 小区名称
@@ -106,6 +105,17 @@ public class PayInfo implements Serializable {
      * 备注
      */
     private String remarks;
+
+    /**
+     * 操作人员记录
+     */
+    private String updateUser;
+
+    /**
+     * 订单号
+     */
+    private String OrderNo;
+
 
 
     /**

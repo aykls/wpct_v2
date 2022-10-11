@@ -74,11 +74,16 @@ public class WechatPayServiceImpl implements WechatPayService {
     @Resource
     OrderInfoMapper orderInfoMapper;
 
-    //测试号 appid 和 app
-    String app1 = "wxb7756386a217f9f1";
-    String app2 = "705ab7713492d438d4181c211e82f0ec";
+    @Autowired
+    OrderInfoServiceImpl orderInfoService;
 
+    @Autowired
+    PaymentInfoServiceImpl paymentInfoService;
 
+    @Autowired
+    RefundInfoServiceImpl refundsInfoService;
+
+    private final ReentrantLock lock = new ReentrantLock();
 
     /**
      * @return 预支付交易会话标识 prepay_id string[1,64]
@@ -87,7 +92,6 @@ public class WechatPayServiceImpl implements WechatPayService {
     @Override
     public String jsapiPay(String openid, String orderId) throws Exception {
         log.warn("生成订单");
-
         OrderInfo orderInfo = orderInfoMapper.selectById(orderId);
 
         log.warn("调用统一下单api");
@@ -193,7 +197,15 @@ public class WechatPayServiceImpl implements WechatPayService {
             String signature = request.getHeader("Wechatpay-Signature");
             HashMap<String, Object> bodyMap = gson.fromJson(body, HashMap.class);
 
-
+            /**
+             * {"id":"c17f5eaf-0a90-5e4c-9ec8-e1f068addfcf",
+             * "create_time":"2022-10-04T13:25:40+08:00",
+             * "resource_type":"encrypt-resource","event_type":
+             * "TRANSACTION.SUCCESS","summary":"支付成功",
+             * "resource":{"original_type":"transaction","algorithm":"AEAD_AES_256_GCM","ciphertext":"gTK9I96p3gXvyN6c9tkLrv3ogD/adDzjFJxvLDWpD9cOybuefaxMxdh/6OxW64wdBBR8IWdCq+nqs,
+             * "associated_data":"transaction",
+             * "nonce":"VBNu9IF6GGnX"}}
+             */
             String requestId = (String) bodyMap.get("id");
             log.info("支付通知的id ===> {}", requestId);
             log.info("支付通知的完整数据 ===> {}", body);   //对称解密ciphertext
@@ -223,6 +235,15 @@ public class WechatPayServiceImpl implements WechatPayService {
             log.warn("收到支付结果通知，处理订单........");
             //TODO 处理订单
             //////////////////////////////////////////////////
+            processOrder(plainText);
+            /**
+             * 验签结果 ===> {"mchid":"1558950191","appid":"wx74862e0dfcf69954",
+             * "out_trade_no":"ORDER_20221004132527865","transaction_id":"4200001569202210040857712725",
+             * "trade_type":"NATIVE","trade_state":"SUCCESS","trade_state_desc":"支付成功",
+             * "bank_type":"OTHERS","attach":"","success_time":"2022-10-04T13:25:40+08:00",
+             * payer":{"openid":"oHwsHuCj4_t6OMpypikZIQ1r-FXY"},
+             * "amount":{"total":1,"payer_total":1,"currency":"CNY","payer_currency":"CNY"}}
+             */
 
             //成功应答
             response.setStatus(200);

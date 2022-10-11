@@ -39,6 +39,28 @@ public class CheckController {
         return checkService.addCheck(payinfo);
     }
 
+    @ApiOperation("后台缴费列表")
+    @PostMapping("/blist")
+    public Result ChecksList(@RequestParam int pageNum,@RequestParam String month) {
+        return checkService.checksList(pageNum,month);
+    }
+
+    /**
+     * 修改缴费(同步)
+     */
+    @ApiOperation("修改缴费")
+    @PostMapping("/update")
+    public Result checkUpdate(@RequestBody PayInfo payinfo) {
+        return checkService.checkUpdate(payinfo);
+
+    }
+
+
+    @ApiOperation("删除缴费")
+    @PostMapping("/delete")
+    public Result deleteCheck(@RequestParam("payinfoId") String checkid,@RequestParam(name = "id") String orderId) {
+        return checkService.deleteCheck(checkid,orderId);
+    }
 
 
 

@@ -22,8 +22,7 @@ public class Consumption implements Serializable {
     /**
      * 房屋id
      **/
-    @TableId(value = "id", type = IdType.AUTO)
-    private int buildId;
+    private String buildId;
 
     /**
      * 面积核准单价

@@ -13,10 +13,9 @@ import com.tbxx.wpct.entity.Consumption;
 import com.tbxx.wpct.entity.OrderInfo;
 import com.tbxx.wpct.entity.PayInfo;
 import com.tbxx.wpct.enums.OrderStatus;
-import com.tbxx.wpct.mapper.ConsumptionMapper;
-import com.tbxx.wpct.mapper.OrderInfoMapper;
-import com.tbxx.wpct.mapper.PayInfoMapper;
+import com.tbxx.wpct.mapper.*;
 import com.tbxx.wpct.service.CheckService;
+import com.tbxx.wpct.util.CheckUtil;
 import com.tbxx.wpct.util.OrderNoUtils;
 import com.tbxx.wpct.util.UserHolder;
 import com.tbxx.wpct.util.UserList;
@@ -26,6 +25,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author ZXX
@@ -35,7 +37,7 @@ import java.time.LocalDateTime;
  */
 @Slf4j
 @Service
-public class CheckServiceImpl implements CheckService {
+public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implements CheckService {
 
     @Resource
     OrderInfoMapper orderInfoMapper;
@@ -45,6 +47,9 @@ public class CheckServiceImpl implements CheckService {
 
     @Resource
     PayInfoMapper payfoMapper;
+
+    @Autowired
+    BuildInfoServiceImpl buildInfoService;
 
 
     /**
