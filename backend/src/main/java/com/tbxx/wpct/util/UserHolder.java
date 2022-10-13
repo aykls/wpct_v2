@@ -3,7 +3,7 @@ package com.tbxx.wpct.util;
 import com.tbxx.wpct.dto.UserDTO;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName UserHolder
  * @Description
  * @DATE 2022/9/30 11:45

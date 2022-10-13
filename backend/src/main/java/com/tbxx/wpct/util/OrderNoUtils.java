@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * 订单号工具类
  *
- * @author qy
+ * @Author qy
  * @since 1.0
  */
 public class OrderNoUtils {

@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName WechatUser
  * @Description
  * @DATE 2022/10/1 16:50

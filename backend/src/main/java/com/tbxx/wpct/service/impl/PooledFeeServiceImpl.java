@@ -13,14 +13,13 @@ import com.tbxx.wpct.mapper.PooledFeeMapper;
 import com.tbxx.wpct.service.PooledFeeService;
 import com.tbxx.wpct.util.UserList;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName PooledFeeServiceImpl
  * @Description TODO
  * @DATE 2022/10/10 19:32
@@ -52,10 +51,9 @@ public class PooledFeeServiceImpl extends ServiceImpl<PooledFeeMapper, PooledFee
             Fee = pooledFee.getElectricityFee(); //公电费
         }
 
-        if (pooledFee.getCreateTime() == null){
+        if (pooledFee.getCreateTime() == null) {
             baseMapper.insert(pooledFee);
-        }
-        else{
+        } else {
             baseMapper.update(pooledFee, queryWrapper);
         }
 
@@ -70,7 +68,7 @@ public class PooledFeeServiceImpl extends ServiceImpl<PooledFeeMapper, PooledFee
      */
     @Override
     public Result pooledList(int pageNum) {
-        QueryWrapper<PooledFee> queryWrapper=new QueryWrapper<>();
+        QueryWrapper<PooledFee> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("create_time");
 
         PageHelper.startPage(pageNum, 5);
@@ -86,6 +84,7 @@ public class PooledFeeServiceImpl extends ServiceImpl<PooledFeeMapper, PooledFee
      */
     @Override
     public Result removePooled(int id) {
+        //删除公摊费表
         QueryWrapper<PooledFee> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("id", id);
         baseMapper.delete(queryWrapper);
@@ -100,8 +99,8 @@ public class PooledFeeServiceImpl extends ServiceImpl<PooledFeeMapper, PooledFee
      * 更新列表
      */
     @Override
-    public Result updatepooled(PooledFee pooledFee,String control) {
-
+    public Result updatepooled(PooledFee pooledFee, String control) {
+        //修改公摊费表
         int id = pooledFee.getId();
         UpdateWrapper<PooledFee> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", id);
@@ -118,7 +117,7 @@ public class PooledFeeServiceImpl extends ServiceImpl<PooledFeeMapper, PooledFee
             Fee = pooledFee.getElectricityFee(); //公电费
         }
 
-        consumptionMapper.updateToNew(Fee,control,villageName);
+        consumptionMapper.updateToNew(Fee, control, villageName);
 
         return Result.ok("更新成功");
     }

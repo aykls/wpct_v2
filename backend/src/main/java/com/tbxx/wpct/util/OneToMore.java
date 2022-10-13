@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName OneToMore
  * @Description 一对多
  * @DATE 2022/10/1 14:07

@@ -8,7 +8,7 @@ import springfox.documentation.builders.BuilderDefaults;
 import java.util.List;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName WechatUserMapper
  * @Description
  * @DATE 2022/10/1 17:15

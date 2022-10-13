@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tbxx.wpct.entity.Consumption;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName ConsumptionService
  * @Description TODO
  * @DATE 2022/10/8 21:13

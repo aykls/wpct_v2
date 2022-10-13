@@ -6,7 +6,7 @@ import com.tbxx.wpct.entity.PooledFee;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName PooledFeeService
  * @Description TODO
  * @DATE 2022/10/10 19:31

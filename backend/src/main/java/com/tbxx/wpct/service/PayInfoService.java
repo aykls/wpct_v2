@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tbxx.wpct.entity.PayInfo;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName PayInfoService
  * @Description TODO
  * @DATE 2022/10/9 19:19

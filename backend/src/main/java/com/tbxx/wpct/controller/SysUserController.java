@@ -15,13 +15,13 @@ import javax.annotation.Resource;
 
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName SysUserController
  * @Description
  * @DATE 2022/9/29 21:04
  */
 
-@CrossOrigin //开放前端的跨域访问
+@CrossOrigin 
 @Api(tags = "用户接口")
 @Slf4j
 @RestController

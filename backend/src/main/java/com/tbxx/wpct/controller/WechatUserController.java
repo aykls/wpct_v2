@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName WechatUserController
  * @Description
  * @DATE 2022/10/7 18:40
  */
-@CrossOrigin //开放前端的跨域访问
+@CrossOrigin 
 @Api(tags = "微信用户")
 @Slf4j
 @RestController

@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName ExamineController
  * @Description TODO
  * @DATE 2022/10/10 17:06
  */
 
-@CrossOrigin //开放前端的跨域访问
+@CrossOrigin 
 @Api(tags = "意见处理（审批）管理")
 @Slf4j
 @RestController

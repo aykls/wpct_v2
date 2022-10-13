@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName PooledFeeController
  * @Description TODO
  * @DATE 2022/10/10 19:19
  */
 
-@CrossOrigin //开放前端的跨域访问
+@CrossOrigin 
 @Api(tags = "公摊费模块")
 @RestController
 @RequestMapping("/pooled")

@@ -8,7 +8,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName Swagger2Config
  * @Description 生成接口文档配置类  http://localhost:8086/swagger-ui.html
  * @DATE 2022/10/3 11:13

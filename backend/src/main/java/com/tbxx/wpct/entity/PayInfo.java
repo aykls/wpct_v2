@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName PayInfo
  * @Description TODO
  * @DATE 2022/10/8 21:16
@@ -115,6 +115,9 @@ public class PayInfo implements Serializable {
      * 订单号
      */
     private String OrderNo;
+
+    @TableField(exist = false)
+    private WechatUser wechatUser;
 
 
 

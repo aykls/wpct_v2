@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName LoginInterceptor
  * @Description 登录校验
  * @DATE 2022/9/30 13:27

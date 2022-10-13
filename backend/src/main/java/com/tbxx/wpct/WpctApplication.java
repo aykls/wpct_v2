@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName WpctApplication
  * @Description
  * @DATE 2022/9/29 18:18

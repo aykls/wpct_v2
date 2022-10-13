@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tbxx.wpct.entity.PooledFee;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName PooledFeeMapper
  * @Description TODO
  * @DATE 2022/10/10 19:31

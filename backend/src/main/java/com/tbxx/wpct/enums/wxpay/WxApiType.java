@@ -19,6 +19,7 @@ public enum WxApiType {
 
 	/**
 	 * 申请退款
+	 *
 	 */
 	DOMESTIC_REFUNDS("/v3/refund/domestic/refunds"),
 

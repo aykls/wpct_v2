@@ -5,7 +5,7 @@ import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.Examine;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName ExamineService
  * @Description TODO
  * @DATE 2022/10/10 17:03

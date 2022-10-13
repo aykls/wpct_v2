@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName WechatPayService
  * @Description
  * @DATE 2022/10/7 10:23
@@ -34,7 +34,7 @@ public interface WechatPayService {
 
     void checkOrderStatus(String orderNo) throws Exception;
 
-    void refund(String orderNo, String reason) throws Exception;
+    void refund(String orderNo, String reason,Integer refundFee) throws Exception;
 
     String queryRefund(String refundNo) throws Exception;
 

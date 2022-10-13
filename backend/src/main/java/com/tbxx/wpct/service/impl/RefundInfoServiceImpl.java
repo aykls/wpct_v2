@@ -32,28 +32,32 @@ public class RefundInfoServiceImpl extends ServiceImpl<RefundInfoMapper, RefundI
 
     /**
      * 根据订单号创建退款订单
+     *
      * @param orderNo
      * @return
      */
     @Override
-    public RefundInfo createRefundByOrderNo(String orderNo, String reason) {
-
+    public RefundInfo createRefundByOrderNo(String orderNo, String reason, Integer refundFee) {
         //根据订单号获取订单信息
         OrderInfo orderInfo = orderInfoService.getOrderByOrderNo(orderNo);
+        Integer totalFee = orderInfo.getTotalFee();//原订单金额(分)
+        if (totalFee < refundFee) {
+            throw new RuntimeException("退款金额不得超过付款金额！");
+        }
 
         //根据订单号生成退款订单
         RefundInfo refundInfo = new RefundInfo();
         refundInfo.setOrderNo(orderNo);//订单编号
         refundInfo.setRefundNo(OrderNoUtils.getRefundNo());//退款单编号
-        refundInfo.setTotalFee(orderInfo.getTotalFee());//原订单金额(分)
-        refundInfo.setRefund(orderInfo.getTotalFee());//退款金额(分)
+        refundInfo.setTotalFee(totalFee);//原订单金额(分)
+        refundInfo.setRefund(refundFee);//退款金额(分)
         refundInfo.setReason(reason);//退款原因
 
         //保存预退款订单
         baseMapper.insert(refundInfo);
-
         return refundInfo;
     }
+
 
     /**
      * 记录退款记录
@@ -66,6 +70,8 @@ public class RefundInfoServiceImpl extends ServiceImpl<RefundInfoMapper, RefundI
         //将json字符串转换成Map
         Gson gson = new Gson();
         Map<String, String> resultMap = gson.fromJson(content, HashMap.class);
+
+        log.warn("resultMap是===>{}", resultMap);
 
         //根据退款单编号修改退款单
         QueryWrapper<RefundInfo> queryWrapper = new QueryWrapper<>();
@@ -81,8 +87,9 @@ public class RefundInfoServiceImpl extends ServiceImpl<RefundInfoMapper, RefundI
             refundInfo.setRefundStatus(resultMap.get("status"));//退款状态
             refundInfo.setContentReturn(content);//将全部响应结果存入数据库的content字段
 
-            log.error("content===>{}",content);
+            log.warn("content===>{}", content);
         }
+
         //退款回调中的回调参数
         if (resultMap.get("refund_status") != null) {
             refundInfo.setRefundStatus(resultMap.get("refund_status"));//退款状态
@@ -95,6 +102,7 @@ public class RefundInfoServiceImpl extends ServiceImpl<RefundInfoMapper, RefundI
 
     /**
      * 找出申请退款超过minutes分钟并且未成功的退款单
+     *
      * @param minutes
      * @return
      */
@@ -106,10 +114,10 @@ public class RefundInfoServiceImpl extends ServiceImpl<RefundInfoMapper, RefundI
 
         QueryWrapper<RefundInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("refund_status", WxRefundStatus.PROCESSING.getType());  //退款中的订单
-        queryWrapper.le("create_time",beforeTime);
+        queryWrapper.le("create_time", beforeTime);
         List<RefundInfo> refundInfoList = baseMapper.selectList(queryWrapper);
 
-        return  refundInfoList;
+        return refundInfoList;
 
     }
 

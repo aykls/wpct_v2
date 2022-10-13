@@ -3,7 +3,7 @@ package com.tbxx.wpct.dto;
 import lombok.Data;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName LoginFormDTO
  * @Description
  * @DATE 2022/9/30 11:45

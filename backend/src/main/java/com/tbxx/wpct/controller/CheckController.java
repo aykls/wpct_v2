@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName CheckController
  * @Description TODO
  * @DATE 2022/10/8 21:09
  */
 
-@CrossOrigin //开放前端的跨域访问
+@CrossOrigin 
 @Api(tags = "账单管理")
 @Slf4j
 @RestController

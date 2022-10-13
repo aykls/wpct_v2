@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName WxPayConfig
  * @Description
  * @DATE 2022/10/6 13:41

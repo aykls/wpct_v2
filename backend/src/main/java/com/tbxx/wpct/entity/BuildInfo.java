@@ -9,7 +9,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName BuildInfo
  * @Description TODO
  * @DATE 2022/10/8 16:54

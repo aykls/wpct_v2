@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.tbxx.wpct.dto.UserDTO;
 import com.tbxx.wpct.util.UserHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -16,12 +17,13 @@ import static com.tbxx.wpct.util.constant.RedisConstants.LOGIN_USER_KEY;
 import static com.tbxx.wpct.util.constant.RedisConstants.LOGIN_USER_TTL;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName RefreshTokenInterceptor
  * @Description
  * @DATE 2022/9/30 13:29
  */
 
+@Slf4j
 public class RefreshTokenInterceptor implements HandlerInterceptor {
 
     private final StringRedisTemplate stringRedisTemplate;
@@ -32,6 +34,8 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //log.warn("preHandle方法生效");
+
         //获取请求头中的token
         String token = request.getHeader("authorization");
         if (StrUtil.isBlank(token)) {

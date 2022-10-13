@@ -6,7 +6,7 @@ import com.tbxx.wpct.entity.BuildInfo;
 import java.util.List;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName BuildInfoMapper
  * @Description TODO
  * @DATE 2022/10/8 17:24

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tbxx.wpct.entity.PayInfo;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName PayInfoMapper
  * @Description TODO
  * @DATE 2022/10/9 19:18

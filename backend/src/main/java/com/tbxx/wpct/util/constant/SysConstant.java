@@ -1,7 +1,7 @@
 package com.tbxx.wpct.util.constant;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName SysConstant
  * @Description 常量
  * @DATE 2022/9/29 18:42

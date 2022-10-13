@@ -4,8 +4,7 @@
 
 
 <mapper namespace="com.tbxx.wpct.mapper.ConsumptionMapper">
-
-    <!--date_format(tbname,'%Y-%m')=date_format(now(),'%Y-%m')-->
+    <!--删除公摊费-->
     <update id="updatePooledToZero">
         UPDATE tb_consumption c
             LEFT JOIN tb_payinfo p on c.build_id = payinfo_id
@@ -16,6 +15,18 @@
           AND DATE_FORMAT(p.pay_begin_time, '%Y-%m') = date_format(now(), '%Y-%m')
     </update>
 
+
+    <!--    修改公摊费-->
+    <update id="updateToNew">
+        UPDATE tb_consumption c
+            LEFT JOIN tb_payinfo p on c.build_id = payinfo_id
+        SET c.${control}=#{Fee}
+        WHERE c.build_id = p.payinfo_id
+          AND DATE_FORMAT(p.pay_begin_time, '%Y-%m') = date_format(now(), '%Y-%m')
+    </update>
+
+
+    <!--新增公摊费-->
     <update id="addPooledFee">
         UPDATE tb_consumption c
             LEFT JOIN tb_payinfo p on c.build_id = payinfo_id
@@ -24,7 +35,6 @@
           AND DATE_FORMAT(p.pay_begin_time, '%Y-%m') = date_format(now(), '%Y-%m')
           AND village_name = #{villageName}
     </update>
-
     <update id="updatePooledFee">
         UPDATE tb_pooled_fee p
         SET p.${control} = #{Fee}
@@ -33,11 +43,26 @@
     </update>
 
 
-    <update id="updateToNew">
-        UPDATE tb_consumption c
-            LEFT JOIN tb_payinfo p on c.build_id = payinfo_id
-        SET c.${control}=#{Fee}
-        WHERE c.build_id = p.payinfo_id
-          AND DATE_FORMAT(p.pay_begin_time, '%Y-%m') = date_format(now(), '%Y-%m')
-    </update>
+    <!--查询该小区在本月是否已经有增加公摊费-->
+    <select id="selectVexist" resultType="string">
+        select village_name
+        from tb_pooled_fee p
+        WHERE p.village_name = #{villageName}
+          AND DATE_FORMAT(p.create_time, '%Y-%m') = date_format(now(), '%Y-%m')
+    </select>
+    <!--查询公摊费状态-->
+    <select id="selectOrderStatus" resultType="consumption">
+        select c.*
+        from tb_consumption c
+                 right join tb_order_info o on c.build_id = o.check_id
+        WHERE o.status = 0
+    </select>
+
+    <!--查询单个公摊费-->
+    <select id="singleToNew" resultType="integer">
+        select ${control}
+            from tb_pooled_fee p
+        WHERE p.village_name = #{villageName}
+          AND DATE_FORMAT(p.create_time, '%Y-%m') = date_format(now(), '%Y-%m')
+    </select>
 </mapper>

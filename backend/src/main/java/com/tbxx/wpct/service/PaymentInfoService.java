@@ -1,7 +1,7 @@
 package com.tbxx.wpct.service;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName PaymentInfoService
  * @Description TODO
  * @DATE 2022/10/10 11:03

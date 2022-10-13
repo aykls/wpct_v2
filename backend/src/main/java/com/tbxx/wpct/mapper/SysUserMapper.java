@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName SysUserMapper
  * @Description
  * @DATE 2022/9/29 18:37

@@ -7,7 +7,7 @@ import com.tbxx.wpct.entity.Examine;
 import java.util.List;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName ExamineMapper
  * @Description TODO
  * @DATE 2022/10/10 17:03

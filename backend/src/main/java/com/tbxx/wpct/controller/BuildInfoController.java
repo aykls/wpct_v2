@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName BuildInfoController
  * @Description TODO
  * @DATE 2022/10/8 19:42
  */
 
-@CrossOrigin //开放前端的跨域访问
+@CrossOrigin 
 @Api(tags = "房屋信息")
 @Slf4j
 @RestController

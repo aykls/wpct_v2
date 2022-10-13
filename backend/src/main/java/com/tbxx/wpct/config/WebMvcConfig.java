@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.annotation.Resource;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName WebMvcConfig
  * @Description 注册登录拦截器
  * @DATE 2022/9/30 13:32

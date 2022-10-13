@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName PayInfoServiceImpl
  * @Description TODO
  * @DATE 2022/10/9 19:19

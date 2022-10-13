@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName Result
  * @Description 响应前端页面
  * @DATE 2022/9/29 20:49

@@ -8,7 +8,7 @@ import com.tbxx.wpct.entity.PayInfo;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName CheckServiceription TODO
  * @DATE 2022/10/9 18:39
  */

@@ -18,7 +18,7 @@ import java.util.List;
 import static com.tbxx.wpct.util.constant.SysConstant.*;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName WechatUserServiceImpl
  * @Description
  * @DATE 2022/10/1 17:13

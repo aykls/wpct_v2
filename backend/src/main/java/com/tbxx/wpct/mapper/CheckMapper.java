@@ -8,7 +8,7 @@ import com.tbxx.wpct.entity.PayInfo;
 import java.util.List;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName CheckMapper
  * @Description TODO
  * @DATE 2022/10/10 14:02

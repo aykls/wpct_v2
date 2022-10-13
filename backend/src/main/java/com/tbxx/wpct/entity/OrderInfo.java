@@ -16,7 +16,7 @@ import java.util.List;
 import static com.fasterxml.jackson.datatype.jsr310.deser.JSR310StringParsableDeserializer.ZONE_ID;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName OrderInfo
  * @Description TODO
  * @DATE 2022/10/9 17:53
@@ -41,7 +41,7 @@ public class OrderInfo implements Serializable,Comparable<OrderInfo> {
 
     private LocalDateTime updateTime;
 
-    private String checkid;    //consump 和 payinfo 表(连删)
+    private String checkId;    //consump 和 payinfo 表(连删)
 
     /**
      * 小区名

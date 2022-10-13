@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin //开放前端的跨域访问
+@CrossOrigin 
 @Api(tags = "角色接口")
 @Slf4j
 @RestController

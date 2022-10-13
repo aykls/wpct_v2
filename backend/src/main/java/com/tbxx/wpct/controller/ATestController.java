@@ -4,13 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName BuildInfoController
  * @Description TODO
  * @DATE 2022/10/8 19:42
  */
 
-@CrossOrigin //开放前端的跨域访问
+@CrossOrigin 
 @Slf4j
 @RestController
 @RequestMapping("/")

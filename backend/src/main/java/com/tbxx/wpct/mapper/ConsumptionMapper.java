@@ -5,7 +5,7 @@ import com.tbxx.wpct.entity.Consumption;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName ConsumptionMapper
  * @Description TODO
  * @DATE 2022/10/8 21:12

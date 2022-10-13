@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName SysUser
  * @Description
  * @DATE 2022/9/29 18:37

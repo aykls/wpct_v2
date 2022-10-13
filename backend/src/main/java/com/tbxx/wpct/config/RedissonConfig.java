@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName RedissonConfig
  * @Description  Redisson分布式锁
  * @DATE 2022/9/30 12:07

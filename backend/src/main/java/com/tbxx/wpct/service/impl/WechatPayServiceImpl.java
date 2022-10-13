@@ -50,7 +50,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import static com.tbxx.wpct.enums.wxpay.WxNotifyType.REFUND_NOTIFY;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName WechatPayServiceImpl
  * @Description
  * @DATE 2022/10/7 10:24
@@ -428,18 +428,14 @@ public class WechatPayServiceImpl implements WechatPayService {
 
     /**
      * 退款
-     *
-     * @param orderNo
-     * @param reason
-     * @throws IOException
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void refund(String orderNo, String reason) throws Exception {
+    public void refund(String orderNo, String reason,Integer refundFee) throws Exception {
         log.info("===创建初始退款单记录===");
 
         //根据订单编号创建退款单
-        RefundInfo refundsInfo = refundsInfoService.createRefundByOrderNo(orderNo, reason);
+        RefundInfo refundsInfo = refundsInfoService.createRefundByOrderNo(orderNo, reason,refundFee);
 
 
         //调用统一退款API

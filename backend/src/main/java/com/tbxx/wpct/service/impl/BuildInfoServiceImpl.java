@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName BuildInfoServiceImpl
  * @Description TODO
  * @DATE 2022/10/8 17:26

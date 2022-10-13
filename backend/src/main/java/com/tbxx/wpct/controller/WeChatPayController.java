@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -39,9 +40,13 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+import static com.tbxx.wpct.util.constant.RedisConstants.ACCESS_TOKEN;
+import static com.tbxx.wpct.util.constant.RedisConstants.ACCESS_TOKEN_TTL;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName WeChatPayController
  * @Description
  * @DATE 2022/10/6 13:48
@@ -55,13 +60,15 @@ import java.util.*;
 public class WeChatPayController {
 
     @Resource
-    WxPayConfig wxPayConfig;
+    private  WxPayConfig wxPayConfig;
 
     @Autowired
-    WechatPayServiceImpl wechatPayService;
+    private  WechatPayServiceImpl wechatPayService;
 
     @Autowired
-    WechatUserServiceImpl wechatUserService;
+    private  WechatUserServiceImpl wechatUserService;
+
+
 
 
     private String domain = "https://4s3471264h.zicp.fun";  //"http://fjwpct.com";  //"http://dadanb.top";  //"https://4s3471264h.zicp.fun";
@@ -169,7 +176,6 @@ public class WeChatPayController {
             wechatUser.setNickname(jsonObject.getString("nickname"));
             wechatUserService.save(wechatUser);
         }
-
 //        if (user == null || user.getPid() == null) {
 //            //TODO 跳转注册页面
 //        }
@@ -177,15 +183,16 @@ public class WeChatPayController {
 
 
         userUrl = "https://60z8193p42.goho.co//zqb/new.html" + "?openid=" + jsonObject.getString("openid");
-        
+
         //TODO 如果没有授权登录 跳转注册页面  未完成
         response.sendRedirect(userUrl);
-
     }
 
 
-    //access_token是公众号的全局唯一接口调用凭据，公众号调用各接口时都需使用access_token。  参考官方文档-->附录一
-    @ApiOperation("获取Access token")
+    /**
+     * 初始化前端 wx.config必要参数
+     */
+    @ApiOperation("获取jsapiSDK")
     @PostMapping("/jsapi/sdk")
     public Result wechatPaySDK() {
         Gson gson = new Gson();
@@ -197,6 +204,8 @@ public class WeChatPayController {
 
         HashMap<String, Object> map = gson.fromJson(resu1, HashMap.class);
         String access_token = (String) map.get("access_token");
+        log.warn("access_token{}",access_token);
+
 
 
         // https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token="+access_token+"&type=jsapi";
@@ -231,7 +240,7 @@ public class WeChatPayController {
     @PostMapping("/jsapi/pay")
     public Result wechatPay(@RequestParam String openid, @RequestParam(name = "id") String orderId) throws Exception {
         log.warn("JSAPI下单");
-        String resultJson = wechatPayService.jsapiPay(openid,orderId);
+        String resultJson = wechatPayService.jsapiPay(openid, orderId);
         return Result.ok(resultJson);
     }
 
@@ -247,7 +256,7 @@ public class WeChatPayController {
 
     /**
      * 用户取消订单
-     *          //TODO 实际可能用不到
+     * //TODO 实际可能用不到
      */
     @ApiOperation("用户取消订单")
     @PostMapping("/cancel/{orderNo}")
@@ -265,16 +274,16 @@ public class WeChatPayController {
     public Result queryOrder(@PathVariable String orderNo) throws IOException {
         log.info("查询订单");
         String bodyAsString = wechatPayService.queryOrder(orderNo);
-        return Result.ok("查询成功",bodyAsString);
+        return Result.ok("查询成功", bodyAsString);
     }
 
 
     @ApiOperation("申请退款")
-    @PostMapping("/refunds/{orderNo}/{reason}")
-    public Result refunds(@PathVariable String orderNo, @PathVariable String reason)
+    @PostMapping("/refunds/{orderNo}/{reason}/{refundFee}")
+    public Result refunds(@PathVariable String orderNo, @PathVariable String reason, @PathVariable Integer refundFee)
             throws Exception {
         log.info("申请退款");
-        wechatPayService.refund(orderNo, reason);
+        wechatPayService.refund(orderNo, reason,refundFee);
         return Result.ok();
     }
 
@@ -314,10 +323,8 @@ public class WeChatPayController {
             String timestamp = request.getHeader("Wechatpay-Timestamp");
             String signature = request.getHeader("Wechatpay-Signature");
             HashMap<String, Object> bodyMap = gson.fromJson(body, HashMap.class);
-
-
             String requestId = (String) bodyMap.get("id");
-            log.info("退款通知的id ===> {}", requestId);
+            log.info("退款通知执行 ===> {}", requestId);
             log.info("退款通知的完整数据 ===> {}", body);   //对称解密ciphertext
 
             //构建request，传入必要参数(wxPaySDK0.4.8带有request方式验签的方法 github)
@@ -366,7 +373,7 @@ public class WeChatPayController {
     public Result queryTradeBill(@PathVariable String billDate, @PathVariable String type) throws Exception {
         log.info("获取账单url");
         String downloadUrl = wechatPayService.queryBill(billDate, type);
-        return  Result.ok("获取账单url成功",downloadUrl);
+        return Result.ok("获取账单url成功", downloadUrl);
     }
 
     @ApiOperation("下载账单")

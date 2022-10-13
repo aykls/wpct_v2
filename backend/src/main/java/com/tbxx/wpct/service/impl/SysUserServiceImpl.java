@@ -47,7 +47,7 @@ import static com.tbxx.wpct.util.constant.RedisConstants.LOGIN_USER_TTL;
 import static com.tbxx.wpct.util.constant.SysConstant.PASSWORD_REGEX;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName SysUserServiceImpl
  * @Description
  * @DATE 2022/9/29 18:35
@@ -83,7 +83,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         } catch (Exception e) {
             return Result.fail("密码错误，请重新输入");
         }
-
         //随机生成token作为登录凭证
         String token = UUID.randomUUID().toString(true);
         //存入redis

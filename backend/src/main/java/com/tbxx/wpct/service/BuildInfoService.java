@@ -5,7 +5,7 @@ import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.BuildInfo;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName BuildInfoService
  * @Description TODO
  * @DATE 2022/10/8 17:25

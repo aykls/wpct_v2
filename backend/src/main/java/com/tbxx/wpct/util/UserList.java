@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName UserList
  * @Description  查询用户列表
  * @DATE 2022/10/1 16:04

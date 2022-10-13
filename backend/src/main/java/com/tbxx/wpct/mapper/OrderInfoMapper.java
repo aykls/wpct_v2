@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tbxx.wpct.entity.OrderInfo;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @InterfaceName OrderInfoMapper
  * @Description TODO
  * @DATE 2022/10/9 17:57

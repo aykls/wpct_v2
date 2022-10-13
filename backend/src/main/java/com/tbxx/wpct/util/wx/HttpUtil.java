@@ -7,7 +7,7 @@ import org.apache.http.impl.client.HttpClients;
 
 /**
  * 网络请求工具类
- * @author zgy
+ * @Author zgy
  *
  */
 public class HttpUtil {

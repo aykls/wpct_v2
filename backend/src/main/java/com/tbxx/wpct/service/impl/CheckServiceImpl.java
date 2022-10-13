@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author ZXX
+ * @Author ZXX
  * @ClassName CheckServiceImpl
  * @Description TODO
  * @DATE 2022/10/9 18:40
@@ -134,10 +134,10 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
      */
     @Override
     public Result checkUpdate(PayInfo payinfo) {
-        //TODO 操作留底
-//        UserDTO updateUser = UserHolder.getUser();
-//        log.warn("当前进行修改的用户是===>{}",updateUser.getUserName());
-//        payinfo.setUpdateUser(updateUser.getUserName());
+        //TODO 操作留底  和前端配合
+        String userName = UserHolder.getUser().getUserName();
+        log.warn("当前进行修改的用户是===>{}",userName);
+        payinfo.setUpdateUser(userName);
 
         String payinfoId = payinfo.getPayinfoId();
         Consumption consumption = payinfo.getConsumption();
