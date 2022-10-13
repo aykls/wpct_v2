@@ -127,7 +127,6 @@ public class Consumption implements Serializable {
     /**
      * 月金额
      */
-    @TableField(exist = false)
     private Integer monthCost;
 
 

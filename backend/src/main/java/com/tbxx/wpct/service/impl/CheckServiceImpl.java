@@ -78,6 +78,11 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
         orderInfo.setRoomNo(payinfo.getRoomNo());           //房号
         orderInfo.setCreateTime(LocalDateTime.now());       //创建时间
         orderInfo.setTotalFee(consumption.getMonthCost());  //月缴费
+        orderInfo.setCheckId(checkid);                      //连接co表 和 pay表
+        if(consumption.getGwaterFee()>0 && consumption.getLiftFee()>0 && consumption.getElectricityFee()>0){
+            orderInfo.setStatus(1);
+        }
+
         orderInfo.setOrderStatus(OrderStatus.NOTPAY.getType());//默认 未付款
 
         orderInfoMapper.insert(orderInfo);

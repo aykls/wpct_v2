@@ -55,6 +55,10 @@ public class OrderInfo implements Serializable,Comparable<OrderInfo> {
      * 房号
      */
     private String roomNo;
+    /**
+     * 商家发送微信用户缴费单状态
+     * */
+    private Integer status;
 
 
 

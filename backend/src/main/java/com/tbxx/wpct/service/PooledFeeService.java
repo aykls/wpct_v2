@@ -24,4 +24,7 @@ public interface PooledFeeService extends IService<PooledFee> {
 
     @Transactional
     Result updatepooled(PooledFee pooledFee,String control);
+
+    @Transactional
+    Result singlepooled(String villageName ,String control);
 }

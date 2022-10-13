@@ -39,8 +39,16 @@ public class PooledFeeServiceImpl extends ServiceImpl<PooledFeeMapper, PooledFee
     @Override
     public Result addpooled(PooledFee pooledFee, String control) {
         Integer Fee;
-        QueryWrapper<PooledFee> queryWrapper = new QueryWrapper<>();
         String villageName = pooledFee.getVillageName();
+
+        //查询该小区在本月是否已经有增加公摊费
+        villageName = consumptionMapper.selectVexist(villageName);
+
+        if (villageName == null) {
+            Result.fail("该小区本月已有公摊费记录 请找到原处修改");
+        }
+
+        QueryWrapper<PooledFee> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("village_name", villageName);
 
         if (control.equals("lift_fee")) {
@@ -118,6 +126,19 @@ public class PooledFeeServiceImpl extends ServiceImpl<PooledFeeMapper, PooledFee
         }
 
         consumptionMapper.updateToNew(Fee, control, villageName);
+
+        return Result.ok("更新成功");
+    }
+
+
+    /**
+     * 查询单个公摊费
+     */
+    @Override
+    public Result singlepooled(String villageName ,String control) {
+        //修改公摊费表
+
+        consumptionMapper.singleToNew(control, villageName);
 
         return Result.ok("更新成功");
     }

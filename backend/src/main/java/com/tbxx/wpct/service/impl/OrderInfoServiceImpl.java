@@ -68,6 +68,27 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
      */
     @Override
     public OrderInfo getOrderByOrderNo(String orderNo) {
+
         return query().eq("order_no", orderNo).one();
+    }
+
+
+    /**
+     * 查询创建超过minutes分钟并且未支付的订单
+     * @param minutes
+     * @return
+     */
+    @Override
+    public List<OrderInfo> getNoPayOrderByDuration(int minutes) {
+
+        Instant instant = Instant.now().minus(Duration.ofMinutes(minutes));
+
+        QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("order_status", OrderStatus.NOTPAY.getType());
+        queryWrapper.le("create_time", instant);
+
+        List<OrderInfo> orderInfoList = baseMapper.selectList(queryWrapper);
+
+        return orderInfoList;
     }
 }
