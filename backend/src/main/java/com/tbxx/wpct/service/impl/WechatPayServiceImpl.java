@@ -74,8 +74,98 @@ public class WechatPayServiceImpl implements WechatPayService {
 
     private final ReentrantLock lock = new ReentrantLock();
 
+
     /**
-     * @return 预支付交易会话标识 prepay_id string[1,64]
+     * 押金下单专用
+     */
+    @Override
+    public String depositJsapiPay(OrderInfo orderInfo, String openid) throws Exception {
+
+        log.warn("调用统一下单api(押金)");
+        HttpPost httpPost = new HttpPost(wxPayConfig.getDomain().concat("/v3/pay/transactions/jsapi"));
+
+        //请求body参数
+        Gson gson = new Gson();
+        Map<String, Object> paramsMap = new HashMap<>();
+
+        paramsMap.put("appid", wxPayConfig.getAppid());
+        paramsMap.put("mchid", wxPayConfig.getMchId());
+        paramsMap.put("description", orderInfo.getTitle());
+        paramsMap.put("out_trade_no", orderInfo.getOrderNo());   //test
+        paramsMap.put("notify_url", "https://4s3471264h.zicp.fun/weixin/jsapi/notify");  //test
+
+        Map amountMap = new HashMap();
+        amountMap.put("total", orderInfo.getTotalFee());
+        amountMap.put("currency", "CNY");
+
+        Map payerMap = new HashMap();
+        payerMap.put("openid", openid);  //test
+
+        paramsMap.put("amount", amountMap);
+        paramsMap.put("payer", payerMap);
+
+        //将参数转换成json字符串
+        String jsonParams = gson.toJson(paramsMap);
+        log.info("请求参数:{}", jsonParams);
+
+        StringEntity entity = new StringEntity(jsonParams, "utf-8");
+        entity.setContentType("application/json");
+        httpPost.setEntity(entity);
+        httpPost.setHeader("Accept", "application/json");
+
+        //完成签名并执行请求
+        CloseableHttpResponse response = httpClient.execute(httpPost);
+
+        try {
+            String bodyAsString = EntityUtils.toString(response.getEntity());
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode == 200) { //处理成功
+                log.info("成功, 返回结果 = " + bodyAsString);
+            } else if (statusCode == 204) { //处理成功，无返回Body
+                log.info("成功");
+            } else {
+                log.info("JSAPI下单失败,响应码 = " + statusCode + ",返回结果 = " +
+                        bodyAsString);
+                throw new IOException("request failed");
+            }
+
+            String nonceStr = RandomUtil.randomString(32);// 随机字符串
+            String timeStamp = String.valueOf(System.currentTimeMillis() / 1000);// 时间戳
+
+            //响应结果
+            Map<String, String> resultMap = gson.fromJson(bodyAsString,
+                    HashMap.class);
+            String prepayId = resultMap.get("prepay_id");
+
+            /*
+            //存入 预支付交易会话标识 防止调用下单接口
+            orderInfo.setPrepayId(prepayId);
+            QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("id",orderId);
+            orderInfoMapper.update(orderInfo,queryWrapper);
+             */
+
+
+            String Sign = wxPayConfig.getSign(wxPayConfig.getAppid(), Long.parseLong(timeStamp), nonceStr, "prepay_id=" + prepayId);
+
+            resultMap.put("timeStamp", timeStamp);
+            resultMap.put("nonceStr", nonceStr);
+            resultMap.put("appId", wxPayConfig.getAppid());
+            resultMap.put("signType", "RSA");
+            resultMap.put("paySign", Sign);
+
+            String resultJson = gson.toJson(resultMap);
+            log.warn("resultJson是=====>{}", resultJson);
+
+            return resultJson;
+        } finally {
+            response.close();
+        }
+    }
+
+
+    /**
+     * @return 预支付交易会话标识 prepay_id string[1,64](押金)
      * 请求URL：https://api.mch.weixin.qq.com/v3/pay/transactions/jsapi
      */
     @Override

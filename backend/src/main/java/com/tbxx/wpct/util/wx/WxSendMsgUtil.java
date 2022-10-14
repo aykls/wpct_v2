@@ -26,6 +26,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static com.tbxx.wpct.util.constant.RedisConstants.ACCESS_TOKEN;
 
@@ -50,6 +51,8 @@ public class WxSendMsgUtil {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    private final ReentrantLock lock = new ReentrantLock();
+
 
     public String getAccessToken() throws InterruptedException {
         /*先从缓存中取openid，缓存中取不到 说明已经过期，则重新申请*/
@@ -59,19 +62,25 @@ public class WxSendMsgUtil {
         if (accessToken != null && expire != null && expire > 5L) {
             return accessToken;
         }
-        Map<String, String> params = new HashMap<>();
-        params.put("APPID", wxPayConfig.getAppid());
-        params.put("APPSECRET", wxPayConfig.getAppSecret());
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(
-                "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={APPID}&secret={APPSECRET}", String.class, params);
-        String body = responseEntity.getBody();
-        JSONObject object = JSON.parseObject(body);
-        String Access_Token = object.getString("access_token");
-        /*access_token有效时长*/
-        int expires_in = object.getInteger("expires_in");
-        /*过期时间减去10毫秒：10毫秒是网络连接的程序运行所占用的时间*/
-        stringRedisTemplate.opsForValue().set(ACCESS_TOKEN, Access_Token, expires_in - 10, TimeUnit.SECONDS);
-        return Access_Token;
+
+        if (lock.tryLock()) {
+            Map<String, String> params = new HashMap<>();
+            params.put("APPID", wxPayConfig.getAppid());
+            params.put("APPSECRET", wxPayConfig.getAppSecret());
+            ResponseEntity<String> responseEntity = restTemplate.getForEntity(
+                    "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={APPID}&secret={APPSECRET}", String.class, params);
+            String body = responseEntity.getBody();
+            JSONObject object = JSON.parseObject(body);
+            assert object != null;
+            String Access_Token = object.getString("access_token");
+            /*access_token有效时长*/
+            int expires_in = object.getInteger("expires_in");
+            /*过期时间减去10毫秒：10毫秒是网络连接的程序运行所占用的时间*/
+            stringRedisTemplate.opsForValue().set(ACCESS_TOKEN, Access_Token, expires_in - 10, TimeUnit.SECONDS);
+            return Access_Token;
+        }
+        Thread.sleep(1000);
+        return getAccessToken();
     }
 
 

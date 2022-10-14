@@ -48,4 +48,12 @@ public class BuildInfo implements Serializable {
      * 与房屋的关系
      */
     private String relation;
+    /**
+     * 押金
+     */
+    private Integer deposit;
+    /**
+     * 押金订单号
+     */
+    private String orderNo;
 }

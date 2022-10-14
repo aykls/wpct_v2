@@ -72,8 +72,8 @@ public class WxMsgTemplateHasten {
         this.keyword3 = getFormat(keyword3);
     }
 
-    public void setAmount27(String amount27) {
-        this.amount27 = getFormat(amount27);
+    public void setKeyword4(String keyword4) {
+        this.keyword4 = getFormat(keyword4);
     }
 
     public void setKeyword5(String keyword5) {

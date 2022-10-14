@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tbxx.wpct.config.WxMsgConfig;
 import com.tbxx.wpct.dto.Result;
+import com.tbxx.wpct.dto.WechatUserDTO;
 import com.tbxx.wpct.entity.Consumption;
 import com.tbxx.wpct.entity.PayInfo;
 import com.tbxx.wpct.entity.WechatUser;
@@ -22,8 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -115,7 +118,6 @@ public class SendMsgServiceImpl implements SendMsgService {
         queryWrapper1.eq("openid", wechatUserDTO.getOpenid());
         WechatUser wechatUser = wechatUserMapper.selectOne(queryWrapper1);
 
-        String pid = wechatUser.getPid();
         QueryWrapper<PayInfo> queryWrapper2 = new QueryWrapper<>();
         queryWrapper2.eq("village_name", wechatUserDTO.getVillageName()).eq("build_no", wechatUserDTO.getBuildNo())
                 .eq("room_no", wechatUserDTO.getRoomNo());

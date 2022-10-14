@@ -51,5 +51,21 @@
             order by  pay_begin_time desc
     </select>
 
+    <select id="sendMsg" resultType="com.tbxx.wpct.dto.WechatUserDTO">
+        SELECT  tbi.openid,tbi.room_no,tbi.village_name,tbi.build_no  FROM  tb_order_info o
+                   left join tb_build_info tbi on o.build_no = tbi.build_no
+                    and o.village_name=tbi.village_name and o.room_no=tbi.room_no
+        WHERE  o.order_status= '未支付'
+    </select>
+
+
+    <select id="selectOrderNo" resultType="com.tbxx.wpct.entity.BuildInfo">
+        select  *
+            from tb_build_info b
+            group by b.village_name,b.build_no,b.room_no
+    </select>
+
+
+
 </mapper>
 

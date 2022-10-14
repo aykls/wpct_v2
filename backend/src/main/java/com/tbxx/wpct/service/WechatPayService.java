@@ -1,5 +1,6 @@
 package com.tbxx.wpct.service;
 
+import com.tbxx.wpct.entity.OrderInfo;
 import com.wechat.pay.contrib.apache.httpclient.exception.HttpCodeException;
 import com.wechat.pay.contrib.apache.httpclient.exception.NotFoundException;
 

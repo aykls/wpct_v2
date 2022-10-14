@@ -1,8 +1,11 @@
 package com.tbxx.wpct.service;
 
 import com.tbxx.wpct.dto.Result;
+import com.tbxx.wpct.dto.WechatUserDTO;
 import com.tbxx.wpct.entity.PayInfo;
 import com.tbxx.wpct.entity.WechatUser;
+
+import java.util.List;
 
 /**
  * @InterfaceName SendMsgService

@@ -14,7 +14,7 @@ import java.util.Date;
 public class OrderNoUtils {
 
     /**
-     * 获取订单编号
+     * 获取订单编号(缴费)
      * @return
      */
     public static String getOrderNo() {
@@ -22,12 +22,29 @@ public class OrderNoUtils {
     }
 
     /**
-     * 获取退款单编号
+     * 获取退款单编号(缴费)
      * @return
      */
     public static String getRefundNo() {
         return "REFUND_" + getNo();
     }
+
+    /**
+     * 获取订单编号(押金)
+     * @return
+     */
+    public static String getOrderDe() {
+        return "ORDERDE_" + getNo();
+    }
+
+    /**
+     * 获取退款单编号(押金)
+     * @return
+     */
+    public static String getRefundDe() {
+        return "REFUNDDE_" + getNo();
+    }
+
 
     /**
      * 获取编号
