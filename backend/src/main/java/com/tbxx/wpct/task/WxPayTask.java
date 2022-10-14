@@ -8,10 +8,7 @@ import com.tbxx.wpct.entity.OrderInfo;
 import com.tbxx.wpct.entity.RefundInfo;
 import com.tbxx.wpct.mapper.ConsumptionMapper;
 import com.tbxx.wpct.service.OrderInfoService;
-import com.tbxx.wpct.service.impl.ConsumptionServiceImpl;
-import com.tbxx.wpct.service.impl.OrderInfoServiceImpl;
-import com.tbxx.wpct.service.impl.RefundInfoServiceImpl;
-import com.tbxx.wpct.service.impl.WechatPayServiceImpl;
+import com.tbxx.wpct.service.impl.*;
 
 import com.tbxx.wpct.util.wx.WeiXinUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -28,12 +25,7 @@ import java.util.concurrent.TimeUnit;
 import static com.tbxx.wpct.util.constant.RedisConstants.ACCESS_TOKEN;
 import static com.tbxx.wpct.util.constant.RedisConstants.ACCESS_TOKEN_TTL;
 
-/**
- * @Author ZXX
- * @ClassName WxPayTask
- * @Description TODO
- * @DATE 2022/10/5 13:06
- */
+
 
 @Slf4j
 @Component
@@ -72,6 +64,8 @@ public class WxPayTask {
 
     @Resource
     private WxPayConfig wxPayConfig;
+
+
 
 //    /**
 //     * 从第0秒开始每隔30秒执行1次，查询创建超过5分钟，并且未支付的订单
@@ -125,21 +119,6 @@ public class WxPayTask {
 //        }
 //    }
 
-//    @Scheduled(cron = "0/45 * * * * ?")
-//    public void flashAccessToken() {
-//        log.warn("查看access_token是否过期");
-//        String access_token = stringRedisTemplate.opsForValue().get(ACCESS_TOKEN);
-//        if (access_token == null) { //获取不到代表已经过期了
-//            log.warn("access_token过期 重新请求");
-//            Gson gson = new Gson();
-//            String toGetUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=" + wxPayConfig.getAppid() + "&secret=" + wxPayConfig.getAppSecret();
-//            String resu = WeiXinUtil.httpRequest(toGetUrl, "GET", null);
-//            HashMap<String, Object> map = gson.fromJson(resu, HashMap.class);
-//            String new_access_token = (String) map.get("access_token");
-//            //将new_access_token存入redis中
-//            stringRedisTemplate.opsForValue().set(ACCESS_TOKEN, new_access_token, ACCESS_TOKEN_TTL - 10, TimeUnit.SECONDS);
-//        }
-//    }
 
 
 }

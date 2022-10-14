@@ -9,6 +9,7 @@ import com.tbxx.wpct.entity.Consumption;
 import com.tbxx.wpct.entity.PayInfo;
 import com.tbxx.wpct.entity.WechatUser;
 import com.tbxx.wpct.entity.wxpush.WxMsgTemplateHasten;
+import com.tbxx.wpct.mapper.ConsumptionMapper;
 import com.tbxx.wpct.mapper.PayInfoMapper;
 import com.tbxx.wpct.mapper.WechatUserMapper;
 import com.tbxx.wpct.service.SendMsgService;
@@ -45,6 +46,8 @@ public class SendMsgServiceImpl implements SendMsgService {
 
     @Resource
     private PayInfoMapper payInfoMapper;
+    @Resource
+    private ConsumptionMapper consumptionMapper;
 
     @Resource
     private WechatUserMapper wechatUserMapper;
@@ -54,19 +57,37 @@ public class SendMsgServiceImpl implements SendMsgService {
      * 参数拼接
      */
     public WxMsgConfig getMsgConfig(PayInfo payInfo, WechatUser wechatUser) {
-        //TODO 这里只是测试
+        String payinfoId = payInfo.getPayinfoId();
+        QueryWrapper<Consumption> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("build_id", payinfoId);
+        Consumption consumption = consumptionMapper.selectOne(queryWrapper);
+
+
         WxMsgTemplateHasten wxMsgTemplateHasten = new WxMsgTemplateHasten();
-        wxMsgTemplateHasten.setTime31(String.valueOf(payInfo.getPayBeginTime()));
-        wxMsgTemplateHasten.setThing30(payInfo.getRoomNo());
-        wxMsgTemplateHasten.setCharacter_string29(payInfo.getOrderNo());
-        wxMsgTemplateHasten.setAmount28("50");
-        wxMsgTemplateHasten.setAmount27("0");
+        wxMsgTemplateHasten.setFirst(payInfo.getVillageName() + "-"
+                + payInfo.getBuildNo() + "-"
+                + payInfo.getRoomNo() + "-" +
+                "缴费提醒");
+        /*房屋号*/
+        wxMsgTemplateHasten.setKeyword1(payInfo.getVillageName() + "-"
+                + payInfo.getBuildNo() + "-"
+                + payInfo.getRoomNo());
+        /*缴费人*/
+        wxMsgTemplateHasten.setKeyword2(wechatUser.getName());
+        /*缴费类型*/
+        wxMsgTemplateHasten.setKeyword3("总费用");
+        /*缴费状态*/
+        wxMsgTemplateHasten.setKeyword4("未支付");
+        /*合计金额*/
+        BigDecimal bigDecimal = new BigDecimal(consumption.getMonthCost());
+        wxMsgTemplateHasten.setKeyword5(String.valueOf(bigDecimal.divide(new BigDecimal(100))));
+        wxMsgTemplateHasten.setRemark("请及时缴交费用~");
 
 
         /*消息推送配置参数拼接*/
         WxMsgConfig wxMsgConfig = new WxMsgConfig();
         wxMsgConfig.setTouser(wechatUser.getOpenid());
-        wxMsgConfig.setTemplate_id("DBrQ5E3r0dDNxXQqwEtSE7feVps6Qo-IKg8pv3FMy4w");
+        wxMsgConfig.setTemplate_id("QgLoZpp1KWNskam2jclpxXmmSu4nhVZkv8bPU9wEqS4");
         wxMsgConfig.setData(wxMsgTemplateHasten);
         return wxMsgConfig;
     }
@@ -89,34 +110,37 @@ public class SendMsgServiceImpl implements SendMsgService {
      * 催缴
      */
     @Override
-    public Result sendHasten(String openid) {
+    public void sendHasten(WechatUserDTO wechatUserDTO) throws InterruptedException {
         QueryWrapper<WechatUser> queryWrapper1 = new QueryWrapper<>();
-        queryWrapper1.eq("openid",openid);
+        queryWrapper1.eq("openid", wechatUserDTO.getOpenid());
         WechatUser wechatUser = wechatUserMapper.selectOne(queryWrapper1);
 
         String pid = wechatUser.getPid();
         QueryWrapper<PayInfo> queryWrapper2 = new QueryWrapper<>();
-        queryWrapper2.eq("pid",pid);
-        PayInfo payInfo = payInfoMapper.selectOne(queryWrapper2);
+        queryWrapper2.eq("village_name", wechatUserDTO.getVillageName()).eq("build_no", wechatUserDTO.getBuildNo())
+                .eq("room_no", wechatUserDTO.getRoomNo());
 
-        WxMsgConfig requestData = this.getMsgConfig(payInfo,wechatUser);
-        log.info("推送消息请求参数：{}", JSON.toJSONString(requestData));
+        List<PayInfo> payInfos = payInfoMapper.selectList(queryWrapper2);
 
-        String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=" + wxSendMsgUtil.getAccessToken();
-        log.info("推送消息请求地址：{}", url);
-        JSONObject responseData = postData(url, requestData);
-        log.info("推送消息返回参数：{}", JSON.toJSONString(responseData));
+        for (PayInfo pList : payInfos) {
+            WxMsgConfig requestData = this.getMsgConfig(pList, wechatUser);
 
-        Integer errorCode = responseData.getInteger("errcode");
-        String errorMessage = responseData.getString("errmsg");
-        if (errorCode == 0) {
-            log.info("推送消息发送成功");
-            return Result.ok("推送消息发送成功");
+            log.info("推送消息请求参数：{}", JSON.toJSONString(requestData));
 
-        } else {
-            log.info("推送消息发送失败,errcode：{},errorMessage：{}", errorCode, errorMessage);
-            return Result.ok("推送消息发送失败");
+            String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" + wxSendMsgUtil.getAccessToken();
+            log.info("推送消息请求地址：{}", url);
+            JSONObject responseData = postData(url, requestData);
+            log.info("推送消息返回参数：{}", JSON.toJSONString(responseData));
+
+            Integer errorCode = responseData.getInteger("errcode");
+            String errorMessage = responseData.getString("errmsg");
+            if (errorCode == 0) {
+                log.info("推送消息发送成功");
+            } else {
+                log.info("推送消息发送失败,errcode：{},errorMessage：{}", errorCode, errorMessage);
+            }
         }
+
     }
 
 

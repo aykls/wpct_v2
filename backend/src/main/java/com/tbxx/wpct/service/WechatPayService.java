@@ -21,7 +21,9 @@ import java.util.Map;
  */
 
 public interface WechatPayService {
-    String  jsapiPay(String openid,String orderId) throws Exception;
+    String depositJsapiPay(OrderInfo orderInfo, String openid) throws Exception;
+
+    String  jsapiPay(String openid, String orderId) throws Exception;
 
     String payNotify(HttpServletRequest request, HttpServletResponse response) throws GeneralSecurityException, NotFoundException, IOException, HttpCodeException;
 

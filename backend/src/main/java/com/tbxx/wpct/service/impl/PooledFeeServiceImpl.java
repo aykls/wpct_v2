@@ -135,7 +135,7 @@ public class PooledFeeServiceImpl extends ServiceImpl<PooledFeeMapper, PooledFee
      * 查询单个公摊费
      */
     @Override
-    public Result singlepooled(String villageName ,String control) {
+    public Result singlepooled(String villageName, String control) {
         //修改公摊费表
 
         consumptionMapper.singleToNew(control, villageName);

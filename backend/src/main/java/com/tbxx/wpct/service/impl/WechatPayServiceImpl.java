@@ -1,22 +1,16 @@
 package com.tbxx.wpct.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.gson.Gson;
 import com.tbxx.wpct.entity.OrderInfo;
-import com.tbxx.wpct.entity.PaymentInfo;
 import com.tbxx.wpct.entity.RefundInfo;
 import com.tbxx.wpct.enums.OrderStatus;
-import com.tbxx.wpct.enums.PayType;
 import com.tbxx.wpct.enums.wxpay.WxApiType;
-import com.tbxx.wpct.enums.wxpay.WxNotifyType;
 import com.tbxx.wpct.enums.wxpay.WxRefundStatus;
 import com.tbxx.wpct.enums.wxpay.WxTradeState;
 import com.tbxx.wpct.mapper.OrderInfoMapper;
 import com.tbxx.wpct.service.WechatPayService;
 import com.tbxx.wpct.util.HttpUtils;
-import com.tbxx.wpct.util.OrderNoUtils;
 import com.tbxx.wpct.config.WxPayConfig;
 import com.wechat.pay.contrib.apache.httpclient.exception.HttpCodeException;
 import com.wechat.pay.contrib.apache.httpclient.exception.NotFoundException;
@@ -40,14 +34,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
-
-import static com.tbxx.wpct.enums.wxpay.WxNotifyType.REFUND_NOTIFY;
 
 /**
  * @Author ZXX
@@ -159,7 +148,7 @@ public class WechatPayServiceImpl implements WechatPayService {
              */
 
 
-            String Sign =  wxPayConfig.getSign(wxPayConfig.getAppid(), Long.parseLong(timeStamp),nonceStr,"prepay_id="+ prepayId);
+            String Sign = wxPayConfig.getSign(wxPayConfig.getAppid(), Long.parseLong(timeStamp), nonceStr, "prepay_id=" + prepayId);
 
             resultMap.put("timeStamp", timeStamp);
             resultMap.put("nonceStr", nonceStr);
@@ -263,7 +252,6 @@ public class WechatPayServiceImpl implements WechatPayService {
         }
 
     }
-
 
 
     /**
@@ -431,11 +419,11 @@ public class WechatPayServiceImpl implements WechatPayService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void refund(String orderNo, String reason,Integer refundFee) throws Exception {
+    public void refund(String orderNo, String reason, Integer refundFee) throws Exception {
         log.info("===创建初始退款单记录===");
 
         //根据订单编号创建退款单
-        RefundInfo refundsInfo = refundsInfoService.createRefundByOrderNo(orderNo, reason,refundFee);
+        RefundInfo refundsInfo = refundsInfoService.createRefundByOrderNo(orderNo, reason, refundFee);
 
 
         //调用统一退款API
@@ -448,7 +436,7 @@ public class WechatPayServiceImpl implements WechatPayService {
         paramsMap.put("out_trade_no", orderNo);//订单编号
         paramsMap.put("out_refund_no", refundsInfo.getRefundNo());//退款单编号
         paramsMap.put("reason", reason);//退款原因
-        paramsMap.put("notify_url","https://4s3471264h.zicp.fun/wenxin/refunds/notify");//TODO 退款通知地址  改回公众号的
+        paramsMap.put("notify_url", "https://4s3471264h.zicp.fun/wenxin/refunds/notify");//TODO 退款通知地址  改回公众号的
 
         Map amountMap = new HashMap();
         amountMap.put("refund", refundsInfo.getRefund());//退款金额
@@ -529,12 +517,13 @@ public class WechatPayServiceImpl implements WechatPayService {
 
     /**
      * 根据退款单号核实退款单状态
+     *
      * @param refundNo
      * @return
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void checkRefundStatus(String refundNo) throws Exception{
+    public void checkRefundStatus(String refundNo) throws Exception {
 
         log.warn("根据退款单号核实退款单状态 ===> {}", refundNo);
 
@@ -549,7 +538,7 @@ public class WechatPayServiceImpl implements WechatPayService {
         String status = resultMap.get("status");
         String orderNo = resultMap.get("out_trade_no");
 
-        if(WxRefundStatus.SUCCESS.getType().equals(status)){
+        if (WxRefundStatus.SUCCESS.getType().equals(status)) {
             log.warn("核实订单已退款成功 ===> {}", refundNo);
             //如果确认退款成功，则更新订单状态
             orderInfoService.updateStatusByOrderNo(orderNo,
@@ -573,12 +562,12 @@ public class WechatPayServiceImpl implements WechatPayService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void processRefund(HashMap<String, Object> resultMap) throws Exception{
+    public void processRefund(HashMap<String, Object> resultMap) throws Exception {
         log.info("退款单");
         Gson gson = new Gson();
 
-        String orderNo = (String)resultMap.get("out_trade_no");
-        if(lock.tryLock()){
+        String orderNo = (String) resultMap.get("out_trade_no");
+        if (lock.tryLock()) {
             try {
                 String orderStatus = orderInfoService.getOrderStatus(orderNo);
                 if (!OrderStatus.REFUND_PROCESSING.getType().equals(orderStatus)) {
@@ -598,21 +587,22 @@ public class WechatPayServiceImpl implements WechatPayService {
 
     /**
      * 申请账单
+     *
      * @param billDate
      * @param type
      * @return
      * @throws Exception
      */
     @Override
-    public String queryBill(String billDate, String type) throws  Exception{
-        log.warn("申请账单接口调用{}，{}",billDate,type);
+    public String queryBill(String billDate, String type) throws Exception {
+        log.warn("申请账单接口调用{}，{}", billDate, type);
 
-        String url ="";
-        if("tradebill".equals(type)){ //交易账单
-            url =WxApiType.TRADE_BILLS.getType();
-        }else if("fundflowbill".equals(type)){ //资金账单
+        String url = "";
+        if ("tradebill".equals(type)) { //交易账单
+            url = WxApiType.TRADE_BILLS.getType();
+        } else if ("fundflowbill".equals(type)) { //资金账单
             url = WxApiType.FUND_FLOW_BILLS.getType();
-        }else {
+        } else {
             log.error("账单类型错误");
             throw new RuntimeException("不支持的账单类型");
         }
@@ -626,7 +616,7 @@ public class WechatPayServiceImpl implements WechatPayService {
         //获得响应结果
         CloseableHttpResponse response = httpClient.execute(httpGet);
 
-        try{
+        try {
             String bodyAsString = EntityUtils.toString(response.getEntity());
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode == 200) {
@@ -634,14 +624,14 @@ public class WechatPayServiceImpl implements WechatPayService {
             } else if (statusCode == 204) {
                 log.info("成功");
             } else {
-                throw new RuntimeException("申请账单异常, 响应码 = " + statusCode+ ", 申请账单返回结果 = " + bodyAsString);
+                throw new RuntimeException("申请账单异常, 响应码 = " + statusCode + ", 申请账单返回结果 = " + bodyAsString);
             }
             //获取账单下载地址
             Gson gson = new Gson();
             Map<String, String> resultMap = gson.fromJson(bodyAsString,
                     HashMap.class);
             return resultMap.get("download_url");
-        }finally {
+        } finally {
             response.close();
         }
     }
@@ -649,6 +639,7 @@ public class WechatPayServiceImpl implements WechatPayService {
 
     /**
      * 下载账单
+     *
      * @param billDate
      * @param type
      * @return

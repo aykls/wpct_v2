@@ -9,6 +9,7 @@ package com.tbxx.wpct.util.constant;
 
 public class SysConstant {
 
+
     /**
      * 密码正则。6~20位的字母、数字、下划线
      */

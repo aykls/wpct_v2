@@ -44,44 +44,19 @@ public class WxSendMsgUtil {
     @Resource
     private WxPayConfig wxPayConfig;
 
-
-    /*微信官方换取openid的固定接口*/
-    final String CODE2SESSION_URL = "https://api.weixin.qq.com/sns/jscode2session?appid={appId}&secret={appSecret}&js_code={code}&grant_type=authorization_code";
-
     @Resource
     private RestTemplate restTemplate;
-    @Autowired
-    private ObjectMapper objectMapper;
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
 
-    /*获取openid和session_key，参数code是小程序端传过来的*/
-    public Map code2Session(String code) throws JsonMappingException, JsonProcessingException {
-        Map<String, Object> params = Maps.newHashMap();
-        params.put("appId", "wxaf4fff5b42d65d60");
-        params.put("appSecret", "4a5b6b0f9d9e7042228a3c6a70d743ed");
-        params.put("code", code);
-
-        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wxaf4fff5b42d65d60&secret=4a5b6b0f9d9e7042228a3c6a70d743ed&js_code=" + code + "&grant_type=authorization_code";
-        String s = HttpUtil.get(url);
-        JSONObject jsonObject = JSON.parseObject(s);
-
-        log.warn("json是{}", jsonObject);
-
-
-//        JsonNode json = objectMapper.readTree(response.getBody());
-//        Map returnMap=new HashMap();
-//        returnMap.put("session_key",json.get("session_key").asText());
-//        /*获取到openid*/
-//        returnMap.put("openid",json.get("openid").asText());
-        return null;
-    }
-
-    public String getAccessToken() {
+    public String getAccessToken() throws InterruptedException {
         /*先从缓存中取openid，缓存中取不到 说明已经过期，则重新申请*/
         String accessToken = stringRedisTemplate.opsForValue().get(ACCESS_TOKEN);
-        if (accessToken != null) {
+        Long expire = stringRedisTemplate.getExpire(ACCESS_TOKEN, TimeUnit.MINUTES);
+
+        if (accessToken != null && expire != null && expire > 5L) {
             return accessToken;
         }
         Map<String, String> params = new HashMap<>();
@@ -99,9 +74,5 @@ public class WxSendMsgUtil {
         return Access_Token;
     }
 
-//    public JsonNode decryptData(String encryptedData, String session_key, String iv) throws IOException {
-//        AES aes = new AES();
-//        byte[] data = aes.decrypt(Base64.getDecoder().decode(encryptedData), Base64.getDecoder().decode(session_key), Base64.getDecoder().decode(iv));
-//        return objectMapper.readTree(data);
-//    }
+
 }

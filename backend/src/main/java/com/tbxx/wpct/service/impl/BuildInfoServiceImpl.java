@@ -51,6 +51,7 @@ public class BuildInfoServiceImpl extends ServiceImpl<BuildInfoMapper, BuildInfo
         if(buildInfoList == null){
             Result.ok("你的账号未绑定房屋信息");
         }
+
         return Result.ok(buildInfoList);
     };
 }

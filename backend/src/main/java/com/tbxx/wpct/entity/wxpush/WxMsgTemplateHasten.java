@@ -21,20 +21,31 @@ import java.util.Map;
 @Getter
 public class WxMsgTemplateHasten {
 
-    /*账单日期*/
-    private Map<String, String> time31;
+    /**
+     * 提醒
+     */
+    private Map<String, String> first;
 
-    /*房间名称*/
-    private Map<String, String> thing30;
+    /*房屋号*/
+    private Map<String, String> keyword1;
 
-    /*订单号*/
-    private Map<String, String> character_string29;
+    /*缴费人*/
+    private Map<String, String> keyword2;
 
-    /*总欠金额*/
-    private Map<String, String> amount28;
+    /*缴费类型*/
+    private Map<String, String> keyword3;
 
-    /*本次交易*/
-    private Map<String, String> amount27;
+    /*缴费状态*/
+    private Map<String, String> keyword4;
+
+    /*合计金额*/
+    private Map<String, String> keyword5;
+
+    /**
+     * 提醒
+     */
+    private Map<String, String> remark;
+
 
 
 
@@ -45,24 +56,33 @@ public class WxMsgTemplateHasten {
     }
 
 
-    public void setTime31(String time31) {
-        this.time31 = getFormat(time31);
+    public void setFirst(String first) {
+        this.first = getFormat(first);
     }
 
-    public void setThing30(String thing30) {
-        this.thing30 = getFormat(thing30);
+    public void setKeyword1(String keyword1) {
+        this.keyword1 = getFormat(keyword1);
     }
 
-    public void setCharacter_string29(String character_string29) {
-        this.character_string29 = getFormat(character_string29);
+    public void setKeyword2(String keyword2) {
+        this.keyword2 = getFormat(keyword2);
     }
 
-    public void setAmount28(String amount28) {
-        this.amount28 = getFormat(amount28);
+    public void setKeyword3(String keyword3) {
+        this.keyword3 = getFormat(keyword3);
     }
 
     public void setAmount27(String amount27) {
         this.amount27 = getFormat(amount27);
+    }
+
+    public void setKeyword5(String keyword5) {
+        this.keyword5 = getFormat(keyword5);
+    }
+
+
+    public void setRemark(String remark) {
+        this.remark = getFormat(remark);
     }
 
 }

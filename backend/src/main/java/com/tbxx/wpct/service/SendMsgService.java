@@ -12,5 +12,5 @@ import com.tbxx.wpct.entity.WechatUser;
  */
 
 public interface SendMsgService {
-    Result sendHasten(String openid);
+   void sendHasten(WechatUserDTO wechatUserDTO) throws InterruptedException;
 }
