@@ -19,4 +19,5 @@ public interface WechatUserService extends IService<WechatUser> {
     Result register(WechatUser wechatUser);
 
 
+    Result getInfo(String openid);
 }

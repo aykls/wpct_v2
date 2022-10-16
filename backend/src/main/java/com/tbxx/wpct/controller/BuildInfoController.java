@@ -36,8 +36,8 @@ public class BuildInfoController {
 
 
     @ApiOperation("用户房屋列表")
-    @GetMapping("/list")
-    public Result BuildList(@RequestParam String openid) {
+    @PostMapping("/list")
+    public Result BuildList(@RequestBody String openid) {
         return buildInfoService.buildList(openid);
     }
 

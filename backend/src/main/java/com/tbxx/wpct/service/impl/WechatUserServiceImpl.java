@@ -1,5 +1,7 @@
 package com.tbxx.wpct.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.BuildInfo;
@@ -13,7 +15,10 @@ import org.springframework.stereotype.Service;
 import springfox.documentation.builders.BuilderDefaults;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.tbxx.wpct.util.constant.SysConstant.*;
 
@@ -53,9 +58,31 @@ public class WechatUserServiceImpl extends ServiceImpl<WechatUserMapper, WechatU
         //用户注册
         List<BuildInfo> buildInfoList = wechatUser.getBuildInfoList();
         buildInfoMapper.insertBuildInfos(buildInfoList);
+        //wechatUser表插入
+        UpdateWrapper<WechatUser> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("openid",wechatUser.getOpenid());
+        WechatUser user = new WechatUser();
+        user.setNumber(phoneNumber);
+        user.setPid(pid);
+        user.setName(wechatUser.getName());
+        wechatUserMapper.update(user,updateWrapper);
 
-        return Result.ok("注册成功") ;
+        return Result.ok("1") ;
     }
 
 
+    /**
+     * 查询用户信息
+     */
+    @Override
+    public Result getInfo(String openid) {
+        QueryWrapper<WechatUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("openid",openid);
+        WechatUser user = wechatUserMapper.selectOne(queryWrapper);
+        String number = user.getNumber();
+        String name = user.getName();
+        Map map = new HashMap();
+        map.put("name",name);map.put("number",number);
+        return Result.ok(map);
+    }
 }

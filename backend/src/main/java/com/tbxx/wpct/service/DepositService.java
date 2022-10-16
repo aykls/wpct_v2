@@ -16,5 +16,7 @@ public interface DepositService extends IService<Deposit>  {
     Result jsapiPay(BuildInfo buildInfo, Integer money, String openid) throws Exception;
 
     Result DepositList(int pageNum);
+
+    Result setMoney(Integer money,BuildInfo buildInfo);
 }
 

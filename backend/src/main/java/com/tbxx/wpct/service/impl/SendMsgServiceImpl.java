@@ -69,7 +69,7 @@ public class SendMsgServiceImpl implements SendMsgService {
         WxMsgTemplateHasten wxMsgTemplateHasten = new WxMsgTemplateHasten();
         wxMsgTemplateHasten.setFirst(payInfo.getVillageName() + "-"
                 + payInfo.getBuildNo() + "-"
-                + payInfo.getRoomNo() + "-" +
+                + payInfo.getRoomNo() +
                 "缴费提醒");
         /*房屋号*/
         wxMsgTemplateHasten.setKeyword1(payInfo.getVillageName() + "-"

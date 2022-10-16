@@ -37,10 +37,15 @@ public class WechatUserController {
 
     @ApiOperation("微信用户注册")
     @PostMapping ("/register")
-    @CrossOrigin
     public Result register(@RequestBody WechatUser wechatUser){
         Result register = wechatUserService.register(wechatUser);
         return register;
+    }
+
+    @ApiOperation("微信用户信息")
+    @PostMapping("/info")
+    public Result getInfo(@RequestBody String openid){
+       return wechatUserService.getInfo(openid);
     }
 
 

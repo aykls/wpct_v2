@@ -1,4 +1,4 @@
-package com.tbxx.wpct.service;
+package com.tbxx.wpct.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -14,6 +14,7 @@ import com.tbxx.wpct.mapper.BuildInfoMapper;
 import com.tbxx.wpct.mapper.CheckMapper;
 import com.tbxx.wpct.mapper.DepositMapper;
 import com.tbxx.wpct.mapper.OrderInfoMapper;
+import com.tbxx.wpct.service.DepositService;
 import com.tbxx.wpct.service.impl.BuildInfoServiceImpl;
 import com.tbxx.wpct.service.impl.WechatPayServiceImpl;
 import com.tbxx.wpct.util.OrderNoUtils;
@@ -85,6 +86,7 @@ public class DepositServiceImpl extends ServiceImpl<DepositMapper, Deposit> impl
                     .set("order_no", orderNo).update();
         }
         String resultJson = wechatPayService.depositJsapiPay(orderInfo, openid);
+        log.warn("押金下单的结果是====>{}",resultJson);
         return Result.ok(resultJson);
     }
 
@@ -101,4 +103,14 @@ public class DepositServiceImpl extends ServiceImpl<DepositMapper, Deposit> impl
 
         return Result.ok(pageInfo);
     }
+
+    @Override
+    public Result setMoney(Integer money,BuildInfo buildInfo) {
+        buildInfoService.update().eq("village_name", buildInfo.getVillageName())
+                .eq("build_no", buildInfo.getBuildNo()).eq("room_no", buildInfo.getRoomNo())
+                .set("deposit",buildInfo.getDeposit()-money).update();
+        return Result.ok("扣除成功");
+    }
+
+
 }
