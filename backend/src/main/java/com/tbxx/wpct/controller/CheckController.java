@@ -58,7 +58,7 @@ public class CheckController {
 
     @ApiOperation("删除缴费")
     @PostMapping("/delete")
-    public Result deleteCheck(@RequestParam("payinfoId") String checkid,@RequestParam(name = "id") String orderId) {
+    public Result deleteCheck(@RequestParam("payinfoId") String checkid,@RequestParam(name = "orderNo") String orderId) {
         return checkService.deleteCheck(checkid,orderId);
     }
 

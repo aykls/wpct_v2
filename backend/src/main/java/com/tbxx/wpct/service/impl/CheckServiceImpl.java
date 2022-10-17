@@ -67,6 +67,7 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
         String checkid = CheckUtil.getCheckNo();  //生成consumption和payinfo 连接
         consumption.setBuildId(checkid);
         payinfo.setPayinfoId(checkid);
+        payinfo.setOrderNo(orderNo);
 
         consumptionMapper.insert(consumption);
         payfoMapper.insert(payinfo);
@@ -169,7 +170,7 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
     public Result deleteCheck(String checkid,String orderId) {
         //查询订单
         QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id", orderId);
+        queryWrapper.eq("order_no", orderId);
         orderInfoMapper.delete(queryWrapper);
 
         QueryWrapper<Consumption> cqueryWrapper = new QueryWrapper<>();
