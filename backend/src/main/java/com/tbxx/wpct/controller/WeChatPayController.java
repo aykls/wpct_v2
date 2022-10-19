@@ -116,7 +116,7 @@ public class WeChatPayController {
     @ApiOperation("获得微信用户信息")
     @CrossOrigin
     @RequestMapping(value = "/callback", method = RequestMethod.GET)
-    public void callback(HttpServletResponse response, HttpServletRequest request) throws IOException {
+    public Result callback(HttpServletResponse response, HttpServletRequest request) throws IOException {
 
         log.warn("我带着code来了");
         String code = request.getParameter("code");
@@ -166,6 +166,14 @@ public class WeChatPayController {
         String userRes = HttpUtil.get(userUrl);
         log.warn("用户的信息==>{}", userRes);
 
+        //将openid返回给前端  10-19
+        Gson gson = new Gson();
+        HashMap getMap = gson.fromJson(userRes, HashMap.class);
+        String getOpenid = (String) getMap.get("openid");
+        Map<String,String> rMap = new HashMap<>();
+        rMap.put("openid",getOpenid);
+        log.warn("传给前端的是====>{}",rMap);
+
 
         JSONObject jsonObject = JSONObject.parseObject(userRes);
         WechatUser user = wechatUserService.query().eq("openid", openid).one();
@@ -186,6 +194,7 @@ public class WeChatPayController {
 
         //TODO 如果没有授权登录 跳转注册页面  未完成
         response.sendRedirect(userUrl);
+        return Result.ok(rMap);
     }
 
 
