@@ -66,14 +66,17 @@ public class WxPayConfig {
     /**
      * 获取商户私钥
      *
-     * @param filename 私钥文件路径
+     * @param
      * @return 私钥信息
      */
-    private PrivateKey getPrivateKey(String filename) {
+    private PrivateKey getPrivateKey() throws UnsupportedEncodingException {
 
         try {
-            return PemUtil.loadPrivateKey(new FileInputStream(filename));
-        } catch (FileNotFoundException e) {
+             PrivateKey merchantPrivateKey = PemUtil.loadPrivateKey(new ByteArrayInputStream( Constant.privateKey.getBytes("utf-8")));
+             //log.info("merchantPrivateKey===load===>{}",merchantPrivateKey);
+             return merchantPrivateKey;
+             //return PemUtil.loadPrivateKey(new FileInputStream(filename));
+        } catch (Exception e) {
             throw new RuntimeException("商户私钥文件不存在", e);
         }
     }
@@ -89,7 +92,7 @@ public class WxPayConfig {
         log.info("获取签名验证器");
 
         //获取商户私钥
-        PrivateKey privateKey = getPrivateKey(privateKeyPath);
+        PrivateKey privateKey = getPrivateKey();
         //平台证书的商户信息
         WechatPay2Credentials wechatPay2Credentials = new WechatPay2Credentials(mchId, new PrivateKeySigner(mchSerialNo, privateKey));
 
@@ -109,12 +112,12 @@ public class WxPayConfig {
      * @param verifier 签名验证器
      */
     @Bean(name = "WxPayClient")
-    public CloseableHttpClient getWxPayClient(Verifier verifier) {
+    public CloseableHttpClient getWxPayClient(Verifier verifier) throws UnsupportedEncodingException {
 
         log.info("获取HttpClient");
 
         //获取商户私钥
-        PrivateKey privateKey = getPrivateKey(privateKeyPath);
+        PrivateKey privateKey = getPrivateKey();
 
         //用于构建HttpClient
         WechatPayHttpClientBuilder builder = WechatPayHttpClientBuilder.create()
@@ -129,10 +132,10 @@ public class WxPayConfig {
 
 
     @Bean(name = "wxPayNoSignClient")
-    public CloseableHttpClient getWxPayNoSignClient(Verifier verifier) {
+    public CloseableHttpClient getWxPayNoSignClient(Verifier verifier) throws UnsupportedEncodingException {
         log.info("初始化wxPayNoSignClient");
         //获取商户私钥
-        PrivateKey privateKey = getPrivateKey(privateKeyPath);
+        PrivateKey privateKey = getPrivateKey();
 
         WechatPayHttpClientBuilder builder = WechatPayHttpClientBuilder.create()
                 .withMerchant(mchId, mchSerialNo, privateKey)
