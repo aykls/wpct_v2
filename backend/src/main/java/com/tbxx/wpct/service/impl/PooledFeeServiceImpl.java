@@ -136,10 +136,15 @@ public class PooledFeeServiceImpl extends ServiceImpl<PooledFeeMapper, PooledFee
      */
     @Override
     public Result singlepooled(String villageName, String control) {
-        //修改公摊费表
+        if(control.equals("total")) {
+            PooledFee pooledFee = query().eq("village_name", villageName).one();
+            return Result.ok(pooledFee);
+        }
+        else {
+            List<PooledFee> pooledFees = consumptionMapper.singleToNew(control, villageName);
+            return Result.ok(pooledFees);
+        }
 
-        consumptionMapper.singleToNew(control, villageName);
 
-        return Result.ok("更新成功");
     }
 }

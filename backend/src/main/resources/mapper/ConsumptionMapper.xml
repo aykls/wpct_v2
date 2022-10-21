@@ -59,7 +59,7 @@
     </select>
 
     <!--查询单个公摊费-->
-    <select id="singleToNew" resultType="integer">
+    <select id="singleToNew" resultType="PooledFee">
         select ${control}
             from tb_pooled_fee p
         WHERE p.village_name = #{villageName}

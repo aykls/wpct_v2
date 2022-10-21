@@ -2,6 +2,7 @@ package com.tbxx.wpct.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tbxx.wpct.entity.Consumption;
+import com.tbxx.wpct.entity.PooledFee;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -34,6 +35,6 @@ public interface ConsumptionMapper extends BaseMapper<Consumption> {
     List<Consumption> selectOrderStatus();
 
     @Transactional
-    Integer singleToNew(String control,String villageName);
+    List<PooledFee> singleToNew(String control, String villageName);
 
 }
