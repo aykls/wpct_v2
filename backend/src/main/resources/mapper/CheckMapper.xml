@@ -27,6 +27,7 @@
             <result column="build_id" property="buildId"/>
             <result column="area_fee" property="areaFee"/>
             <result column="area" property="area"/>
+            <result column="car_fee" property="carFee"/>
             <result column="limit_area" property="limitArea"/>
             <result column="over_area" property="overArea"/>
             <result column="overarea_fee" property="overareaFee"/>
