@@ -53,7 +53,7 @@ public class PooledFeeController {
 
     @ApiOperation("查某一小区公摊费")
     @PostMapping("/cost")
-    public Result singlepooled(@RequestBody String villageName ,@RequestParam String control){
+    public Result singlepooled(@RequestParam String villageName ,@RequestParam String control){
         return pooledFeeService.singlepooled(villageName,control);
     }
 

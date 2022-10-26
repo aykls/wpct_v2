@@ -30,7 +30,10 @@ import java.util.List;
 public class PooledFeeServiceImpl extends ServiceImpl<PooledFeeMapper, PooledFee> implements PooledFeeService {
 
     @Resource
-    ConsumptionMapper consumptionMapper;
+    private ConsumptionMapper consumptionMapper;
+
+    @Resource
+    private PooledFeeMapper pooledFeeMapper;
 
 
     /**
