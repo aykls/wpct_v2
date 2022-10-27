@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * @DATE 2022/10/10 17:06
  */
 
-@CrossOrigin 
+@CrossOrigin
 @Api(tags = "意见处理（审批）管理")
 @Slf4j
 @RestController
@@ -30,33 +30,42 @@ public class ExamineController {
 
     @ApiOperation("新增处理（审批）")
     @PostMapping("/add")
-    public Result addExamine(@RequestBody Examine examine){
+    public Result addExamine(@RequestBody Examine examine) {
         return examineService.addExamine(examine);
     }
 
     @ApiOperation("删除处理（审批）")
     @GetMapping("/remove")
-    public Result removeExamine(@RequestParam Integer id){
+    public Result removeExamine(@RequestParam Integer id) {
         QueryWrapper<Examine> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id",id);
+        queryWrapper.eq("id", id);
         examineService.remove(queryWrapper);
         return Result.ok("删除成功");
     }
 
 
-
     @ApiOperation("后台处理（审批）列表")
     @GetMapping("/list")
-    public Result listExamine(){
+    public Result listExamine() {
         return examineService.listExamine();
     }
 
 
     @ApiOperation("微信用户历史 记录处理（审批）")
     @PostMapping("/wxlist")
-    public Result userExamine(String openid){
+    public Result userExamine(@RequestParam String openid) {
 
         return examineService.userExamineList(openid);
+    }
+
+
+    /**
+     * 后台管理员处理用户审批
+     */
+    @ApiOperation("处理审批")
+    @PostMapping("/solu")
+    public Result soluExamine(@RequestParam Integer id,@RequestParam String openid,@RequestParam String resolveMsg) {
+        return examineService.soluExamine(id, openid, resolveMsg);
     }
 
 }

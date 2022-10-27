@@ -17,4 +17,7 @@ public interface ExamineService extends IService<Examine> {
     Result userExamineList(String openid);
 
     Result listExamine();
+
+
+    Result soluExamine(Integer id, String openid, String resolveMsg);
 }

@@ -1,6 +1,7 @@
 package com.tbxx.wpct.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.Examine;
@@ -9,6 +10,7 @@ import com.tbxx.wpct.service.ExamineService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -54,5 +56,19 @@ public class ExamineServiceImpl extends ServiceImpl<ExamineMapper, Examine> impl
     }
 
 
-
+    /**
+     * 处理意见
+     */
+    @Override
+    public Result soluExamine(Integer id, String openid, String resolveMsg) {
+        UpdateWrapper<Examine> updateWrapper = new UpdateWrapper<>();
+        //根据openid和id锁定处理的信息
+        updateWrapper.eq("id",id).eq("openid",openid);
+        Examine examine = new Examine();
+        examine.setExamineTime(LocalDateTime.now());
+        examine.setResolveMsg(resolveMsg);
+        examine.setExamineStatus("已处理");
+        baseMapper.update(examine,updateWrapper);
+        return Result.ok("操作成功！");
+    }
 }
