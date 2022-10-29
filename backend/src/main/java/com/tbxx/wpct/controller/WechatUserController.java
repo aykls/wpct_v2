@@ -2,6 +2,7 @@ package com.tbxx.wpct.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tbxx.wpct.dto.Result;
+import com.tbxx.wpct.dto.SR;
 import com.tbxx.wpct.entity.BuildInfo;
 import com.tbxx.wpct.entity.WechatUser;
 import com.tbxx.wpct.service.impl.BuildInfoServiceImpl;
@@ -47,6 +48,14 @@ public class WechatUserController {
     public Result getInfo(@RequestBody String openid){
        return wechatUserService.getInfo(openid);
     }
+
+
+    @ApiOperation("微信用户信息(后台)")
+    @GetMapping("/binfo")
+    public SR getInfoToBackend(){
+        return wechatUserService.getInfoToBackend();
+    }
+
 
 
 

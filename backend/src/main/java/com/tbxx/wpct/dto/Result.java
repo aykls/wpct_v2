@@ -40,6 +40,7 @@ public class Result {
         return new Result(true, null, data, total);
     }
 
+
     public static Result fail(String msg) {
         return new Result(false, msg, null, null);
     }
