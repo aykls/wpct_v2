@@ -9,6 +9,7 @@ import com.tbxx.wpct.service.impl.SysUserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class SysRoleController {
     /**
      * 新增角色
      */
+    @RequiresPermissions("role:add")
     @ApiOperation("新增角色")
     @PostMapping("/add")
     public Result insersysUser(@RequestBody SysRole role) {
@@ -34,7 +36,7 @@ public class SysRoleController {
     /**
      * 删除角色
      */
-    @ApiOperation("删除角色")
+    @RequiresPermissions("role:delete")
     @GetMapping("/remove")
     public Result removeRole(@RequestParam Integer ID) {
         return roleService.deleteRoleAndPerm(ID);
@@ -44,6 +46,7 @@ public class SysRoleController {
     /**
      * 角色列表
      */
+    @RequiresPermissions("role:list")
     @ApiOperation("角色列表")
     @GetMapping("/listRole")
     public Result listRole() {
@@ -55,7 +58,7 @@ public class SysRoleController {
      * 修改角色名&权限
      */
     @ApiOperation("修改角色名&权限")
-    @PostMapping("/update")
+    @RequiresPermissions("role:update")
     public Result updateRoleNameAndPerms(@RequestBody SysRole sysRole) {
         return roleService.updateRoleNameAndPerms(sysRole);
     }

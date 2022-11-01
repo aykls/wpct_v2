@@ -11,6 +11,7 @@ import com.tbxx.wpct.service.impl.WechatUserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +50,7 @@ public class WechatUserController {
        return wechatUserService.getInfo(openid);
     }
 
-
+    @RequiresPermissions("weixin:list")
     @ApiOperation("微信用户信息(后台)")
     @GetMapping("/binfo")
     public SR getInfoToBackend(){

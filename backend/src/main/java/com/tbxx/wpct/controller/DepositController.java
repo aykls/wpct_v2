@@ -9,6 +9,7 @@ import com.tbxx.wpct.service.impl.DepositServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class DepositController {
     @Resource
     private DepositMapper depositMapper;
 
-
+    @RequiresPermissions("deposit:add")
     @ApiOperation("新增小区押金")
     @PostMapping("/add")
     public Result addDeposit(@RequestBody Deposit deposit) {
@@ -38,7 +39,7 @@ public class DepositController {
         return Result.ok("添加成功");
     }
 
-
+    @RequiresPermissions("deposit:remove")
     @ApiOperation("删除小区押金")
     @GetMapping("/remove")
     public Result removeDeposit(@RequestParam Integer id) {
@@ -54,7 +55,7 @@ public class DepositController {
         return Result.ok(list);
     }
 
-
+    @RequiresPermissions("deposit:update")
     @ApiOperation("修改小区押金")
     @PostMapping("/update")
     public Result userDeposit(@RequestBody Deposit deposit) {
@@ -78,6 +79,7 @@ public class DepositController {
         return depositService.jsapiPay(buildInfo, money, openid);
     }
 
+    @RequiresPermissions("deposit:list")
     @ApiOperation("押金列表（后台）")
     @PostMapping("/blist")
     public Result DepositBList(@RequestParam int pageNum) {

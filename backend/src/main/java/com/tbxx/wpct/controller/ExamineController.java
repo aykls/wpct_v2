@@ -7,6 +7,7 @@ import com.tbxx.wpct.service.impl.ExamineServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class ExamineController {
         return examineService.addExamine(examine);
     }
 
+    @RequiresPermissions("shenpi:remove")
     @ApiOperation("删除处理（审批）")
     @GetMapping("/remove")
     public Result removeExamine(@RequestParam Integer id) {
@@ -43,13 +45,12 @@ public class ExamineController {
         return Result.ok("删除成功");
     }
 
-
+    @RequiresPermissions("shenpi:list")
     @ApiOperation("后台处理（审批）列表")
     @GetMapping("/list")
     public Result listExamine() {
         return examineService.listExamine();
     }
-
 
     @ApiOperation("微信用户历史 记录处理（审批）")
     @PostMapping("/wxlist")
@@ -62,6 +63,7 @@ public class ExamineController {
     /**
      * 后台管理员处理用户审批
      */
+    @RequiresPermissions("shenpi:update")
     @ApiOperation("处理审批")
     @PostMapping("/solu")
     public Result soluExamine(@RequestParam Integer id,@RequestParam String openid,@RequestParam String resolveMsg) {

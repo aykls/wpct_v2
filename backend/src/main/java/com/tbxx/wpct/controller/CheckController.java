@@ -8,6 +8,7 @@ import com.tbxx.wpct.service.impl.CheckServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,12 +34,14 @@ public class CheckController {
     /**
      * 缴费添加(同步)
      */
+    @RequiresPermissions("zujin:add")
     @ApiOperation("新增缴费")
     @PostMapping("/add")
     public Result addCheck(@RequestBody PayInfo payinfo) {
         return checkService.addCheck(payinfo);
     }
 
+    @RequiresPermissions("zujin:list")
     @ApiOperation("后台缴费列表")
     @PostMapping("/blist")
     public Result ChecksList(@RequestParam int pageNum,@RequestParam String month) {
@@ -48,6 +51,7 @@ public class CheckController {
     /**
      * 修改缴费(同步)
      */
+    @RequiresPermissions("zujin:update")
     @ApiOperation("修改缴费")
     @PostMapping("/update")
     public Result checkUpdate(@RequestBody PayInfo payinfo) {
@@ -55,7 +59,7 @@ public class CheckController {
 
     }
 
-
+    @RequiresPermissions("zujin:remove")
     @ApiOperation("删除缴费")
     @PostMapping("/delete")
     public Result deleteCheck(@RequestParam("payinfoId") String checkid,@RequestParam(name = "orderNo") String orderId) {

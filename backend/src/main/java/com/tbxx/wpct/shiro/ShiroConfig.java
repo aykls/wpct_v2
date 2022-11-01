@@ -42,12 +42,12 @@ public class ShiroConfig {
         //配置系统受限资源
         //配置系统公共资源
         Map<String, String> map = new LinkedHashMap<>();
+        map.put("/user/*","authc");
         map.put("/user/toLogin","anon");   //anon 设置为公共资源
         map.put("/user/toLogout","anon");   //anon 设置为公共资源
         map.put("/user/toRegister","anon");   //anon 设置为公共资源
         map.put("/user/getCaptcha","anon");   //anon 设置为公共资源
-        map.put("/user/*","anon");
-        map.put("/role/*","anon");
+        map.put("/**","anon");
 
 
 
