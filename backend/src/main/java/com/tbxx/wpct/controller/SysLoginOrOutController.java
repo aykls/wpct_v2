@@ -2,6 +2,7 @@ package com.tbxx.wpct.controller;
 
 import com.tbxx.wpct.dto.LoginFormDTO;
 import com.tbxx.wpct.dto.Result;
+import com.tbxx.wpct.dto.SR;
 import com.tbxx.wpct.service.impl.SysUserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +32,7 @@ public class SysLoginOrOutController {
      */
     @ApiOperation("登录")
     @PostMapping("/login")
-    public Result authLogin(@RequestBody LoginFormDTO loginForm, HttpSession session){
+    public SR authLogin(@RequestBody LoginFormDTO loginForm, HttpSession session){
         return userService.authLogin(loginForm, session);
     }
 

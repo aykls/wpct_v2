@@ -28,8 +28,15 @@ public class SR {
     public static SR ok(String msg1, List<?> one, String msg2, List<?> two) {
         return new SR(true, msg1, one, msg2,two);
     }
+    public static SR ok(String msg1, String one, String msg2, List<?> two) {
+        return new SR(true, msg1, one, msg2,two);
+    }
 
     public static SR ok() {
         return new SR(true, null, null, null,null);
+    }
+
+    public static SR fail(String msg2) {
+        return new SR(false, msg2, null, null,null);
     }
 }

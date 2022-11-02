@@ -13,6 +13,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tbxx.wpct.dto.LoginFormDTO;
 import com.tbxx.wpct.dto.Result;
+import com.tbxx.wpct.dto.SR;
 import com.tbxx.wpct.dto.UserDTO;
 import com.tbxx.wpct.entity.SysRole;
 import com.tbxx.wpct.entity.SysUser;
@@ -36,10 +37,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.tbxx.wpct.util.constant.RedisConstants.LOGIN_USER_KEY;
@@ -67,13 +65,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 登录
      */
     @Override
-    public Result authLogin(LoginFormDTO loginForm, HttpSession session) {
+    public SR authLogin(LoginFormDTO loginForm, HttpSession session) {
         String userName = loginForm.getUserName();
         String password = loginForm.getPassword();
 
         SysUser user_name = query().eq("user_name", userName).one();
         if (user_name == null) {
-            return Result.fail("用户不存在");
+            return SR.fail("用户不存在");
         }
 
         Subject subject = SecurityUtils.getSubject();
@@ -81,7 +79,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         try {
             subject.login(usernamePasswordToken);
         } catch (Exception e) {
-            return Result.fail("密码错误，请重新输入");
+            return SR.fail("密码错误，请重新输入");
         }
         //随机生成token作为登录凭证
         String token = UUID.randomUUID().toString(true);
@@ -93,7 +91,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + token, userMap);
         //设置过期时间（30分钟）
         stringRedisTemplate.expire(LOGIN_USER_KEY + token, LOGIN_USER_TTL, TimeUnit.MINUTES);
-        return Result.ok(token);
+
+        Set<String> permissions = sysUserMapper.findPermsListByRoleId(user_name.getRoleId().toString());
+
+        List<Object>  list=new ArrayList<>();
+        list.add(user_name);
+        list.addAll(permissions);
+        return SR.ok("token",token,"个人权限和信息",list);
     }
 
     /**

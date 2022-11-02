@@ -3,6 +3,7 @@ package com.tbxx.wpct.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tbxx.wpct.dto.LoginFormDTO;
 import com.tbxx.wpct.dto.Result;
+import com.tbxx.wpct.dto.SR;
 import com.tbxx.wpct.entity.SysUser;
 import org.apache.shiro.authz.AuthorizationInfo;
 
@@ -24,7 +25,7 @@ public interface SysUserService extends IService<SysUser> {
 
     Result updateUser(SysUser sysUser);
 
-    Result authLogin(LoginFormDTO loginForm, HttpSession session);
+    SR authLogin(LoginFormDTO loginForm, HttpSession session);
 
     SysUser QueryUser(String username);
 
