@@ -80,8 +80,8 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
         orderInfo.setCreateTime(LocalDateTime.now());       //创建时间
         orderInfo.setTotalFee(consumption.getMonthCost());  //月缴费
         orderInfo.setCheckId(checkid);                      //连接co表 和 pay表
-        if(consumption.getGwaterFee()!=null && consumption.getLiftFee()!=null && consumption.getElectricityFee()!=null&&
-                consumption.getGwaterFee()>0 && consumption.getLiftFee()>0 && consumption.getElectricityFee()>0){
+        if (consumption.getGwaterFee() != null && consumption.getLiftFee() != null && consumption.getElectricityFee() != null &&
+                consumption.getGwaterFee() > 0 && consumption.getLiftFee() > 0 && consumption.getElectricityFee() > 0) {
             orderInfo.setStatus(1);
         }
 
@@ -98,13 +98,12 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
      * 后端缴费列表
      */
     @Override
-    public Result checksList(int pageNum,String month) {
+    public Result checksList(int pageNum, String month) {
         PageHelper.startPage(pageNum, 5);
         List<PayInfo> payInfos = baseMapper.checksList(month);
         PageInfo<PayInfo> pageInfo = new PageInfo<>(payInfos, 5);
         return Result.ok(pageInfo);
     }
-
 
 
     /**
@@ -122,7 +121,7 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
         for (BuildInfo buildInfo : buildInfoList) {
             QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("village_name", buildInfo.getVillageName()).eq("build_no", buildInfo.getBuildNo())
-                    .eq("room_no", buildInfo.getRoomNo());
+                    .eq("room_no", buildInfo.getRoomNo()).eq("status",1);
 
             //一个房屋订单集合 加入总订单集合
             totalList.addAll(orderInfoMapper.selectList(queryWrapper));
@@ -143,7 +142,7 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
     public Result checkUpdate(PayInfo payinfo) {
         //TODO 操作留底  和前端配合
         String userName = UserHolder.getUser().getUserName();
-        log.warn("当前进行修改的用户是===>{}",userName);
+        log.warn("当前进行修改的用户是===>{}", userName);
         payinfo.setUpdateUser(userName);
 
         String payinfoId = payinfo.getPayinfoId();
@@ -154,10 +153,10 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
         updateWrapper1.eq("payinfo_id", payinfoId);
 
         UpdateWrapper<Consumption> updateWrapper2 = new UpdateWrapper<>();
-        updateWrapper2.eq("build_id",buildId);
+        updateWrapper2.eq("build_id", buildId);
 
-        payfoMapper.update(payinfo,updateWrapper1);
-        consumptionMapper.update(consumption,updateWrapper2);
+        payfoMapper.update(payinfo, updateWrapper1);
+        consumptionMapper.update(consumption, updateWrapper2);
 
 
         return Result.ok("更新成功!");
@@ -168,17 +167,17 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
      * (前后端) 删除缴费列表
      */
     @Override
-    public Result deleteCheck(String checkid,String orderId) {
+    public Result deleteCheck(String checkid, String orderId) {
         //查询订单
         QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("order_no", orderId);
         orderInfoMapper.delete(queryWrapper);
 
         QueryWrapper<Consumption> cqueryWrapper = new QueryWrapper<>();
-        cqueryWrapper.eq("build_id",checkid);
+        cqueryWrapper.eq("build_id", checkid);
 
         QueryWrapper<PayInfo> pqueryWrapper = new QueryWrapper<>();
-        pqueryWrapper.eq("payinfo_id",checkid);
+        pqueryWrapper.eq("payinfo_id", checkid);
 
         consumptionMapper.delete(cqueryWrapper);
         payfoMapper.delete(pqueryWrapper);
