@@ -34,8 +34,7 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //log.warn("preHandle方法生效");
-
+        log.info("pre handle...");
         //获取请求头中的token
         String token = request.getHeader("authorization");
         if (StrUtil.isBlank(token)) {

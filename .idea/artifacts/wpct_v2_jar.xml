@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="wpct_v2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/wpct_v2_jar</output-path>
+    <root id="archive" name="wpct_v2.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="library" level="application" name="jweixin-1.6.0" />
+      <element id="library" level="application" name="axios" />
+    </root>
+  </artifact>
+</component>
