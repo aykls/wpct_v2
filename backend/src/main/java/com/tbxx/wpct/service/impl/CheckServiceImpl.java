@@ -80,7 +80,8 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
         orderInfo.setCreateTime(LocalDateTime.now());       //创建时间
         orderInfo.setTotalFee(consumption.getMonthCost());  //月缴费
         orderInfo.setCheckId(checkid);                      //连接co表 和 pay表
-        if(consumption.getGwaterFee()>0 && consumption.getLiftFee()>0 && consumption.getElectricityFee()>0){
+        if(consumption.getGwaterFee()!=null && consumption.getLiftFee()!=null && consumption.getElectricityFee()!=null&&
+                consumption.getGwaterFee()>0 && consumption.getLiftFee()>0 && consumption.getElectricityFee()>0){
             orderInfo.setStatus(1);
         }
 
