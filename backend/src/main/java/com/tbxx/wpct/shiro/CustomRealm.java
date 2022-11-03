@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.Resource;
 import java.util.Set;
 
+
 @Slf4j
 public class CustomRealm extends AuthorizingRealm {
     @Autowired
@@ -34,10 +35,11 @@ public class CustomRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         log.debug("======doAuthorizationInfo授权=======");
 
-        UserDTO user = UserHolder.getUser();
-        Integer roleId = user.getRoleId();
+//        UserDTO user = UserHolder.getUser();
+//        Integer roleId = user.getRoleId();
 
-        Set<String> permissions = sysUserMapper.findPermsListByRoleId(roleId.toString());
+//       Set<String> permissions = sysUserMapper.findPermsListByRoleId(roleId.toString());
+        Set<String> permissions = sysUserMapper.findPermsListByRoleId(String.valueOf(1));
 
         log.debug("获得权限===>{}",permissions.iterator().toString());
 

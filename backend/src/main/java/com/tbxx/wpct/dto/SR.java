@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName SR
@@ -21,7 +22,7 @@ import java.util.List;
 public class SR {
     private Boolean success;
     private String msg1;
-    private Object data;
+    private Object data1;
     private String msg2;
     private Object data2;
 
@@ -34,6 +35,9 @@ public class SR {
 
     public static SR ok() {
         return new SR(true, null, null, null,null);
+    }
+    public static SR ok(Map<Object,Object> map) {
+        return new SR(true, null, map, null,null);
     }
 
     public static SR fail(String msg2) {

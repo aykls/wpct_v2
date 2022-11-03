@@ -94,10 +94,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         Set<String> permissions = sysUserMapper.findPermsListByRoleId(user_name.getRoleId().toString());
 
-        List<Object>  list=new ArrayList<>();
-        list.add(user_name);
-        list.addAll(permissions);
-        return SR.ok("token",token,"个人权限和信息",list);
+        Map<Object,Object> reMap = new HashMap<>();
+        reMap.put("token",token);
+        reMap.put("user",user_name);
+        reMap.put("permissions",permissions);
+
+        return SR.ok(reMap);
     }
 
     /**
