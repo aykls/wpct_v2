@@ -3,11 +3,9 @@ package com.tbxx.wpct.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tbxx.wpct.dto.Result;
-import com.tbxx.wpct.dto.UserDTO;
 import com.tbxx.wpct.entity.BuildInfo;
 import com.tbxx.wpct.entity.Consumption;
 import com.tbxx.wpct.entity.OrderInfo;
@@ -18,7 +16,6 @@ import com.tbxx.wpct.service.CheckService;
 import com.tbxx.wpct.util.CheckUtil;
 import com.tbxx.wpct.util.OrderNoUtils;
 import com.tbxx.wpct.util.UserHolder;
-import com.tbxx.wpct.util.UserList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -133,6 +130,14 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
 
         totalList.forEach(
                 item -> item.setConsumption(consumptionService.query().eq("build_id", item.getCheckId()).one()));
+
+//        List<Object> relist = new ArrayList<>();
+//        for(OrderInfo orderInfo:totalList){
+//            relist.add(orderInfo);
+//            List<Consumption> con = consumptionService.query().eq("build_id", orderInfo.getCheckId()).list();
+//            relist.add(con);
+//        }
+
 
         return Result.ok(totalList);
     }

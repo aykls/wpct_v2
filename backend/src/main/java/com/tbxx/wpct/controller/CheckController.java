@@ -74,8 +74,7 @@ public class CheckController {
     @ApiOperation("前台微信用户列表")
     @PostMapping("/flist")
     public Result CheckList(@RequestParam String openid) {
-
         return checkService.checklist(openid);
-
     }
+
 }
