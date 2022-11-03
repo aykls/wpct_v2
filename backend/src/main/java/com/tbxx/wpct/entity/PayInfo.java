@@ -116,6 +116,13 @@ public class PayInfo implements Serializable {
      */
     private String OrderNo;
 
+    /**
+     * 与房屋的关系
+     */
+    private String relation;
+
+
+
     @TableField(exist = false)
     private WechatUser wechatUser;
 

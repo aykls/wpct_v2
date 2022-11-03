@@ -51,6 +51,9 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
     @Autowired
     BuildInfoServiceImpl buildInfoService;
 
+    @Autowired
+    ConsumptionServiceImpl consumptionService;
+
 
     /**
      * 新增缴费
@@ -129,8 +132,8 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
         Collections.sort(totalList);
 
         totalList.forEach(
-                item -> System.out.println(item.toString())
-        );
+                item -> item.setConsumption(consumptionService.query().eq("build_id", item.getCheckId()).one()));
+
         return Result.ok(totalList);
     }
 

@@ -69,6 +69,11 @@ public class OrderInfo implements Serializable,Comparable<OrderInfo> {
     private String relation;
 
 
+    /**
+     * 计算
+     */
+    @TableField(exist = false)
+    private Consumption consumption;
 
     @TableField(exist = false)
     private static final ZoneId ZONE_ID = ZoneOffset.systemDefault();
