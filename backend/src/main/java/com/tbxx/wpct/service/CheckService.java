@@ -29,4 +29,6 @@ public interface CheckService extends IService<PayInfo> {
     Result deleteCheck(String checkid,String orderId);
 
     Result checkUpdate(PayInfo payinfo);
+
+    Result checkFee(String checkId);
 }

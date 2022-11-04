@@ -77,4 +77,15 @@ public class CheckController {
         return checkService.checklist(openid);
     }
 
+
+    /**
+     * 前台查看明细
+     */
+    @ApiOperation("前台查看明细")
+    @PostMapping("/fees")
+    public Result checkFee(@RequestBody String checkId){
+        return checkService.checkFee(checkId);
+    }
+
+
 }

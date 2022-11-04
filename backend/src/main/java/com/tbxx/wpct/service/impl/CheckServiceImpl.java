@@ -18,10 +18,12 @@ import com.tbxx.wpct.util.OrderNoUtils;
 import com.tbxx.wpct.util.UserHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -68,6 +70,9 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
         consumption.setBuildId(checkid);
         payinfo.setPayinfoId(checkid);
         payinfo.setOrderNo(orderNo);
+        LocalDateTime time = LocalDateTime.now();
+        payinfo.setPayBeginTime(time);
+        payinfo.setPayEndTime(time.plus(30, ChronoUnit.DAYS));
 
         consumptionMapper.insert(consumption);
         payfoMapper.insert(payinfo);
@@ -121,15 +126,15 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
         for (BuildInfo buildInfo : buildInfoList) {
             QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("village_name", buildInfo.getVillageName()).eq("build_no", buildInfo.getBuildNo())
-                    .eq("room_no", buildInfo.getRoomNo()).eq("status",1);
+                    .eq("room_no", buildInfo.getRoomNo()).eq("status", 1);
 
             //一个房屋订单集合 加入总订单集合
             totalList.addAll(orderInfoMapper.selectList(queryWrapper));
         }
         Collections.sort(totalList);
 
-        totalList.forEach(
-                item -> item.setConsumption(consumptionService.query().eq("build_id", item.getCheckId()).one()));
+//        totalList.forEach(
+//                item -> item.setConsumption(consumptionService.query().eq("build_id", item.getCheckId()).one()));
 
 //        List<Object> relist = new ArrayList<>();
 //        for(OrderInfo orderInfo:totalList){
@@ -142,6 +147,12 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, PayInfo> implemen
         return Result.ok(totalList);
     }
 
+
+    @Override
+    public Result checkFee(String checkId) {
+        Consumption fee = consumptionService.query().eq("build_id", checkId).one();
+        return Result.ok(fee);
+    }
 
     /**
      * 修改缴费（同步）
