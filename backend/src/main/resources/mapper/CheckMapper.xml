@@ -42,6 +42,7 @@
             <result column="c_fee" property="cFee"/>
             <result column="d_fee" property="dFee"/>
             <result column="discount" property="discount"/>
+            <result column="month_cost" property="monthCost"></result>
         </collection>
     </resultMap>
 
