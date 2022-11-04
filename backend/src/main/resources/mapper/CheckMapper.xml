@@ -16,13 +16,15 @@
         <result property="resident" column="resident"/>
         <result property="conditionNumber" column="condition_number"/>
         <result property="personNumber" column="person_number"/>
+        <result property="payStatus" column="pay_status"/>
         <result property="guaranteeType" column="guarantee_type"/>
         <result property="payBeginTime" column="pay_begin_time"/>
         <result property="payEndTime" column="pay_end_time"/>
         <result property="updateTime" column="update_time"/>
         <result property="remarks" column="remarks"/>
         <result property="updateUser" column="update_user"/>
-        <result property="orderNo" column="order_no"/>
+        <result property="OrderNo" column="order_no"/>
+        <result property="relation" column="relation"/>
         <collection property="consumption" ofType="com.tbxx.wpct.entity.Consumption">
             <result column="build_id" property="buildId"/>
             <result column="area_fee" property="areaFee"/>
