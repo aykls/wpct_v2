@@ -1,8 +1,12 @@
 package com.tbxx.wpct.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tbxx.wpct.dto.Result;
+import com.tbxx.wpct.entity.SysPerm;
 import com.tbxx.wpct.entity.SysRole;
 import com.tbxx.wpct.entity.SysUser;
+import com.tbxx.wpct.mapper.SysPermMapper;
+import com.tbxx.wpct.mapper.SysRoleMapper;
 import com.tbxx.wpct.service.SysRoleService;
 import com.tbxx.wpct.service.impl.SysRoleServicelmpl;
 import com.tbxx.wpct.service.impl.SysUserServiceImpl;
@@ -13,7 +17,10 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin 
+import javax.annotation.Resource;
+import java.util.List;
+
+@CrossOrigin
 @Api(tags = "角色接口")
 @Slf4j
 @RestController
@@ -22,6 +29,9 @@ public class SysRoleController {
 
     @Autowired
     private SysRoleServicelmpl roleService;
+
+    @Resource
+    private SysPermMapper sysPermMapper;
 
     /**
      * 新增角色
@@ -61,6 +71,18 @@ public class SysRoleController {
     @RequiresPermissions("role:update")
     public Result updateRoleNameAndPerms(@RequestBody SysRole sysRole) {
         return roleService.updateRoleNameAndPerms(sysRole);
+    }
+
+    /**
+     * 库中所有权限列表
+     */
+    @RequiresPermissions("*:*")
+    @ApiOperation("所有权限列表")
+    @GetMapping("/perms")
+    public Result perms() {
+        QueryWrapper<SysPerm> queryWrapper = new QueryWrapper<>();
+        List<SysPerm> sysPerms = sysPermMapper.selectList(queryWrapper);
+        return Result.ok(sysPerms);
     }
 
 }

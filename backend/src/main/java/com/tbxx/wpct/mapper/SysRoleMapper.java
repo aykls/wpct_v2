@@ -37,4 +37,5 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
     void batchdeleteRolePerm(int roleId, HashSet<Integer> perms);
 
 
+
 }

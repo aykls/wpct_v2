@@ -191,7 +191,7 @@ public class WechatPayServiceImpl implements WechatPayService {
         amountMap.put("currency", "CNY");
 
         Map payerMap = new HashMap();
-        payerMap.put("openid", openid);  //test
+        payerMap.put("openid", openid);
 
         paramsMap.put("amount", amountMap);
         paramsMap.put("payer", payerMap);
