@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.dto.SR;
 import com.tbxx.wpct.entity.BuildInfo;
@@ -100,7 +102,6 @@ public class WechatUserServiceImpl extends ServiceImpl<WechatUserMapper, WechatU
     public SR getInfoToBackend() {
         List<WechatUser> wechatUsers = baseMapper.selectList(null);
         wechatUsers.removeIf(oldList -> oldList.getPid() == null);
-
         for (WechatUser queryBuild : wechatUsers) {
             String openid = queryBuild.getOpenid();
             QueryWrapper<BuildInfo> queryWrapper = new QueryWrapper<>();

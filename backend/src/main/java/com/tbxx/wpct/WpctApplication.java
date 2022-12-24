@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @DATE 2022/9/29 18:18
  */
 
-@MapperScan("com.tbxx.wpct")
+@MapperScan("com.tbxx.wpct.mapper")
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableScheduling
