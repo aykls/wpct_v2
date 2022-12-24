@@ -22,7 +22,7 @@ public class PayInfoController {
     @RequiresPermissions("payInfo:list")
     @ApiOperation("信息列表")
     @GetMapping("/list")
-    //多条件查询
+    //缴费多条件查询
     public List<PayInfo> selectCondition(PayInfoVo vo) {
         return payInfoService.selectCondition(vo);
     }

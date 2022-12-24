@@ -17,7 +17,4 @@ public class PayInfoVo {
     LocalDateTime payBeginTime;
     LocalDateTime payEndTime;
 
-    public PayInfoVo(LocalDateTime payBeginTime) {
-        this.payBeginTime = payBeginTime;
-    }
 }

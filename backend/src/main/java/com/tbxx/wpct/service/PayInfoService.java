@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 public interface PayInfoService extends IService<PayInfo> {
-    //多条件查询
+    //缴费多条件查询
     List<PayInfo> selectCondition(PayInfoVo vo);
 
 }

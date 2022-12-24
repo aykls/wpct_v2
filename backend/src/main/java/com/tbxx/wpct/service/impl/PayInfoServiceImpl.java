@@ -24,7 +24,7 @@ public class PayInfoServiceImpl extends ServiceImpl<PayInfoMapper, PayInfo> impl
     PayInfoMapper payInfoMapper;
 
     @Override
-    //多条件查询
+    //缴费多条件查询
     public List<PayInfo> selectCondition(PayInfoVo vo) {
         return payInfoMapper.selectCondition(vo);
     }
