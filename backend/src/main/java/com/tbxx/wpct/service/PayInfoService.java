@@ -2,10 +2,7 @@ package com.tbxx.wpct.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tbxx.wpct.dto.PayInfoVo;
-import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.PayInfo;
-
-import javax.xml.crypto.Data;
 import java.util.List;
 
 /**
@@ -16,6 +13,7 @@ import java.util.List;
  */
 
 public interface PayInfoService extends IService<PayInfo> {
+    //多条件查询
     List<PayInfo> selectCondition(PayInfoVo vo);
 
 }

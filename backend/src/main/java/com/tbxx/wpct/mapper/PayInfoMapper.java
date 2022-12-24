@@ -2,11 +2,9 @@ package com.tbxx.wpct.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tbxx.wpct.dto.PayInfoVo;
-import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.PayInfo;
 import org.apache.ibatis.annotations.Mapper;
 
-import javax.xml.crypto.Data;
 import java.util.List;
 
 /**
@@ -18,6 +16,7 @@ import java.util.List;
 
 @Mapper
 public interface PayInfoMapper extends BaseMapper<PayInfo> {
+    //多条件查询
     List<PayInfo> selectCondition(PayInfoVo vo);
 
 }

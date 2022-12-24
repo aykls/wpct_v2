@@ -1,7 +1,6 @@
 package com.tbxx.wpct.controller;
 
 import com.tbxx.wpct.dto.PayInfoVo;
-import com.tbxx.wpct.dto.Result;
 import com.tbxx.wpct.entity.PayInfo;
 import com.tbxx.wpct.service.PayInfoService;
 import io.swagger.annotations.Api;
@@ -23,6 +22,7 @@ public class PayInfoController {
     @RequiresPermissions("payInfo:list")
     @ApiOperation("信息列表")
     @GetMapping("/list")
+    //多条件查询
     public List<PayInfo> selectCondition(PayInfoVo vo) {
         return payInfoService.selectCondition(vo);
     }
