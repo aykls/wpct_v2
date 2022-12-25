@@ -1,15 +1,10 @@
 package com.tbxx.wpct.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * @Author ZXX
@@ -84,7 +79,7 @@ public class PayInfo implements Serializable {
     /**
      * 保障类型
      */
-    private String guaranteeType;
+    private String houseType;
 
     /**
      * 缴费开始时间
@@ -120,6 +115,18 @@ public class PayInfo implements Serializable {
      * 与房屋的关系
      */
     private String relation;
+
+
+    /**
+     *车位号1
+     */
+    private String parking1;
+
+
+    /**
+     *车位号2
+     */
+    private String parking2;
 
 
 

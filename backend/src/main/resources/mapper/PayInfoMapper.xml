@@ -14,7 +14,7 @@
         <result  property="conditionNumber" column="condition_number" />
         <result  property="personNumber" column="person_number" />
         <result  property="payStatus" column="pay_status" />
-        <result  property="guaranteeType" column="guarantee_type" />
+        <result  property="houseType" column="house_type" />
         <result  property="payBeginTime" column="pay_begin_time"/>
         <result  property="payEndTime" column="pay_end_time" />
         <result  property="updateTime" column="update_time" />
@@ -22,11 +22,13 @@
         <result  property="updateUser" column="update_user" />
         <result  property="OrderNo" column="order_no" />
         <result  property="relation" column="relation" />
+        <result  property="parking1" column="parking1" />
+        <result  property="parking2" column="parking2" />
     </resultMap>
     <sql id="Base_Column_List" >
         payinfo_id,village_name,build_no,room_no,name,pid,number,car,resident,condition_number,
-            person_number,pay_status,guarantee_type,pay_begin_time,pay_end_time,update_time,
-            remarks,update_user,order_no,relation
+            person_number,pay_status,house_type,pay_begin_time,pay_end_time,update_time,
+            remarks,update_user,order_no,relation,parking1,parking2
     </sql>
     <!--缴费多条件查询-->
     <select id="selectCondition" resultMap="PayInfoMap" parameterType="com.tbxx.wpct.dto.PayInfoVo">

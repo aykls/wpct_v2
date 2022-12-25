@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="华为云（合年）" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" serverName="华为云（合年）" uploadOnCheckin="c915e045-587c-4bee-9e97-09ba8be78a50" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="华为云（合年）">
         <serverdata>
@@ -10,5 +10,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myUploadOnCheckinName" value="华为云（合年）" />
   </component>
 </project>
